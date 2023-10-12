@@ -1,6 +1,28 @@
 const { dataSource } = require('./dataSource');
 // const { throwError } = require('../utils');
 
+//workout_records
+//user_id
+//water_content
+//workout_time
+//current_weight
+//muscle_mass
+//body_fat
+//max_heartrate
+//created_at
+
+//users
+//height
+
+
+
+
+
+
+
+
+
+
 const recordCreator = async (requestCreateRecord) => {
     try {
       const creator = `
@@ -40,11 +62,17 @@ const recordCreator = async (requestCreateRecord) => {
   }
 
 const bmiRecordReader = async(requestReadRecord) => {
-    const bmiRecordReader = await dataSource.query(`SELECT  `);
-      return recordCreator;
-}
+    const weightdReader = await dataSource.query(`SELECT weight, created_at FROM workout_records WHERE user_id = ${id}`);
+    const heightReader = await dataSource.query(`SELECT height FROM users WHERE user_id = ${id}`);
+    const rawDataBMI = {
+        weightReader,
+        heightReader
+    }
+    return rawDataBMI;
+} //서비스 로직에서 처리해야함
 
-const heartbeatReader = async(requestReadRecord) => {
+const maxHeartbeatReader = async(requestReadRecord) => {
+    const heartbeatReader = await dataSource.query(`SELECT max_heartrate, created_at FROM workout_records WHERE user_id = ${id}}`)
     
 }
 
@@ -60,7 +88,7 @@ const bodyfatReader = async(requestReadRecord) => {
 module.exports = {
     recordCreator,
     bmiRecordReader,
-    heartbeatReader,
+    maxHeartbeatReader,
     musclemassReader,
     bodyfatReader,
 }
