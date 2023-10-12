@@ -2,19 +2,13 @@
 
 ## 1. 팀원
 
----
-
 B : 박준우(ProjectManager), 이동훈, 정현우, 김동언, 김승원 F : 권기완(ProductManager), 이영은, 안병우
 
 ## 2. 프로젝트 설명
 
----
-
 추후 작성 예정
 
 ## 3. 프로젝트 설치 및 실행 방법
-
----
 
 ```
 npm install
@@ -23,8 +17,6 @@ npm install
 ## 4. 프로젝트 사용 방법
 
 ### convention
-
----
 
 - 변수 : camelCase
 
@@ -54,8 +46,6 @@ userDao.js
 
 ### branch
 
----
-
 - 브랜치 이름은 기능 및 컴포넌트별로 명명합니다.
 
 ```
@@ -65,8 +55,6 @@ feature/mypage
 ```
 
 ### PR & commit
-
----
 
 - feat: 새로운 기능 추가
 
