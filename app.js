@@ -9,16 +9,17 @@ dotenv.config();
 
 const { AppDataSource } = require("./src/models/dataSource");
 
-// const { routes } = require("./src/routes");
-const routes = express.Router();
+const { routes } = require("./src/routes");
 
 const app = express();
+//const router = express.Router();
+
 
 app.use(cors());
 app.use(express.json()); // for parsing application/json
 app.use(morgan("combined"));
 
-app.use(routes);
+app.use(routes)
 
 app.get("/", async (req, res) => {
   try {

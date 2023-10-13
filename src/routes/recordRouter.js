@@ -1,14 +1,16 @@
 const { throwError } = require('../utils');
-const { request } = require('http');    
+// const { request } = require('http');    
 const express = require('express');
 const recordController = require('../controllers/recordController');
 
-const router = express.Router(); //라우터를 시작합니다.
+const recordRouter = express.Router(); //라우터를 시작합니다.
 
 const createRecord = recordController.createRecord;
 const readRecord = recordController.readRecord;
+const testController = recordController.testController;
 
-router.post('/createRecord', recordContoller.createRecord);
-router.get('/readRecord', recordController.readRecord);
+recordRouter.post('/createRecord', recordController.createRecord);
+recordRouter.get('/readRecord', recordController.readRecord);
+recordRouter.get('/test', recordController.testController);
 
-module.exports = router;
+module.exports = recordRouter;

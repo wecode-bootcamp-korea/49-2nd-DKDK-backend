@@ -1,25 +1,23 @@
-const recordDao = require('../models/recordDao');
-const { throwError } = require('../utils');
-const { } = recordDao;
+const recordDao = require("../models/recordDao");
+const { throwError } = require("../utils");
+const { testDao } = recordDao;
 
-const createRecordService = async(requestCreateRecord) => {
+const testService = async () => {};
 
-}
+const createRecordService = async (requestCreateRecord) => {};
 
-const readRecordService = async(requestReadRecord) => {
+const readRecordService = async (requestReadRecord) => {
+  const convertToHoursAndMinutes = (decimal) => {
+    const hours = Math.floor(decimal);
+    const minutes = (decimal - hours) * 60;
+    return `${hours}시간 ${Math.round(minutes)}분`;
+  };
 
-
-
-    const convertToHoursAndMinutes(decimal) => {
-        const hours = Math.floor(decimal);
-        const minutes = (decimal - hours) * 60;
-        return `${hours}시간 ${Math.round(minutes)}분`;
-    }
-    
-    const result = convertToHoursAndMinutes(id);
-}
+  const result = convertToHoursAndMinutes();
+};
 
 module.exports = {
-    createRecordService,
-    readRecordService,
-}
+  // test,
+  createRecordService,
+  readRecordService,
+};
