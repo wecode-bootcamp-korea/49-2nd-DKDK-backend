@@ -1,28 +1,6 @@
 const { dataSource } = require('./dataSource');
 // const { throwError } = require('../utils');
 
-//workout_records
-//user_id
-//water_content
-//workout_time
-//current_weight
-//muscle_mass
-//body_fat
-//max_heartrate
-//created_at
-
-//users
-//height
-
-
-
-
-
-
-
-
-
-
 const recordCreator = async (requestCreateRecord) => {
     try {
       const creator = `
@@ -77,11 +55,13 @@ const maxHeartbeatReader = async(requestReadRecord) => {
 }
 
 const musclemassReader = async(requestReadRecord) => {
-    
+    const rawHMuscleMassReader = await dataSource.query(`SELECT muscle_mass, created_at FROM workout_records WHERE user_id = ${id}}`)
+    return rawMuscleMassReader;
 }
 
 const bodyfatReader = async(requestReadRecord) => {
-    
+    const rawBodyFatReader = await dataSource.query(`SELECT muscle_mass, created_at FROM workout_records WHERE user_id = ${id}}`)
+    return rawMuscleMassReader;  
 }
 
 
@@ -94,3 +74,24 @@ module.exports = {
 }
 
 // 운동 데이터 차트/BMI/심박수/체지방/골격근
+
+//workout_records
+//user_id
+//water_content
+//workout_time
+//current_weight
+//muscle_mass
+//body_fat
+//max_heartrate
+//created_at
+
+//users
+//height
+
+
+
+
+
+
+
+

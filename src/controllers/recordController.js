@@ -1,7 +1,7 @@
 const recordService = require('../services/recordService');
 
 const readRecord = async(req, res) => {
-    const requestReadRecord = req.body;
+    const requestReadRecord = req.params;
     const { id, createdDate } = requestReadRecord;
 }
 
