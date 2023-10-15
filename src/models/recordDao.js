@@ -2,41 +2,73 @@ const { dataSource, AppDataSource } = require("./dataSource");
 
 const maxHeartbeatReader = async (id) => {
   const heartbeatReader = await AppDataSource.query(
-    `SELECT max_heartrate, created_date FROM workout_records WHERE user_id = ${id}`
+    `SELECT MAX(max_heartrate) AS maxHeartrate, created_date AS createdDate FROM 
+    workout_records 
+    GROUP BY 
+      created_date
+    ORDER BY 
+      created_date DESC
+    LIMIT 12;`
   );
   return heartbeatReader;
 };
 
 const musclemassReader = async (id) => {
   const rawMuscleMassReader = await AppDataSource.query(
-    `SELECT muscle_mass, created_date FROM workout_records WHERE user_id = ${id}`
+    `SELECT MAX(muscle_mass) AS muscleMass, created_date AS createdDate FROM 
+    workout_records 
+    GROUP BY 
+      created_date
+    ORDER BY 
+      created_date DESC
+      LIMIT 12;`
   );
   return rawMuscleMassReader;
 };
 
 const bodyfatReader = async (id) => {
   const rawBodyFatReader = await AppDataSource.query(
-    `SELECT body_fat, created_date FROM workout_records WHERE user_id = ${id}`
+    `SELECT MAX(body_fat) AS bodyFat, created_date AS createdDate FROM 
+    workout_records 
+    GROUP BY 
+      created_date
+    ORDER BY 
+      created_date DESC
+    LIMIT 12;`
   );
   return rawBodyFatReader;
 };
 
 const weightReader = async (id) => {
   const rawWeightReader = await AppDataSource.query(
-    `SELECT weight, created_date FROM workout_records WHERE user_id = ${id}`
+    `SELECT MAX(current_weight) AS weight, created_date AS createdDate FROM 
+    workout_records 
+    GROUP BY 
+      created_date
+    ORDER BY 
+      created_date DESC
+      LIMIT 12;`
   );
   return rawWeightReader;
 };
 
-// const heightReader = async(id) => {
-//   const rawHeightReader = await AppDataSource.query(
-//     `SELECT height FROM users WHERE user_id = ${id}`)
-//   return rawHeightReader;
-// }
+const bmiReader = async(id) => {
+  const rawHeightReader = await AppDataSource.query(
+    `SELECT current_weight AS weight, height, created_date AS createdDate FROM workout_records
+    LEFT JOIN users ON workout_records.user_id = users.id WHERE user_id = ${id}`)
+  return rawHeightReader;
+}
+
 
 const timeReader = async (id) => {
   const rawTimeReader = await AppDataSource.query(
-    `SELECT workout_time, created_date FROM workout_records WHERE user_id = ${id}`
+    `SELECT MAX(workout_time) AS workoutTime, created_date AS createdDate FROM 
+    workout_records 
+    GROUP BY 
+      created_date
+    ORDER BY 
+      created_date DESC
+      LIMIT 12;`
   );
   return rawTimeReader;
 };
@@ -88,7 +120,10 @@ module.exports = {
   testDao,
   recordCreator,
   timeReader,
+  weightReader,
+  bmiReader,
   maxHeartbeatReader,
   musclemassReader,
   bodyfatReader,
 };
+
