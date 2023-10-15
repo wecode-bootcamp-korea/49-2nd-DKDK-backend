@@ -64,6 +64,15 @@ const bodyfatReader = async(requestReadRecord) => {
     return rawMuscleMassReader;  
 }
 
+// try {
+//   const introducerViewer = await dataSource.query(
+//     `SELECT id, product_name, price, original_price, products_description FROM products WHERE id = ${id}`,
+//   );
+//   return introducerViewer;
+// } catch (err) {
+//   console.error(err);
+//   next(err);
+// };
 
 module.exports = {
     recordCreator,
