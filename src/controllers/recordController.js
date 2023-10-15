@@ -1,23 +1,35 @@
 const express = require('express');
 const recordService = require('../services/recordService');
+const { DataSource } = require('typeorm');
+const { testService, createRecordService } = recordService;
 
 const testController = async(req, res) => {
+    const { id } = req.params;
+    const controllerTester = await recordService.testService(id);
     console.log("Here is your controller")
-    res.send("Test controller executed");
+    return res.status(200).json(controllerTester);
 }
 
-
 const readRecord = async(req, res) => {
-    const requestReadRecord = req.params;
-    const currentDate = new Date();
-    const { id, createdDate } = requestReadRecord;
+    const { id } = req.params;
+    const readRecordService = await recordService.readRecordService(Number(id));
+    return res.status(200).json(readRecordService);
 }
 
 
 const createRecord = async(req, res) => {
-    const requestCreateRecord = req.body;
-    const currentDate = new Date();
-    const { id, createdDate } = requestCreateRecord;
+    const addRecord = req.body;
+    const { 
+        userId, 
+        waterContent, 
+        workoutTime, 
+        currentWeight, 
+        muscleMass, 
+        bodyFat, 
+        maxHeartrate,
+    } = addRecord;
+    const addRecordService = await recordService.createRecordService(addRecord);
+    return res.status(200).json(addRecordService);
 }
 
 module.exports = {
@@ -25,3 +37,5 @@ module.exports = {
     readRecord,
     createRecord,
 }
+
+

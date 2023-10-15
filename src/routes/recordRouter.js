@@ -10,7 +10,7 @@ const readRecord = recordController.readRecord;
 const testController = recordController.testController;
 
 recordRouter.post('/createRecord', recordController.createRecord);
-recordRouter.get('/readRecord', recordController.readRecord);
-recordRouter.get('/test', recordController.testController);
+recordRouter.get('/readRecord/:id', recordController.readRecord);
+recordRouter.get('/:id', recordController.testController);
 
 module.exports = recordRouter;

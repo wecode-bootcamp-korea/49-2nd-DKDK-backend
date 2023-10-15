@@ -1,35 +1,48 @@
 const recordDao = require("../models/recordDao");
 const { throwError } = require("../utils");
-const { testDao } = recordDao;
+const {  
+  testDao,
+  recordCreator,
+  musclemassReader,
+  timeReader,
+  maxHeartbeatReader,
+  bodyfatReader } = recordDao;
 
-const testService = async () => {
-   const productIntroducer = await productDao.introducer(id);
-      const productId = productIntroducer[0].id;
-    const imageSelector = await productDao.imageLoader(id);
-    const data = {
-      productId,
-      options: optionSelector,
-    }; 
+const createRecordService = async (addRecord) => {
+  console.log("service listen")
+  const recordCreator = await recordDao.recordCreator(addRecord);
+  return recordCreator
 };
 
-const createRecordService = async (requestCreateRecord) => {
+const readRecordService = async (id) => {
+  const fatRecordReader = await recordDao.bodyfatReader(Number(id));
+  const muscleRecordReader = await recordDao.musclemassReader(Number(id));
+  const workoutTimeReader = await recordDao.timeReader(Number(id));
+  const heartbeatReader = await recordDao.maxHeartbeatReader(Number(id));
+  const formattedMuscleReader = muscleRecordReader[0];
+  const formattedFatReader = fatRecordReader[0];
+  const rawRecordReader = {
+    muscleRecordReader,
+    fatRecordReader,
+    heartbeatReader,
+    workoutTimeReader,
+  }  
+  const recordReader = {
+    formattedMuscleReader,
+    formattedFatReader
+  }
+  return rawRecordReader;
 };
 
-
-
-const readWorkoutRecordService = async (requestReadRecord) => {
-  const workoutRecordReader = await recordDao.introducer(requestReadRecord);
-  const convertToHoursAndMinutes = (decimal) => {
-    const hours = Math.floor(decimal);
-    const minutes = (decimal - hours) * 60;
-    return `${hours}시간 ${Math.round(minutes)}분`;
-  };
-
-const result = convertToHoursAndMinutes();
+const testService = async (id) => {
+  console.log("HELLO FROM THE SERVICE");
+  const testReader = await recordDao.testDao(Number(id));
+  return testReader
 };
+
 
 module.exports = {
-  // test,
   createRecordService,
   readRecordService,
+  testService,
 };

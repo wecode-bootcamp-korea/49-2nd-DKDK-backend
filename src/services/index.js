@@ -1,5 +1,4 @@
 const {
-    testService,
-    createRecordService,
-    readRecordService
+  createRecordService,
+  testService,
   } = require('./recordService');
