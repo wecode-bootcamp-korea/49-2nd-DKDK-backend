@@ -298,10 +298,11 @@ CREATE TABLE `workout_records` (
 CREATE TABLE `workouts` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category_id` int NOT NULL,
-  `name` varchar(20) NOT NULL,
+  `name` varchar(50) NOT NULL,
   `repetition` varchar(10) NOT NULL,
   `set` int NOT NULL,
   `img_url` varchar(255) DEFAULT NULL,
+  `Column7` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `workouts_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `workout_categories` (`id`) ON DELETE CASCADE
@@ -343,5 +344,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20231013085334'),
   ('20231013085412'),
   ('20231013085521'),
-  ('20231013085624');
+  ('20231013085624'),
+  ('20231016070702');
 UNLOCK TABLES;
