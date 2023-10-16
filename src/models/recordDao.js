@@ -125,7 +125,7 @@ const recordUpdater = async (addRecord) => {
     addRecord.maxHeartrate,
     addRecord.userId,
   ];
-  
+  // 쿼리문 작성과 관련 부분에 대해서 고민이 있었음
   const recordUpdater = await AppDataSource.query(updater, values);
   return recordUpdater;
   } catch (error) {
