@@ -132,7 +132,7 @@ CREATE TABLE `products` (
   `available_time` varchar(50) DEFAULT NULL,
   `category_name` varchar(255) NOT NULL,
   `term` int NOT NULL,
-  `price` decimal(10,0) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
   `content` text NOT NULL,
   `status` int DEFAULT '1',
   `created_at` timestamp NULL DEFAULT (now()),
@@ -202,7 +202,7 @@ CREATE TABLE `sub_orders` (
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscriptions` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `price` decimal(10,0) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
   `term` int DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -241,8 +241,8 @@ CREATE TABLE `users` (
   `gender` varchar(6) DEFAULT NULL,
   `phone_number` int DEFAULT NULL,
   `user_type` int DEFAULT NULL,
-  `height` decimal(10,0) DEFAULT NULL,
-  `weight` decimal(10,0) DEFAULT NULL,
+  `height` decimal(10,2) NOT NULL,
+  `weight` decimal(10,2) NOT NULL,
   `interested_workout` int DEFAULT NULL,
   `workout_load` int DEFAULT NULL,
   `img_url` varchar(255) DEFAULT NULL,
@@ -277,12 +277,18 @@ CREATE TABLE `workout_records` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `water_content` int DEFAULT NULL,
-  `workout_time` decimal(10,0) DEFAULT NULL,
-  `current_weight` decimal(10,0) DEFAULT NULL,
-  `muscle_mass` decimal(10,0) DEFAULT NULL,
-  `body_fat` decimal(10,0) DEFAULT NULL,
+  `workout_time` decimal(10,2) DEFAULT NULL,
+  `current_weight` decimal(10,2) DEFAULT NULL,
+  `muscle_mass` decimal(10,2) DEFAULT NULL,
+  `body_fat` decimal(10,2) DEFAULT NULL,
   `max_heartrate` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT (now()),
+  `category_id` int DEFAULT NULL,
+  `Name` varchar(50) DEFAULT NULL,
+  `Repetition` varchar(50) DEFAULT NULL,
+  `Set` int DEFAULT NULL,
+  `img_url` varchar(256) DEFAULT NULL,
+  `Column7` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `workout_records_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
@@ -345,5 +351,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20231013085412'),
   ('20231013085521'),
   ('20231013085624'),
-  ('20231016070702');
+  ('20231016070702'),
+  ('20231016074624');
 UNLOCK TABLES;
