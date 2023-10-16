@@ -71,18 +71,18 @@ const timeReader = async (id) => {
 const recordCreator = async (addRecord) => {
   try {
     const creator = `
-      INSERT INTO workout_records 
-        (
-            user_id, 
-            water_content, 
-            workout_time, 
-            current_weight, 
-            muscle_mass, 
-            body_fat, 
-            max_heartrate,
-        ) 
-        VALUES 
-        (?, ?, ?, ?, ?, ?, ?);
+    INSERT INTO workout_records 
+    (
+        user_id, 
+        water_content, 
+        workout_time, 
+        current_weight, 
+        muscle_mass, 
+        body_fat, 
+        max_heartrate
+    ) 
+    VALUES 
+    (?, ?, ?, ?, ?, ?, ?);    
       `;
     const values = [
       addRecord.userId,
@@ -91,7 +91,7 @@ const recordCreator = async (addRecord) => {
       addRecord.currentWeight,
       addRecord.muscleMass,
       addRecord.bodyFat,
-      addRecord.maxHeartrate
+      addRecord.maxHeartrate,
     ];
     const recordCreator = await AppDataSource.query(creator, values);
     return recordCreator;
@@ -103,8 +103,31 @@ const recordCreator = async (addRecord) => {
 
 const recordUpdater = async (addRecord) => {
   try {
-    const recordUpdater = await AppDataSource.query(updater, values);
-    return recordUpdater;
+    const updater = `
+    UPDATE workout_records
+    SET
+      water_content = ?,
+      workout_time = ?,
+      current_weight = ?,
+      muscle_mass = ?,
+      body_fat = ?,
+      max_heartrate = ?
+    WHERE
+      user_id = ?;
+  `;
+  
+  const values = [
+    addRecord.waterContent,
+    addRecord.workoutTime,
+    addRecord.currentWeight,
+    addRecord.muscleMass,
+    addRecord.bodyFat,
+    addRecord.maxHeartrate,
+    addRecord.userId,
+  ];
+  
+  const recordUpdater = await AppDataSource.query(updater, values);
+  return recordUpdater;
   } catch (error) {
     console.error("ERROR:", error);
     throw error;
@@ -153,6 +176,6 @@ module.exports = {
   bmiReader,
   maxHeartbeatReader,
   musclemassReader,
-  bodyfatReader, 
+  bodyfatReader,
   testDao,
 };

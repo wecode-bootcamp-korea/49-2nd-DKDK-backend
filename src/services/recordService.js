@@ -35,10 +35,10 @@ const createRecordService = async (addRecord) => {
       const recordUpdater = await recordDao.recordUpdater(addRecord);
       return recordUpdater;
     
-  };
-} catch (error) {
+  
+  } catch (error) {
   console.log(error);
-}
+}}
   
 
 const readRecordService = async (id) => {
