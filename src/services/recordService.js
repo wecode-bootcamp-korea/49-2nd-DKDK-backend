@@ -24,15 +24,27 @@ const createRecordService = async (addRecord) => {
     const dateNow = `${year}-${month}-${day}`;
     return dateNow
   }
-  const currentDate = getCurrentDate();
-  
-  const recordChecked = await recordDao.recordChecker(addRecord);
-  const formattedRecordChecked = recordChecked[0];
-  const recentCreatedDate = formattedRecordChecked.createdDate;
 
-  console.log(recentCreatedDate);
-  console.log(currentDate);
-  if (currentDate !== recentCreatedDate) {
+  const getFormattedDate = () => {
+    const userday = Date();
+    const year = String(userday.getFullYear());
+    const month = String(userday.getMonth() + 1).padStart(2, '0');  // Month is 0-indexed, so +1 is needed
+    const day = String(userday.getDate()).padStart(2, '0');
+    const dateUser = `${year}-${month}-${day}`;
+    return dateUser
+  }
+
+  
+  const currentDate = getCurrentDate();
+  console.log(currentDate)
+  const userDate = await recordDao.recordChecker(addRecord);
+  const receivedDate = userDate[0].createdDate;
+  console.log(receivedDate)
+  const userDateChecker = getFormattedDate(receivedDate)
+  console.log(userDateChecker)
+  
+
+  if (userDateChecker !== currentDate) {
     const recordCreator = await recordDao.recordCreator(addRecord);
     return recordCreator;
   } 
@@ -65,7 +77,6 @@ const readRecordService = async (id) => {
     return {
       workoutTime: numberWorkout,
       createdDate: record.createdDate
-        // 결과를 소수점 둘째 자리까지만 반환
     };
   });
   
@@ -75,7 +86,6 @@ const readRecordService = async (id) => {
     return {
       maxHeartbeat: numberHeartbeat,
       createdDate: record.createdDate
-        // 결과를 소수점 둘째 자리까지만 반환
     };
   });
 
@@ -84,9 +94,8 @@ const readRecordService = async (id) => {
     const weightSquared = parseFloat(record.weight) * parseFloat(record.weight);
     const bmi = weightSquared / parseFloat(record.height);
     return {
-      bmi: Number(bmi.toFixed(2)),
+      bmi: Number(bmi.toFixed(2)), // 결과를 소수점 둘째 자리까지만 반환
       createdDate: record.createdDate
-        // 결과를 소수점 둘째 자리까지만 반환
     };
   });
 

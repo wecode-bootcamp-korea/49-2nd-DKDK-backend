@@ -80,10 +80,9 @@ const recordCreator = async (addRecord) => {
             muscle_mass, 
             body_fat, 
             max_heartrate,
-            created_date
         ) 
         VALUES 
-        (?, ?, ?, ?, ?, ?, ?, ?);
+        (?, ?, ?, ?, ?, ?, ?);
       `;
     const values = [
       addRecord.userId,
@@ -92,8 +91,7 @@ const recordCreator = async (addRecord) => {
       addRecord.currentWeight,
       addRecord.muscleMass,
       addRecord.bodyFat,
-      addRecord.maxHeartrate,
-      addRecord.createdDate,
+      addRecord.maxHeartrate
     ];
     const recordCreator = await AppDataSource.query(creator, values);
     return recordCreator;
@@ -138,6 +136,7 @@ const testDao = async (id) => {
 
 const recordChecker = async (addRecord) => {
   const id = addRecord.userId;
+  const createdDate = addRecord.createdDate;
   const checker = await AppDataSource.query(
     `SELECT created_date AS createdDate FROM workout_records WHERE user_id = ${id} ORDER BY created_date DESC LIMIT 1`
   );
