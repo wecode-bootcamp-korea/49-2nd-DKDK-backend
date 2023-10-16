@@ -8,12 +8,34 @@ const {
   maxHeartbeatReader,
   bmiReader,
   weightReader,
+  recordUpdater,
+  recordChecker,
   bodyfatReader } = recordDao;
 
 const createRecordService = async (addRecord) => {
-  console.log("service listen")
-  const recordCreator = await recordDao.recordCreator(addRecord);
-  return recordCreator
+  
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');  // Month is 0-indexed, so +1 is needed
+    const day = String(today.getDate()).padStart(2, '0');
+    const dateNow = `${year}-${month}-${day}`;
+    return dateNow
+  }
+  const currentDate = getCurrentDate();
+  
+  const recordChecked = await recordDao.recordChecker(addRecord);
+  const formattedRecordChecked = recordChecked[0];
+  const recentCreatedDate = formattedRecordChecked.createdDate;
+
+  console.log(recentCreatedDate);
+  console.log(currentDate);
+  if (currentDate !== recentCreatedDate) {
+    const recordCreator = await recordDao.recordCreator(addRecord);
+    return recordCreator;
+  } 
+  const recordUpdater = await recordDao.recordUpdater(addRecord);
+  return recordUpdater;
 };
 
 const readRecordService = async (id) => {
