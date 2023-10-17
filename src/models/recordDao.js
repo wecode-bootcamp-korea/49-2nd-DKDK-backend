@@ -1,5 +1,5 @@
 const { dataSource, AppDataSource } = require("./dataSource");
-const { throwError } = require('../utils/throwError');
+const { throwError } = require("../utils/throwError");
 
 const maxHeartbeatReader = async (id) => {
   const heartbeatReader = await AppDataSource.query(
@@ -105,8 +105,8 @@ const recordCreator = async (addRecord) => {
 const recordUpdater = async (addRecord) => {
   try {
     const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-  
+    const formattedDate = today.toISOString().split("T")[0];
+
     const updater = `
     UPDATE workout_records
     SET
@@ -121,19 +121,19 @@ const recordUpdater = async (addRecord) => {
     `;
 
     const values = [
-      addRecord.waterContent, 
       addRecord.waterContent,
-      addRecord.workoutTime, 
-      addRecord.workoutTime, 
+      addRecord.waterContent,
+      addRecord.workoutTime,
+      addRecord.workoutTime,
       addRecord.currentWeight,
       addRecord.currentWeight,
-      addRecord.muscleMass, 
-      addRecord.muscleMass, 
+      addRecord.muscleMass,
+      addRecord.muscleMass,
       addRecord.bodyFat,
       addRecord.bodyFat,
       addRecord.maxHeartrate,
       addRecord.maxHeartrate,
-      addRecord.userId
+      addRecord.userId,
     ];
     console.log(addRecord);
     const recordUpdater = await AppDataSource.query(updater, values);
@@ -143,9 +143,6 @@ const recordUpdater = async (addRecord) => {
     throw error;
   }
 };
-
-
-
 
 const avgWorkoutTimeUser = async (id) => {
   const avgWorkoutTimeUserLoad = await AppDataSource.query(
@@ -161,16 +158,14 @@ const avgWorkoutTimeTotal = async (id) => {
   return avgWorkoutTimeTotalLoad;
 };
 
-
 const recordIdChecker = async (addRecord) => {
   const id = addRecord.userId;
   const idChecker = await AppDataSource.query(
     `SELECT user_id AS userId FROM workout_records WHERE user_id = ${id}`
   );
-  console.log(idChecker)
+  console.log(idChecker);
   return idChecker;
 };
-
 
 const recordIdParamsChecker = async (id) => {
   const idParamsChecker = await AppDataSource.query(
