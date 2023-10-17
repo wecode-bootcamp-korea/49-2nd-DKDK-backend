@@ -8,9 +8,7 @@ const start = async () => {
   const app = createApp();
   const port = process.env.PORT;
 
-  await AppDataSource.initialize().then(() =>
-    console.log("Datasource initialized.")
-  );
+  await AppDataSource.initialize().then(() => console.log("Datasource initialized."));
 
   //server test
   app.get("/ping", async (req, res) => {
@@ -18,7 +16,7 @@ const start = async () => {
   });
 
   app.listen(port || 8000, () => {
-    console.log(`server is running at ${app.get("port")}`);
+    console.log(`server is running at ${ port }`);
   });
 };
 

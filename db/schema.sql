@@ -153,7 +153,7 @@ CREATE TABLE `pt_orders` (
   `id` int NOT NULL AUTO_INCREMENT,
   `buyer_user_id` int NOT NULL,
   `product_id` int NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT (now()),
   PRIMARY KEY (`id`),
   KEY `buyer_user_id` (`buyer_user_id`),
   KEY `product_id` (`product_id`),
@@ -184,7 +184,7 @@ CREATE TABLE `sub_orders` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `sub_id` int NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT (now()),
   `end_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -235,8 +235,8 @@ CREATE TABLE `trainers` (
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nickname` varchar(50) DEFAULT NULL,
-  `kakao_id` int DEFAULT NULL,
-  `naver_id` int DEFAULT NULL,
+  `kakao_id` varchar(50) DEFAULT NULL,
+  `naver_id` varchar(50) DEFAULT NULL,
   `birthday` varchar(10) DEFAULT NULL,
   `gender` varchar(6) DEFAULT NULL,
   `phone_number` int DEFAULT NULL,
@@ -246,7 +246,7 @@ CREATE TABLE `users` (
   `interested_workout` int DEFAULT NULL,
   `workout_load` int DEFAULT NULL,
   `img_url` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT (now()),
   PRIMARY KEY (`id`),
   UNIQUE KEY `nickname` (`nickname`),
   KEY `interested_workout` (`interested_workout`),
@@ -283,12 +283,6 @@ CREATE TABLE `workout_records` (
   `body_fat` decimal(10,2) DEFAULT NULL,
   `max_heartrate` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT (now()),
-  `category_id` int DEFAULT NULL,
-  `Name` varchar(50) DEFAULT NULL,
-  `Repetition` varchar(50) DEFAULT NULL,
-  `Set` int DEFAULT NULL,
-  `img_url` varchar(256) DEFAULT NULL,
-  `Column7` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `workout_records_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
@@ -308,7 +302,6 @@ CREATE TABLE `workouts` (
   `repetition` varchar(10) NOT NULL,
   `set` int NOT NULL,
   `img_url` varchar(255) DEFAULT NULL,
-  `Column7` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `workouts_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `workout_categories` (`id`) ON DELETE CASCADE
@@ -316,7 +309,7 @@ CREATE TABLE `workouts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping routines for database 'DKDK'
+-- Dumping routines for database 'dkdk'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -352,5 +345,7 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20231013085521'),
   ('20231013085624'),
   ('20231016070702'),
-  ('20231016074624');
+  ('20231016074624'),
+  ('20231016172928'),
+  ('20231017013635');
 UNLOCK TABLES;
