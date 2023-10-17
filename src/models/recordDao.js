@@ -1,5 +1,5 @@
 const { dataSource, AppDataSource } = require("./dataSource");
-
+const { throwError } = require('../utils/throwError');
 
 const maxHeartbeatReader = async (id) => {
   const heartbeatReader = await AppDataSource.query(
@@ -102,40 +102,6 @@ const recordCreator = async (addRecord) => {
   }
 };
 
-// const recordUpdater = async (addRecord) => {
-//   try {
-//     const updater = `
-//     UPDATE workout_records
-//     SET
-//       water_content = ?,
-//       workout_time = ?,
-//       current_weight = ?,
-//       muscle_mass = ?,
-//       body_fat = ?,
-//       max_heartrate = ?,
-//       created_at = NOW()
-//     WHERE
-//       user_id = ? AND DATE(created_at) = CURDATE();
-//     `;
-
-//     const values = [
-//       addRecord.waterContent,
-//       addRecord.workoutTime, 
-//       addRecord.currentWeight,
-//       addRecord.muscleMass, 
-//       addRecord.bodyFat,
-//       addRecord.maxHeartrate,
-//       addRecord.userId,
-//     ];
-
-//     const recordUpdater = await AppDataSource.query(updater, values);
-//     return recordUpdater;
-//   } catch (error) {
-//     console.error("ERROR:", error);
-//     throw error;
-//   }
-// };
-
 const recordUpdater = async (addRecord) => {
   try {
     const today = new Date();
@@ -195,14 +161,6 @@ const avgWorkoutTimeTotal = async (id) => {
   return avgWorkoutTimeTotalLoad;
 };
 
-const testDao = async (id) => {
-  console.log(id);
-  const tester = await AppDataSource.query(
-    `SELECT * FROM workout_records WHERE user_id = ${id}`
-  );
-  console.log(tester);
-  return tester;
-};
 
 const recordIdChecker = async (addRecord) => {
   const id = addRecord.userId;
@@ -244,5 +202,4 @@ module.exports = {
   recordIdParamsChecker,
   musclemassReader,
   bodyfatReader,
-  testDao,
 };

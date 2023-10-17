@@ -1,7 +1,6 @@
 const recordDao = require("../models/recordDao");
 const { throwError } = require("../utils");
 const {
-  testDao,
   recordCreator,
   musclemassReader,
   timeReader,

@@ -1,7 +1,9 @@
 const express = require('express');
 const recordService = require('../services/recordService');
+const { throwError } = require('../utils/throwError');
 const { DataSource } = require('typeorm');
 const { testService, createRecordService } = recordService;
+
 
 const testController = async(req, res) => {
     const { id } = req.params;
