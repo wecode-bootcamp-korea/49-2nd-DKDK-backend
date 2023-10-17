@@ -1,17 +1,10 @@
 const passport = require("passport");
 const KakaoStrategy = require("passport-kakao").Strategy;
-const jwt = require("jsonwebtoken");
-const throwError = require("../utils/throwError");
+const { generateToken, throwError } = require("../utils")
 require("dotenv").config();
 
 const { userDao } = require("../models");
 const { findByKakaoId, updateImgUrl, createUser } = userDao;
-
-// jwt 생성
-const generateToken = (userId) => {
-
-  return jwt.sign({ id: userId }, process.env.SECRET);
-};
 
 // 카카오 전략
 passport.use(
