@@ -20,8 +20,7 @@ const createRecordService = async (addRecord) => {
   try {
     //유저아이디가 존재하는지 확인
     const userIdLoader = await recordDao.recordIdChecker(addRecord);
-    const userIdLoadChecker = userIdLoader.userId;
-    if (!userIdLoadChecker) {
+    if (!userIdLoader) {
       return JSON.parse(JSON.stringify("undefined"));
     }
 

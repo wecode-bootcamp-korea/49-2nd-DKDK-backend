@@ -70,8 +70,7 @@ const timeReader = async (id) => {
 };
 
 const recordCreator = async (addRecord) => {
-  try {
-    const creator = `
+  const creator = `
     INSERT INTO workout_records 
     (
         user_id, 
@@ -85,29 +84,21 @@ const recordCreator = async (addRecord) => {
     VALUES 
     (?, ?, ?, ?, ?, ?, ?);    
       `;
-    const values = [
-      addRecord.userId,
-      addRecord.waterContent,
-      addRecord.workoutTime,
-      addRecord.currentWeight,
-      addRecord.muscleMass,
-      addRecord.bodyFat,
-      addRecord.maxHeartrate,
-    ];
-    const recordCreator = await AppDataSource.query(creator, values);
-    return recordCreator;
-  } catch (error) {
-    console.error("ERROR:", error);
-    throw error;
-  }
+  const values = [
+    addRecord.userId,
+    addRecord.waterContent,
+    addRecord.workoutTime,
+    addRecord.currentWeight,
+    addRecord.muscleMass,
+    addRecord.bodyFat,
+    addRecord.maxHeartrate,
+  ];
+  const recordCreator = await AppDataSource.query(creator, values);
+  return recordCreator;
 };
 
 const recordUpdater = async (addRecord) => {
-  try {
-    const today = new Date();
-    const formattedDate = today.toISOString().split("T")[0];
-
-    const updater = `
+  const updater = `
     UPDATE workout_records
     SET
       water_content = CASE WHEN ? IS NOT NULL THEN ? ELSE water_content END,
@@ -120,28 +111,24 @@ const recordUpdater = async (addRecord) => {
       user_id = ? AND DATE(created_at) = CURDATE();
     `;
 
-    const values = [
-      addRecord.waterContent,
-      addRecord.waterContent,
-      addRecord.workoutTime,
-      addRecord.workoutTime,
-      addRecord.currentWeight,
-      addRecord.currentWeight,
-      addRecord.muscleMass,
-      addRecord.muscleMass,
-      addRecord.bodyFat,
-      addRecord.bodyFat,
-      addRecord.maxHeartrate,
-      addRecord.maxHeartrate,
-      addRecord.userId,
-    ];
-    console.log(addRecord);
-    const recordUpdater = await AppDataSource.query(updater, values);
-    return recordUpdater;
-  } catch (error) {
-    console.error("ERROR:", error);
-    throw error;
-  }
+  const values = [
+    addRecord.waterContent,
+    addRecord.waterContent,
+    addRecord.workoutTime,
+    addRecord.workoutTime,
+    addRecord.currentWeight,
+    addRecord.currentWeight,
+    addRecord.muscleMass,
+    addRecord.muscleMass,
+    addRecord.bodyFat,
+    addRecord.bodyFat,
+    addRecord.maxHeartrate,
+    addRecord.maxHeartrate,
+    addRecord.userId,
+  ];
+  console.log(addRecord);
+  const recordUpdater = await AppDataSource.query(updater, values);
+  return recordUpdater;
 };
 
 const avgWorkoutTimeUser = async (id) => {
