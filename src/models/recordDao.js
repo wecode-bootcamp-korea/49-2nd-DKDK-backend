@@ -3,10 +3,10 @@ const { dataSource, AppDataSource } = require("./dataSource");
 
 const maxHeartbeatReader = async (id) => {
   const heartbeatReader = await AppDataSource.query(
-    `SELECT max_heartrate AS maxHeartrate, created_date AS createdDate
+    `SELECT max_heartrate AS maxHeartrate, created_at AS createdAt
       FROM workout_records
       WHERE user_id = ${id}
-      ORDER BY createdDate DESC
+      ORDER BY createdAt DESC
     LIMIT 12;
 `
   );
@@ -15,10 +15,10 @@ const maxHeartbeatReader = async (id) => {
 
 const musclemassReader = async (id) => {
   const rawMuscleMassReader = await AppDataSource.query(
-    `SELECT muscle_mass AS muscleMass, created_date AS createdDate
+    `SELECT muscle_mass AS muscleMass, created_at AS createdAt
     FROM workout_records
     WHERE user_id = ${id}
-    ORDER BY createdDate DESC
+    ORDER BY createdAt DESC
     LIMIT 12;
     `
   );
@@ -27,10 +27,10 @@ const musclemassReader = async (id) => {
 
 const bodyfatReader = async (id) => {
   const rawBodyFatReader = await AppDataSource.query(
-    `SELECT body_fat AS bodyFat, created_date AS createdDate
+    `SELECT body_fat AS bodyFat, created_at AS createdAt
     FROM workout_records
     WHERE user_id = ${id}
-    ORDER BY createdDate DESC
+    ORDER BY createdAt DESC
     LIMIT 12;
     `
   );
@@ -39,10 +39,10 @@ const bodyfatReader = async (id) => {
 
 const weightReader = async (id) => {
   const rawWeightReader = await AppDataSource.query(
-    `SELECT current_weight AS weight, created_date AS createdDate FROM 
+    `SELECT current_weight AS weight, created_at AS createdAt FROM 
     workout_records WHERE user_id = ${id}
     ORDER BY 
-      created_date DESC
+      created_at DESC
       LIMIT 12;`
   );
   return rawWeightReader;
@@ -50,7 +50,7 @@ const weightReader = async (id) => {
 
 const bmiReader = async (id) => {
   const rawHeightReader = await AppDataSource.query(
-    `SELECT current_weight AS weight, height, created_date AS createdDate FROM workout_records
+    `SELECT current_weight AS weight, height, created_at AS createdAt FROM workout_records
     LEFT JOIN users ON workout_records.user_id = users.id WHERE user_id = ${id}`
   );
   return rawHeightReader;
@@ -58,11 +58,11 @@ const bmiReader = async (id) => {
 
 const timeReader = async (id) => {
   const rawTimeReader = await AppDataSource.query(
-    `SELECT MAX(workout_time) AS workoutTime, created_date AS createdDate
+    `SELECT MAX(workout_time) AS workoutTime, created_at AS createdAt
     FROM workout_records
     WHERE user_id = ${id}
-    GROUP BY created_date
-    ORDER BY createdDate DESC
+    GROUP BY created_at
+    ORDER BY createdAt DESC
     LIMIT 12;
     `
   );
@@ -102,38 +102,84 @@ const recordCreator = async (addRecord) => {
   }
 };
 
+// const recordUpdater = async (addRecord) => {
+//   try {
+//     const updater = `
+//     UPDATE workout_records
+//     SET
+//       water_content = ?,
+//       workout_time = ?,
+//       current_weight = ?,
+//       muscle_mass = ?,
+//       body_fat = ?,
+//       max_heartrate = ?,
+//       created_at = NOW()
+//     WHERE
+//       user_id = ? AND DATE(created_at) = CURDATE();
+//     `;
+
+//     const values = [
+//       addRecord.waterContent,
+//       addRecord.workoutTime, 
+//       addRecord.currentWeight,
+//       addRecord.muscleMass, 
+//       addRecord.bodyFat,
+//       addRecord.maxHeartrate,
+//       addRecord.userId,
+//     ];
+
+//     const recordUpdater = await AppDataSource.query(updater, values);
+//     return recordUpdater;
+//   } catch (error) {
+//     console.error("ERROR:", error);
+//     throw error;
+//   }
+// };
+
 const recordUpdater = async (addRecord) => {
   try {
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+  
     const updater = `
     UPDATE workout_records
     SET
-      water_content = ?,
-      workout_time = ?,
-      current_weight = ?,
-      muscle_mass = ?,
-      body_fat = ?,
-      max_heartrate = ?
+      water_content = CASE WHEN ? IS NOT NULL THEN ? ELSE water_content END,
+      workout_time = CASE WHEN ? IS NOT NULL THEN ? ELSE workout_time END,
+      current_weight = CASE WHEN ? IS NOT NULL THEN ? ELSE current_weight END,
+      muscle_mass = CASE WHEN ? IS NOT NULL THEN ? ELSE muscle_mass END,
+      body_fat = CASE WHEN ? IS NOT NULL THEN ? ELSE body_fat END,
+      max_heartrate = CASE WHEN ? IS NOT NULL THEN ? ELSE max_heartrate END
     WHERE
-      user_id = ?;
-  `;
-  
-  const values = [
-    addRecord.waterContent,
-    addRecord.workoutTime,
-    addRecord.currentWeight,
-    addRecord.muscleMass,
-    addRecord.bodyFat,
-    addRecord.maxHeartrate,
-    addRecord.userId,
-  ];
-  // 쿼리문 작성과 관련 부분에 대해서 고민이 있었음
-  const recordUpdater = await AppDataSource.query(updater, values);
-  return recordUpdater;
+      user_id = ? AND DATE(created_at) = CURDATE();
+    `;
+
+    const values = [
+      addRecord.waterContent, 
+      addRecord.waterContent,
+      addRecord.workoutTime, 
+      addRecord.workoutTime, 
+      addRecord.currentWeight,
+      addRecord.currentWeight,
+      addRecord.muscleMass, 
+      addRecord.muscleMass, 
+      addRecord.bodyFat,
+      addRecord.bodyFat,
+      addRecord.maxHeartrate,
+      addRecord.maxHeartrate,
+      addRecord.userId
+    ];
+    console.log(addRecord);
+    const recordUpdater = await AppDataSource.query(updater, values);
+    return recordUpdater;
   } catch (error) {
     console.error("ERROR:", error);
     throw error;
   }
 };
+
+
+
 
 const avgWorkoutTimeUser = async (id) => {
   const avgWorkoutTimeUserLoad = await AppDataSource.query(
@@ -177,9 +223,9 @@ const recordIdParamsChecker = async (id) => {
 
 const recordTimeChecker = async (addRecord) => {
   const id = addRecord.userId;
-  const createdDate = addRecord.createdDate;
+  const createdAt = addRecord.createdAt;
   const checker = await AppDataSource.query(
-    `SELECT created_date AS createdDate FROM workout_records WHERE user_id = ${id} ORDER BY created_date DESC LIMIT 1`
+    `SELECT created_at AS createdAt FROM workout_records WHERE user_id = ${id} ORDER BY created_at DESC LIMIT 1`
   );
   return checker;
 };

@@ -20,7 +20,8 @@ const {
 const createRecordService = async (addRecord) => {
   try {
     //유저아이디가 존재하는지 확인
-    const userIdLoader = await recordDao.recordIdChecker(addRecord)[0];
+    const userIdLoader = await recordDao.recordIdChecker(addRecord);
+    const userIdLoadChecker = userIdLoader.userId;
     if (!userIdLoader) {
       return JSON.parse(JSON.stringify("undefined"))
     }
@@ -28,7 +29,7 @@ const createRecordService = async (addRecord) => {
     //유저정보 확인 후, 기록 생성/업데이트 분기처리
     const nowDate = new Date();
     const userDateTime = await recordDao.recordTimeChecker(addRecord);
-    const receivedDateTime = userDateTime[0].createdDate; 
+    const receivedDateTime = userDateTime[0].createdAt; 
     const dateCheckerPole = nowDate.setHours(0, 0, 0, 0); 
     const formattedUserDate = receivedDateTime.setHours(0,0,0,0)
     //당일 기록 미존재 시, 기록 생성
@@ -57,7 +58,7 @@ const readRecordService = async (id) => {
     const numberFat = Number(record.bodyFat);
     return {
       bodyFat: numberFat,
-      createdDate: record.createdDate,
+      createdAt: record.createdAt,
     };
   });
 
@@ -66,7 +67,7 @@ const readRecordService = async (id) => {
     const numberMuscleMass = Number(record.muscleMass);
     return {
       muscleMass: numberMuscleMass,
-      createdDate: record.createdDate,
+      createdAt: record.createdAt,
     };
   });
 
@@ -75,7 +76,7 @@ const readRecordService = async (id) => {
     const numberWorkout = Number(record.workoutTime);
     return {
       workoutTime: numberWorkout,
-      createdDate: record.createdDate,
+      createdAt: record.createdAt,
     };
   });
 
@@ -84,7 +85,7 @@ const readRecordService = async (id) => {
     const numberHeartbeat = Number(record.maxHeartrate);
     return {
       maxHeartbeat: numberHeartbeat,
-      createdDate: record.createdDate,
+      createdAt: record.createdAt,
     };
   });
 
@@ -94,7 +95,7 @@ const readRecordService = async (id) => {
     const bmi = weightSquared / parseFloat(record.height);
     return {
       bmi: Number(bmi.toFixed(2)), // 결과를 소수점 둘째 자리까지만 반환
-      createdDate: record.createdDate,
+      createdAt: record.createdAt,
     };
   });
 

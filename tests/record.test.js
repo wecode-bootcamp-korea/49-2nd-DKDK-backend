@@ -37,7 +37,7 @@
 //         "muscleMass": 23,
 //         "bodyFat": 23,
 //         "maxHeartrate": 145,
-//         "createdDate": "2023-10-15"
+//         "createdAt": "2023-10-15"
 //       }) // body를 작성합니다.
 //       .expect(200) // expect()로 예상되는 statusCode, response를 넣어 테스트할 수 있습니다.
 //       .expect({
