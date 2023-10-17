@@ -18,6 +18,7 @@ const {
 
 const createRecordService = async (addRecord) => {
   try {
+    
     //유저아이디가 존재하는지 확인
     const userIdLoader = await recordDao.recordIdChecker(addRecord);
     if (!userIdLoader) {
@@ -30,14 +31,17 @@ const createRecordService = async (addRecord) => {
     const receivedDateTime = userDateTime[0].createdAt;
     const dateCheckerPole = nowDate.setHours(0, 0, 0, 0);
     const formattedUserDate = receivedDateTime.setHours(0, 0, 0, 0);
+    
     //당일 기록 미존재 시, 기록 생성
     if (dateCheckerPole !== formattedUserDate) {
       const recordCreator = await recordDao.recordCreator(addRecord);
       return recordCreator;
     }
+    
     //당일 기록 존재 시, 기록 업데이트
     const recordUpdater = await recordDao.recordUpdater(addRecord);
     return recordUpdater;
+
   } catch (error) {
     console.log(error);
   }
