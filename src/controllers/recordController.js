@@ -1,14 +1,17 @@
 const express = require("express");
 const recordService = require("../services/recordService");
 const { throwError } = require("../utils/throwError");
-const { DataSource } = require("typeorm");
 const { readRecordService, createRecordService } = recordService;
 
 const readRecord = async (req, res) => {
   try {
     const { id } = req.params;
     const readRecordService = await recordService.readRecordService(Number(id));
-    return res.status(200).json(readRecordService);
+    console.log("rec_cont : ", readRecordService);
+    if (readRecordService === undefined) {
+      res.status(400).json("NO_USER");
+    }
+    res.status(200).json(readRecordService);
   } catch (error) {
     console.log(error);
   }

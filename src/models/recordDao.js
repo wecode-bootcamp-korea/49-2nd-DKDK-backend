@@ -1,5 +1,4 @@
 const { dataSource, AppDataSource } = require("./dataSource");
-const { throwError } = require("../utils/throwError");
 
 const maxHeartbeatReader = async (id) => {
   const heartbeatReader = await AppDataSource.query(
