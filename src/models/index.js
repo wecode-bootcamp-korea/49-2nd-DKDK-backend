@@ -1,5 +1,5 @@
-const { mypageDao } = require('./mypageDao')
+const mypageDao = require("./mypageDao");
 
 module.exports = {
-    mypageDao
-}
+  mypageDao,
+};
