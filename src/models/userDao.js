@@ -1,5 +1,7 @@
 const { AppDataSource } = require("../models/dataSource");
+const { createConnection } = require("typeorm");
 
+// isSubscribed 추가
 const findByKakaoId = async (kakaoId) => {
   const [result] = await AppDataSource.query(
     `
@@ -16,29 +18,121 @@ const findByKakaoId = async (kakaoId) => {
 };
 
 const updateImgUrl = async (userId, imgUrl) => {
-  const [result] = await AppDataSource.query(
+  const result = await AppDataSource.query(
     `
       UPDATE users 
       SET img_url = ?
       WHERE id = ?
     `,
     [imgUrl, userId]
-  )
+  );
 
   return result;
-}
+};
 
-//추후수정 : isSubscribed 추가, 트랜젝션
+//트랜잭션????
 const createUser = async (kakaoId, imgUrl) => {
-  const result = await AppDataSource.query(`INSERT INTO users (kakao_id, img_url) VALUES (?, ?)`, [kakaoId, imgUrl]);
+  const result = await AppDataSource.query(
+    `INSERT INTO users (kakao_id, img_url) VALUES (?, ?)`, [kakaoId, imgUrl]);
 
   console.log("userDao createUser result : ", result);
 
   return result;
 };
 
+const findByUserId = async (userId) => {
+  const [result] = await AppDataSource.query(
+    `
+    SELECT id
+    FROM users
+    WHERE id = ?
+    `,
+    [userId]
+  );
+
+  console.log("userDao findByUserId result: ", result);
+
+  return result;
+};
+
+// 상세 업데이트
+const updateUser = async (
+  userId,
+  userType,
+  imgUrl,
+  nickname,
+  phoneNumber,
+  gender,
+  birthday,
+  height,
+  weight,
+  interestedWorkout,
+  workoutLoad,
+  specialized
+) => {
+  const connection = await createConnection();
+
+  try {
+    //트랜젝션 시작
+    await connection.transaction(async (transactionalEntityManager) => {
+      //1. 유저 정보 업데이트
+      const userUpdate = await transactionalEntityManager.query(
+        `
+            UPDATE users
+            SET 
+                user_type = ?,
+                img_url = ?,
+                nickname = ?,
+                phone_number = ?,
+                gender = ?,
+                birthday = ?,
+                height = ?,
+                weight = ?,
+                interested_workout = ?,
+                workout_load =?
+            WHERE id = ?
+          `,
+        [
+          userType,
+          imgUrl,
+          nickname,
+          phoneNumber,
+          gender,
+          birthday,
+          height,
+          weight,
+          interestedWorkout,
+          workoutLoad,
+          userId,
+        ]
+      );
+
+      //2. 트레이너 회원의 경우 트레이너 정보 생성
+      if (userType === 2) {
+        const createTrainer = await transactionalEntityManager.query(
+          `
+            INSERT INTO trainers
+            (user_id, specialized)
+            VALUES (?, ?)
+          `,
+          [userId, specialized]
+        );
+      }
+    });
+  } catch (err) {
+    //롤백 및 에러 처리
+    console.error(err);
+    throwError(400, "TRANSACTION_ERROR");
+  } finally {
+    //연결 닫기
+    await connection.close();
+  }
+};
+
 module.exports = {
   findByKakaoId,
+  findByUserId,
   updateImgUrl,
   createUser,
+  updateUser,
 };
