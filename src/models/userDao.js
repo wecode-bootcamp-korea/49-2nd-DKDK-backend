@@ -1,5 +1,6 @@
 const { AppDataSource } = require("../models/dataSource");
 const { createConnection } = require("typeorm");
+const { throwError } = require("../utils");
 
 // isSubscribed 추가
 const findByKakaoId = async (kakaoId) => {
@@ -15,6 +16,7 @@ const findByKakaoId = async (kakaoId) => {
   console.log("userDao findByKakaoId result: ", result);
 
   return result;
+
 };
 
 const updateImgUrl = async (userId, imgUrl) => {
@@ -33,7 +35,13 @@ const updateImgUrl = async (userId, imgUrl) => {
 //트랜잭션????
 const createUser = async (kakaoId, imgUrl) => {
   const result = await AppDataSource.query(
-    `INSERT INTO users (kakao_id, img_url) VALUES (?, ?)`, [kakaoId, imgUrl]);
+    `
+    INSERT INTO users 
+    (kakao_id, img_url) 
+    VALUES (?, ?)
+    `,
+    [kakaoId, imgUrl]
+  );
 
   console.log("userDao createUser result : ", result);
 
@@ -49,8 +57,6 @@ const findByUserId = async (userId) => {
     `,
     [userId]
   );
-
-  console.log("userDao findByUserId result: ", result);
 
   return result;
 };
@@ -119,6 +125,7 @@ const updateUser = async (
         );
       }
     });
+
   } catch (err) {
     //롤백 및 에러 처리
     console.error(err);

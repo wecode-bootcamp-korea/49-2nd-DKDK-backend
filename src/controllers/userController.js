@@ -43,7 +43,6 @@ const detailSignUp = async (req, res) => {
       throwError(400, "INVALID_USER_TYPE");
     }
 
-    //토큰생성하기
     const signUpUser = await detailUpdateUser(
       userId,
       userType,

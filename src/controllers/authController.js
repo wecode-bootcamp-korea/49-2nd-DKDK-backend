@@ -32,8 +32,9 @@ const kakaoLogin = async (req, res) => {
   
       }
     } else {
-  
-      res.status(500).json({ message: "FAIL_TO_LOGIN_RETURN", statusCode: 500 });
+      res.status(500).json({ 
+        message: "FAIL_TO_LOGIN_RETURN", 
+        statusCode: 500 });
     }
   };
   
