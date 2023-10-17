@@ -1,5 +1,6 @@
 const { dataSource, AppDataSource } = require("./dataSource");
 
+
 const maxHeartbeatReader = async (id) => {
   const heartbeatReader = await AppDataSource.query(
     `SELECT max_heartrate AS maxHeartrate, created_date AS createdDate
@@ -157,7 +158,7 @@ const testDao = async (id) => {
   return tester;
 };
 
-const recordChecker = async (addRecord) => {
+const recordTimeChecker = async (addRecord) => {
   const id = addRecord.userId;
   const createdDate = addRecord.createdDate;
   const checker = await AppDataSource.query(
@@ -165,8 +166,25 @@ const recordChecker = async (addRecord) => {
   );
   return checker;
 };
+
+const recordIdChecker = async (addRecord) => {
+  const id = addRecord.userId;
+  const idChecker = await AppDataSource.query(
+    `SELECT user_id AS userId FROM workout_records WHERE user_id = ${id}`
+  );
+  return idChecker;
+};
+
+const recordIdParamsChecker = async (id) => {
+  const idParamsChecker = await AppDataSource.query(
+    `SELECT user_id AS userId FROM workout_records WHERE user_id = ${id}`
+  );
+  return idParamsChecker;
+};
+
 module.exports = {
-  recordChecker,
+  recordTimeChecker,
+  recordIdChecker,
   recordCreator,
   recordUpdater,
   weightReader,
@@ -175,6 +193,7 @@ module.exports = {
   timeReader,
   bmiReader,
   maxHeartbeatReader,
+  recordIdParamsChecker,
   musclemassReader,
   bodyfatReader,
   testDao,

@@ -11,37 +11,45 @@ const {
   bmiReader,
   weightReader,
   recordUpdater,
-  recordChecker,
+  recordTimeChecker,
+  recordIdParamsChecker,
+  recordIdChecker,
   bodyfatReader,
 } = recordDao;
 
 const createRecordService = async (addRecord) => {
   try {
     const nowDate = new Date();
-    const userDateTime = await recordDao.recordChecker(addRecord);
+    const userDateTime = await recordDao.recordTimeChecker(addRecord);
+    const userIdLoader = await recordDao.recordIdChecker(addRecord);
     const receivedDateTime = userDateTime[0].createdDate; 
     const dateCheckerPole = nowDate.setHours(0, 0, 0, 0); 
     const formattedUserDate = receivedDateTime.setHours(0,0,0,0)
   
-    // if (dateCheckerPole !== formattedUserDate) {
-    //   const recordCreator = await recordDao.recordCreator(addRecord);
-    //   return recordCreator;
-    // }
+    if (!userIdLoader) {
+      return JSON.parse(JSON.stringify("undefined"))
+    }
 
     if (dateCheckerPole !== formattedUserDate) {
       const recordCreator = await recordDao.recordCreator(addRecord);
       return recordCreator;
     }
+    
       const recordUpdater = await recordDao.recordUpdater(addRecord);
       return recordUpdater;
-    
-  
+
   } catch (error) {
   console.log(error);
 }}
   
 
 const readRecordService = async (id) => {
+  const userIdLoader = await recordDao.recordIdParamsChecker(id);
+  const userIdParamsLoader = userIdLoader[0];
+  if (!userIdParamsLoader) {
+    return JSON.parse(JSON.stringify("undefined"))
+  }
+
   const fatRecordReader = await recordDao.bodyfatReader(Number(id));
   const numberFatRecords = fatRecordReader.map((record) => {
     const numberFat = Number(record.bodyFat);
