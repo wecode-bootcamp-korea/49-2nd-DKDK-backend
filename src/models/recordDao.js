@@ -158,6 +158,23 @@ const testDao = async (id) => {
   return tester;
 };
 
+const recordIdChecker = async (addRecord) => {
+  const id = addRecord.userId;
+  const idChecker = await AppDataSource.query(
+    `SELECT user_id AS userId FROM workout_records WHERE user_id = ${id}`
+  );
+  console.log(idChecker)
+  return idChecker;
+};
+
+
+const recordIdParamsChecker = async (id) => {
+  const idParamsChecker = await AppDataSource.query(
+    `SELECT user_id AS userId FROM workout_records WHERE user_id = ${id}`
+  );
+  return idParamsChecker;
+};
+
 const recordTimeChecker = async (addRecord) => {
   const id = addRecord.userId;
   const createdDate = addRecord.createdDate;
@@ -165,21 +182,6 @@ const recordTimeChecker = async (addRecord) => {
     `SELECT created_date AS createdDate FROM workout_records WHERE user_id = ${id} ORDER BY created_date DESC LIMIT 1`
   );
   return checker;
-};
-
-const recordIdChecker = async (addRecord) => {
-  const id = addRecord.userId;
-  const idChecker = await AppDataSource.query(
-    `SELECT user_id AS userId FROM workout_records WHERE user_id = ${id}`
-  );
-  return idChecker;
-};
-
-const recordIdParamsChecker = async (id) => {
-  const idParamsChecker = await AppDataSource.query(
-    `SELECT user_id AS userId FROM workout_records WHERE user_id = ${id}`
-  );
-  return idParamsChecker;
 };
 
 module.exports = {

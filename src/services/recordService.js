@@ -19,24 +19,23 @@ const {
 
 const createRecordService = async (addRecord) => {
   try {
-    const nowDate = new Date();
-    const userDateTime = await recordDao.recordTimeChecker(addRecord);
-    const userIdLoader = await recordDao.recordIdChecker(addRecord);
-    const receivedDateTime = userDateTime[0].createdDate; 
-    const dateCheckerPole = nowDate.setHours(0, 0, 0, 0); 
-    const formattedUserDate = receivedDateTime.setHours(0,0,0,0)
-  
+    const userIdLoader = await recordDao.recordIdChecker(addRecord)[0];
     if (!userIdLoader) {
       return JSON.parse(JSON.stringify("undefined"))
     }
 
+    const nowDate = new Date();
+    const userDateTime = await recordDao.recordTimeChecker(addRecord);
+    const receivedDateTime = userDateTime[0].createdDate; 
+    const dateCheckerPole = nowDate.setHours(0, 0, 0, 0); 
+    const formattedUserDate = receivedDateTime.setHours(0,0,0,0)
     if (dateCheckerPole !== formattedUserDate) {
       const recordCreator = await recordDao.recordCreator(addRecord);
       return recordCreator;
     }
     
-      const recordUpdater = await recordDao.recordUpdater(addRecord);
-      return recordUpdater;
+    const recordUpdater = await recordDao.recordUpdater(addRecord);
+    return recordUpdater;
 
   } catch (error) {
   console.log(error);
