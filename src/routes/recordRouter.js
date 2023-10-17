@@ -11,3 +11,6 @@ recordRouter.post("/createRecord", recordController.createRecord);
 recordRouter.get("/readRecord/:id", recordController.readRecord);
 
 module.exports = recordRouter;
+
+
+

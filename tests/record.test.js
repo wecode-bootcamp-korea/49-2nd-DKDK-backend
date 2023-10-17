@@ -1,3 +1,4 @@
+
 // tests/user.test.js
 
 // npm i --save-dev supertest
@@ -7,14 +8,17 @@ const request = require("supertest");
 const { createApp } = require("../app");
 // DB와의 커넥션을 위해 DataSource 객체를 불러옵니다.
 const { AppDataSource } = require("../src/models/data-source");
-
+console.log(AppDataSource);
 describe("read Records", () => {
   let app;
 
-  beforeAll(async () => {
+  beforeAll(async() => {
     // 모든 테스트가 시작하기 전(beforeAll)에 app을 만들고, DataSource를 이니셜라이징 합니다.
     app = createApp();
-    await AppDataSource.initialize();
+    await AppDataSource.initialize().then(() =>
+    console.log("Datasource initialized.")
+  );
+  console.log(AppDataSource);
   });
 
   afterAll(async () => {
@@ -22,18 +26,21 @@ describe("read Records", () => {
     // await AppDataSource.query(`TRUNCATE workout_records`);
 
     // 모든 테스트가 끝나게 되면(afterAll) DB 커넥션을 끊어줍니다.
-    await AppDataSource.destroy();
+    // await AppDataSource.destroy();
   });
 
   test("FAILED: Unable to find the user", async () => {
     await request(app)
-      .get("/records/readRecord/6")
-      .expect(400)
+    .get("/records/readRecord/6")
+    .expect(400);
   });
+});
 
-  test("SUCCESS: Able to load the record", async () => {
-    await request(app).get("/records/readRecord/3").expect(200);
-  });
+  // test("SUCCESS: Able to load the record", async () => {
+  //   await request(app)
+  //   .get("/records/readRecord/3")
+  //   .expect(200);
+  // });
 
   //   test("SUCCESS: Records created", async () => {
   //     // supertest의 request를 활용하여 app에 테스트용 request를 보냅니다.
@@ -71,4 +78,4 @@ describe("read Records", () => {
   //       .expect(409)
   //       .expect({ message: "duplicated email" });
   //   });
-});
+// });

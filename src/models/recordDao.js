@@ -125,7 +125,6 @@ const recordUpdater = async (addRecord) => {
     addRecord.maxHeartrate,
     addRecord.userId,
   ];
-  console.log(addRecord);
   const recordUpdater = await AppDataSource.query(updater, values);
   return recordUpdater;
 };
@@ -149,7 +148,6 @@ const recordIdChecker = async (addRecord) => {
   const idChecker = await AppDataSource.query(
     `SELECT user_id AS userId FROM workout_records WHERE user_id = ${id}`
   );
-  console.log(idChecker);
   return idChecker;
 };
 

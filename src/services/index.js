@@ -1,4 +1,4 @@
 const {
   createRecordService,
-  testService,
+  readRecordService,
   } = require('./recordService');
