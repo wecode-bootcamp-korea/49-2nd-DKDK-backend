@@ -1,0 +1,15 @@
+const {
+  recordTimeChecker,
+  recordIdChecker,
+  recordCreator,
+  recordUpdater,
+  weightReader,
+  avgWorkoutTimeTotal,
+  avgWorkoutTimeUser,
+  timeReader,
+  bmiReader,
+  maxHeartbeatReader,
+  recordIdParamsChecker,
+  musclemassReader,
+  bodyfatReader,
+} = require("./recordDao");
