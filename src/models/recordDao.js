@@ -6,8 +6,7 @@ const maxHeartbeatReader = async (id) => {
       FROM workout_records
       WHERE user_id = ${id}
       ORDER BY createdAt DESC
-    LIMIT 12;
-`
+    LIMIT 12;`
   );
   return heartbeatReader;
 };

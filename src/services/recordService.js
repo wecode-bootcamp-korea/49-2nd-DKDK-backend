@@ -44,7 +44,6 @@ const createRecordService = async (addRecord) => {
 const readRecordService = async (id) => {
   const userIdLoader = await recordDao.recordIdParamsChecker(id);
   const userIdParamsLoader = userIdLoader[0];
-  console.log(userIdParamsLoader)
   if (!userIdParamsLoader) {
   return userIdParamsLoader;
   }
