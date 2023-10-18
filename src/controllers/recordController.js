@@ -8,11 +8,11 @@ const readRecord = async (req, res) => {
     const { id } = req.params;
     const readRecordService = await recordService.readRecordService(Number(id));
     if (readRecordService === undefined) {
-      res.status(400).json("NO_USER");
+    return res.status(400).json("NO_USER");
     }
     res.status(200).json(readRecordService);
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
 };
 

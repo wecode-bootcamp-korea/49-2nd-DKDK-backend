@@ -44,8 +44,9 @@ const createRecordService = async (addRecord) => {
 const readRecordService = async (id) => {
   const userIdLoader = await recordDao.recordIdParamsChecker(id);
   const userIdParamsLoader = userIdLoader[0];
+  console.log(userIdParamsLoader)
   if (!userIdParamsLoader) {
-    throwError(404, "user not found");
+  return userIdParamsLoader;
   }
   const fatRecordReader = await recordDao.bodyfatReader(id);
   const numberFatRecords = fatRecordReader.map((record) => {

@@ -9,4 +9,5 @@ const AppDataSource = new DataSource({
   database: process.env.TYPEORM_DATABASE,
 });
 
+
 module.exports = { AppDataSource };
