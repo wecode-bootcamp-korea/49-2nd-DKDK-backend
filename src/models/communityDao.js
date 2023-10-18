@@ -1,5 +1,5 @@
 const { dataSource } = require("./dataSource");
-
+//글 불러오기
 const getPostDao = async (userId, postId) => {
   return await dataSource.query(
     `
@@ -8,7 +8,7 @@ const getPostDao = async (userId, postId) => {
     [userId, postId]
   );
 };
-
+//글 쓰기
 const createPostDao = async (userId, content, img_url) => {
   return await dataSource.query(
     `
@@ -18,7 +18,7 @@ const createPostDao = async (userId, content, img_url) => {
     [userId, content, img_url]
   );
 };
-
+// 글 지우기
 const deletePostDao = async (userId, postId) => {
   return await dataSource.query(
     `
@@ -27,7 +27,7 @@ const deletePostDao = async (userId, postId) => {
     [userId, postId]
   );
 };
-
+// 댓글달기
 const createCommentDao = async (userId, postId, content) => {
   return await dataSource.query(
     `
@@ -35,6 +35,15 @@ const createCommentDao = async (userId, postId, content) => {
         VALUES (?,?,?)
         `,
     [userId, postId, content]
+  );
+};
+
+const deleteCommentDao = async (userId, postId, content) => {
+  return await dataSource.query(
+    `
+        DELETE FROM comments WHERE (user_id, postId, content)
+        VALUES (?,?,?)
+        `[(userId, postId, content)]
   );
 };
 
