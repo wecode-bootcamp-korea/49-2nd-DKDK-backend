@@ -10,4 +10,6 @@ const readRecord = recordController.readRecord;
 recordRouter.post("/createRecord", recordController.createRecord);
 recordRouter.get("/readRecord/:id", recordController.readRecord);
 
+//라우터에 토큰확인 미들웨어를 추가해야함
+
 module.exports = recordRouter;
