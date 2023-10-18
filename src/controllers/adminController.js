@@ -1,10 +1,11 @@
-// const { adminService } = require("../services");
+const { adminService } = require("../services");
 
-const logIn = async () => {
-  console.log("hi login");
+const logIn = async (req, res) => {
+  const { email, password } = req.body;
+  await adminService.logIn(email, password);
 };
 
-const signUp = async () => {
+const signUp = async (req, res) => {
   console.log("hi signUp");
 };
 
