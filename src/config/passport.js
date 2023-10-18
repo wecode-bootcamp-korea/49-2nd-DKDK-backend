@@ -52,7 +52,7 @@ passport.use(
 
             if (!exUserData) throwError(400, "FAIL_TO_GET_EX_USER")
 
-            done(null, exUserData); //req.user 라는 객체가 생성, null은 오류객체자리
+            done(null, exUserData);
          
             // 2. 상세정보를 입력하지 않은 회원
           } else {
@@ -85,7 +85,7 @@ passport.use(
 
           if (!newUserData) throwError(400, "FAIL_TO_GET_NEW_USER")
 
-          done(null, newUserData); //newUserData 가 req.user 에 담김
+          done(null, newUserData);
         }
 
       } catch (error) {

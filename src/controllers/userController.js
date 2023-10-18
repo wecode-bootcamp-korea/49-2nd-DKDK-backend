@@ -3,16 +3,16 @@ const { checkEmptyValues, generateToken, throwError } = require("../utils");
 const { userServicve } = require("../services");
 const { detailUpdateUser } = userServicve;
 
-//회원가입후 토큰,  기존유저인지, 뉴 유저인지 , 
 const detailSignUp = async (req, res) => {
 
   const accessToken = req.headers.authorization;
   const { id } = jwt.verify(accessToken, process.env.SECRET);
   const userId = id;
+
+  if(!accessToken) throwError("INVALID_TOKEN")
   
   const {
     userType,
-    imgUrl,
     nickname,
     phoneNumber,
     gender,
@@ -29,7 +29,6 @@ const detailSignUp = async (req, res) => {
     if (!userType) throwError(400, "KEY_ERROR");
 
     const commonFields = [
-      imgUrl,
       nickname,
       phoneNumber,
       gender,
@@ -41,8 +40,8 @@ const detailSignUp = async (req, res) => {
     ];
 
     //트레이너만 specialized 입력
-    if (userType === 1 || userType === 2) {
-      const fieldsToCheck = userType === 2 ? [...commonFields, specialized] : commonFields;
+    if (userType === "1" || userType === "2") {
+      const fieldsToCheck = userType === "2" ? [...commonFields, specialized] : commonFields;
 
       checkEmptyValues(...fieldsToCheck);
     } else {
@@ -52,7 +51,6 @@ const detailSignUp = async (req, res) => {
     const signUpUser = await detailUpdateUser(
       userId,
       userType,
-      imgUrl,
       nickname,
       phoneNumber,
       gender,
@@ -66,14 +64,8 @@ const detailSignUp = async (req, res) => {
 
     console.log("userController signUpUser : ", signUpUser)
 
-   // const token = generateToken(signUpUser.userId);
-
     return res.status(200).json({
       message: "SIGNUP_SUCCESS",
-      token: accessToken,
-      data: {
-        userType: signUpUser.userType,
-      },
     });
   } catch (err) {
     console.error(err);

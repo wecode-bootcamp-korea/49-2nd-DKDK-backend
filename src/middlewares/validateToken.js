@@ -6,8 +6,8 @@ const validateToken = async (req, res, next) => {
     const accessToken = req.headers.authorization;
 
     //토큰이 없다면 에러 발생
-    if (!accessToken) {
-      throwError(401, 'AccessToken required');
+    if (!accessToken) { 
+      throwError(401, 'ACCESSTOKEN_REQUIRED');
     }
 
     const { id } = jwt.verify(accessToken, process.env.SECRET);

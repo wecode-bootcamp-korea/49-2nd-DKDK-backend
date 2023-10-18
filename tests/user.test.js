@@ -1,24 +1,24 @@
 const request = require("supertest");
-
 const { createApp } = require("../app");
 const { AppDataSource } = require("../src/models/dataSource");
-
-//jest.setTimeout(10000); // 10 seconds
+const jwt = require("jsonwebtoken");
 
 describe("Sign up", () => {
   let app;
+  let userId;
+  let accessToken;
 
   beforeAll(async () => {
     app = createApp();
     await AppDataSource.initialize();
-    await AppDataSource.query(`
-      INSERT INTO users (id, kakao_id)
-      VALUES (1, '12345');
+    const user = await AppDataSource.query(`
+      INSERT INTO users (kakao_id, img_url)
+      VALUES ('12345', "https://img.allurekorea.com/allure/2020/12/style_5fdf11d599bdd-916x1200.jpg");
     `);
-    await AppDataSource.query(`
-    INSERT INTO users (id, kakao_id)
-      VALUES (2, '12346');
-    `);
+
+    userId = user.insertId;
+    accessToken = jwt.sign({ id: userId }, process.env.SECRET);
+
   });
 
   afterAll(async () => {
@@ -29,13 +29,13 @@ describe("Sign up", () => {
     await AppDataSource.destroy(); // 연결 끊기
   });
 
-  test("FALIED : KEY_ERROR", async () => {
+  test("SUCCESS: update user_trainer", async () => {
     await request(app)
       .post("/user/signup")
+      .set("Authorization", accessToken)
       .send({
-        userId: 1,
-        userType: 1,
-        imgUrl: "https://img.allurekorea.com/allure/2020/12/style_5fdf11d599bdd-916x1200.jpg",
+        userType: 2,
+        nickname: "슈슈",
         phoneNumber: "01072925164",
         gender: "남성",
         birthday: "1990/03/26",
@@ -43,6 +43,25 @@ describe("Sign up", () => {
         weight: 70,
         interestedWorkout: 1,
         workoutLoad: 1,
+        specialized : 1
+      })
+      .expect(200);
+  });
+
+  test("FALIED : KEY_ERROR", async () => {
+    await request(app)
+      .post("/user/signup")
+      .set("Authorization", accessToken)
+      .send({
+        userType: 1,
+        phoneNumber: "01072925164",
+        gender: "남성",
+        birthday: "1990/03/26",
+        height: 180,
+        weight: 70,
+        interestedWorkout: 1,
+        workoutLoad: 1,
+
       })
       .expect(400)
       .expect({ message: "KEY_ERROR" });
@@ -51,10 +70,9 @@ describe("Sign up", () => {
   test("FALIED : INVALID_USER_TYPE", async () => {
     await request(app)
       .post("/user/signup")
+      .set("Authorization", accessToken)
       .send({
-        userId: 1,
         userType: 5,
-        imgUrl: "https://img.allurekorea.com/allure/2020/12/style_5fdf11d599bdd-916x1200.jpg",
         nickname: "슈슈",
         phoneNumber: "01072925164",
         gender: "남성",
@@ -68,42 +86,7 @@ describe("Sign up", () => {
       .expect({ message: "INVALID_USER_TYPE" });
   });
 
-  test("SUCCESS: update user", async () => {
-    await request(app)
-      .post("/user/signup")
-      .send({
-        userId: 1,
-        userType: 1,
-        imgUrl: "https://img.allurekorea.com/allure/2020/12/style_5fdf11d599bdd-916x1200.jpg",
-        nickname: "슈슈",
-        phoneNumber: "01072925164",
-        gender: "남성",
-        birthday: "1990/03/26",
-        height: 180,
-        weight: 70,
-        interestedWorkout: 1,
-        workoutLoad: 1,
-      })
-      .expect(200);
-  });
 
-  test("SUCCESS: insert trainer", async () => {
-    await request(app)
-      .post("/user/signup")
-      .send({
-        userId: 2,
-        userType: 2,
-        imgUrl: "https://img.allurekorea.com/allure/2020/12/style_5fdf11d599bdd-916x1200.jpg",
-        nickname: "슈슈슈",
-        phoneNumber: "01072925169",
-        gender: "남성",
-        birthday: "1990/03/26",
-        height: 180,
-        weight: 70,
-        interestedWorkout: 1,
-        workoutLoad: 1,
-        specialized: 1,
-      })
-      .expect(200);
-  });
+
+
 });

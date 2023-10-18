@@ -14,7 +14,7 @@ const kakaoLogin = async (req, res) => {
         };
   
         console.log("response : ", response)
-        res.json(response);
+        return res.json(response);
   
       } else {
   
@@ -29,7 +29,7 @@ const kakaoLogin = async (req, res) => {
         };
   
         console.log("response : ", response)
-        res.json(response);
+        return res.json(response);
   
       }
     } else {

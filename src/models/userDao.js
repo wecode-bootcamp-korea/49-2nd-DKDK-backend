@@ -82,12 +82,11 @@ const findByUserId = async (userId) => {
 };
 
 
-
 // 상세 업데이트
 const updateUser = async (
   userId,
   userType,
-  imgUrl,
+  //imgUrl,
   nickname,
   phoneNumber,
   gender,
@@ -109,7 +108,6 @@ const updateUser = async (
             UPDATE users
             SET 
                 user_type = ?,
-                img_url = ?,
                 nickname = ?,
                 phone_number = ?,
                 gender = ?,
@@ -122,7 +120,6 @@ const updateUser = async (
           `,
         [
           userType,
-          imgUrl,
           nickname,
           phoneNumber,
           gender,
@@ -137,7 +134,7 @@ const updateUser = async (
       );
 
       //2. 트레이너 회원의 경우 트레이너 정보 생성
-      if (userType === 2) {
+      if (userType === "2") {
         const createTrainer = await transactionalEntityManager.query(
           `
             INSERT INTO trainers
