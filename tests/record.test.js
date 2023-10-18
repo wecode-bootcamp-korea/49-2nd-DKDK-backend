@@ -33,7 +33,7 @@ describe("read Records", () => {
     .expect('"NO_USER"')
   });
 
-  test("SUCCESS: Unable to find the user", async () => {
+  test("SUCCESS: Able to read the user record", async () => {
     await request(app)
     .get("/records/readRecord/3")
     .expect(200)
