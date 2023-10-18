@@ -14,6 +14,7 @@ const kakaoLogin = async (req, res) => {
           imgUrl,
         };
   
+        console.log("response : ", response)
         res.json(response);
   
       } else if (req.user.token) {
@@ -28,13 +29,14 @@ const kakaoLogin = async (req, res) => {
           //isSubscribed 추가 예정
         };
   
+        console.log("response : ", response)
         res.json(response);
   
       }
     } else {
-      res.status(500).json({ 
-        message: "FAIL_TO_LOGIN_RETURN", 
-        statusCode: 500 });
+      return res.status(500).json({
+        message: "FAIL_TO_SIGN_UP",
+      });
     }
   };
   

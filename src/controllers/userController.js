@@ -58,6 +58,8 @@ const detailSignUp = async (req, res) => {
       specialized
     );
 
+    console.log("userController signUpUser : ", signUpUser)
+
     const token = generateToken(signUpUser.userId);
 
     return res.status(200).json({
@@ -69,6 +71,10 @@ const detailSignUp = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
+    ``
+    return res.status(err.statusCode || 500).json({
+      message: err.message || "FAIL_TO_SIGNUP",
+    });
   }
 };
 

@@ -37,7 +37,7 @@ const detailUpdateUser = async (
     //키,몸무게 유효성 검사 : 0 이상
     if (height <= 0 || weight <= 0) throwError(400, "INVAILD_NUMERIC");
 
-    await updateUser(
+    const result = await updateUser(
       userId,
       userType,
       imgUrl,
@@ -52,11 +52,14 @@ const detailUpdateUser = async (
       specialized
     );
 
-    return { userId, userType };
+    console.log("service result : ", result)
+    
+    return result;
     
   } catch (err) {
     console.error(err);
-    throwError(400, "FAIL_UPDATE_USER");
+    return err;
+    
   }
 };
 

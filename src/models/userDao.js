@@ -42,10 +42,17 @@ const createUser = async (kakaoId, imgUrl) => {
     `,
     [kakaoId, imgUrl]
   );
+  if (result.insertId) {
+    
+    return {
+      id: result.insertId,
+      img_url: imgUrl,
+    };
 
-  console.log("userDao createUser result : ", result);
+  } else {
+    throwError(401, "FAIL_TO_CREATE_USER")
+  }
 
-  return result;
 };
 
 const findByUserId = async (userId) => {
@@ -80,7 +87,7 @@ const updateUser = async (
 
   try {
     //트랜젝션 시작
-    await connection.transaction(async (transactionalEntityManager) => {
+    const result = await connection.transaction(async (transactionalEntityManager) => {
       //1. 유저 정보 업데이트
       const userUpdate = await transactionalEntityManager.query(
         `
@@ -111,6 +118,7 @@ const updateUser = async (
           workoutLoad,
           userId,
         ]
+
       );
 
       //2. 트레이너 회원의 경우 트레이너 정보 생성
@@ -124,8 +132,21 @@ const updateUser = async (
           [userId, specialized]
         );
       }
+      
+      if (userUpdate.affectedRows > 0) {
+         
+       return {
+          userId : userId,
+          userType : userType,
+        }
+        
+      } else {
+        throwError(401, "FAIL_TO_UPDATE_USER");
+      }
     });
 
+    console.log("dao result : ", result)
+    return result;
   } catch (err) {
     //롤백 및 에러 처리
     console.error(err);
