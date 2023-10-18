@@ -50,9 +50,15 @@ passport.use(
             done(null, exUserData); //req.user 라는 객체가 생성, null은 오류객체자리
          
           } else {
+            const userId = exUser.id;
+            const jwtToken = generateToken(userId);
+
+            if (!jwtToken) throwError(400, "FAIL_TO_GENERATE_JWT")
+
             const userTypeData = {
-              userId: exUser.id,
-              imgUrl: exUser.imgUrl,
+              token: jwtToken,
+              //userId: exUser.id,
+             // imgUrl: exUser.imgUrl,
             };
             done(null, userTypeData);
           }
@@ -60,10 +66,16 @@ passport.use(
           //회원가입
           const newUser = await createUser(kakaoId, imgUrl);
           console.log("passport signup newUser : ", newUser);
+          const userId = newUser.id
+
+          const jwtToken = generateToken(userId);
+
+            if (!jwtToken) throwError(400, "FAIL_TO_GENERATE_JWT")
 
           const newUserData = {
-            userId: newUser.id,
-            imgUrl: newUser.img_url,
+           // userId: newUser.id,
+          //imgUrl: newUser.img_url,
+           token: jwtToken,
           };
 
           if (!newUserData) throwError(400, "FAIL_TO_GET_NEW_USER")
