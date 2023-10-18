@@ -1,6 +1,6 @@
 const { AppDataSource } = require("./dataSource");
 
-// Trainer회원인지 일반 회원인지 체크, 서비스 단에서 체크한뒤
+// Trainer회원인지 일반 회원인지 체크
 const checkTrainer = async (userId) => {
   const isTrainer = await AppDataSource.query(
     `SELECT CASE
@@ -16,7 +16,7 @@ const checkTrainer = async (userId) => {
   return isTrainer[0].isTrainer;
 };
 
-// 유저 정보 확인 - 잠정 완료
+// GET 유저 정보
 const userInfo = async (userId) => {
   return await AppDataSource.query(
     `
@@ -37,116 +37,62 @@ const userInfo = async (userId) => {
   );
 };
 
-// 유저정보 수정
-const userUpdate = async (
-  userId,
-  nickname,
-  profileImg,
-  height,
-  weight,
-  workoutLoad,
-  interestedWorkout
-) => {
-  return await AppDataSource.query(
-    `
-    UPDATE users
-        SET nickname = ?,
-        img_url = ?,
-        height = ?,
-        weight = ?,
-        workout_load = ?,
-        interested_workout = ?
-    WHERE id = ?
-    `,
-    [
-      nickname,
-      profileImg,
-      height,
-      weight,
-      workoutLoad,
-      interestedWorkout,
-      userId,
-    ]
-  );
-};
-
-// 트레이너 기준 user_id 하나로 트레이너 정보 찾을 수 있
+// GET 트레이너 정보
 const trainerInfo = async (userId) => {
-  return await AppDataSource.query(
-    `
-    SELECT u.img_url AS profileImage,
-        u.nickname as nickname,
-        u.height AS height,
-        u.weight AS weight,
-        ANY_VALUE(wc.category) AS specialized,
-        COUNT(c.id) AS numOfComments
-    FROM users u
-    JOIN trainers t ON t.user_id = u.id
-    JOIN workout_categories wc ON wc.id = t.specialized
-    LEFT JOIN comments c on u.id = c.user_id
-    WHERE u.id = ?
-    GROUP BY u.id;
-    `,
-    [userId]
-  );
-};
-
-// 트레이너가 자기 정보 업데이트
-const trainerUpdate = async (
-  userId,
-  nickname,
-  profileImg,
-  height,
-  weight,
-  specialized
-) => {
-  await AppDataSource.query(
-    `
-    UPDATE users
-    SET nickname = ?,
-        profileImg = ?,
-        height = ?,
-        weight = ?,
-    WHERE id = ?;
-    `,
-    [nickname, profileImg, height, weight, userId]
-  );
-
-  await AppDataSource.query(
-    `
-    UPDATE trainers t
-    JOIN users u ON u.id = t.user_id
-    SET t.specialized = ?
-    WHERE u.id = ?;
-    `,
-    [specialized, userId]
-  );
-};
-// 잠정 완료
-const ptOrderInfo = async (userId) => {
-  return await AppDataSource.query(
+  const trainerInfo = await AppDataSource.query(
     `
     SELECT
-        (SELECT u.nickname FROM users u JOIN trainers t ON u.id = t.user_id WHERE t.id = p.trainer_id) AS trainerName,
-        (SELECT u.img_url FROM users u JOIN trainers t ON u.id = t.user_id WHERE t.id = p.trainer_id) AS profileImg,
-        po.created_at AS purchaseDate,
-        p.available_area AS availalbeArea,
-        p.available_time AS availableTime,
-        p.category_name AS category,
-        p.price AS price,
-        p.content AS content
-    FROM pt_orders po
-    JOIN products p ON p.id = po.product_id
-    JOIN users u ON po.buyer_user_id = u.id
-    WHERE u.id = ?;
+      wc.category AS specialization,
+      COUNT(DISTINCT po.buyer_user_id) AS customers,
+      (SELECT COUNT(*) FROM comments c2 WHERE c2.user_id = t.user_id) AS comments
+    FROM trainers t
+    JOIN users u ON u.id = t.user_id
+    JOIN products p ON p.trainer_id = t.id
+    JOIN pt_orders po ON po.product_id = p.id
+    JOIN workout_categories wc ON wc.id = t.specialized
+    WHERE u.id = ?
+    GROUP BY specialization;
     `,
     [userId]
   );
+  return trainerInfo.length === 0 ? "NOT_A_TRAINER" : trainerInfo;
+};
+
+// 잠정 완료
+const ptOrderInfo = async (userId) => {
+  const ptOrderDetail = await AppDataSource.query(
+    `
+    SELECT
+      (SELECT u.nickname FROM users u WHERE u.id = t.user_id) AS trainerName,
+      (SELECT u.img_url FROM users u WHERE u.id = t.user_id) AS profileImg,
+      t.specialized AS specialized,
+      (SELECT COUNT(DISTINCT po.buyer_user_id)
+        FROM pt_orders po
+        JOIN products p ON p.id = po.product_id
+        WHERE p.trainer_id = t.id) AS customers,
+      (SELECT COUNT(*) FROM comments c WHERE c.user_id = t.user_id) AS comments,
+      wc.category AS category,
+      DATE(DATE_ADD(p.created_at, INTERVAL p.term MONTH)) AS end_at,
+      p.available_area AS availableArea
+    FROM pt_orders po
+    JOIN products p ON p.id = po.product_id
+    JOIN trainers t ON p.trainer_id = t.id
+    JOIN workout_categories wc ON p.category_name = wc.id
+    WHERE po.buyer_user_id = ?
+    `,
+    [userId]
+  );
+  return ptOrderDetail.length === 0 ? "NO_PT_ORDERS" : ptOrderDetail;
+  // if (ptOrderDetail.length == 0) {
+  //   return "NO_PT_ORDERS";
+  // } else {
+  //   return ptOrderDetail;
+  // }
 };
 
 // 잠정 완료
 const subOrderInfo = async (userId) => {
-  return await AppDataSource.query(
+  const subOrderDetails = await AppDataSource.query(
     `
     SELECT so.user_id AS userId,
         so.sub_id AS subscriptionId,
@@ -160,6 +106,7 @@ const subOrderInfo = async (userId) => {
     `,
     [userId]
   );
+  return subOrderDetails.length === 0 ? "NO_SUB_ORDERS" : subOrderDetails;
 };
 
 // 잠정 완료
@@ -202,14 +149,80 @@ const workoutRcmd = async (userId) => {
   );
 };
 
+
+// 유저정보 수정
+const userUpdate = async (
+  userId,
+  nickname,
+  profileImg,
+  height,
+  weight,
+  workoutLoad,
+  interestedWorkout
+) => {
+  return await AppDataSource.query(
+    `
+    UPDATE users
+        SET nickname = ?,
+        img_url = ?,
+        height = ?,
+        weight = ?,
+        workout_load = ?,
+        interested_workout = ?
+    WHERE id = ?
+    `,
+    [
+      nickname,
+      profileImg,
+      height,
+      weight,
+      workoutLoad,
+      interestedWorkout,
+      userId,
+    ]
+  );
+};
+
+// 트레이너가 자기 정보 업데이트
+const trainerUpdate = async (
+  userId,
+  nickname,
+  profileImg,
+  height,
+  weight,
+  specialized
+) => {
+  await AppDataSource.query(
+    `
+    UPDATE users
+    SET nickname = ?,
+        profileImg = ?,
+        height = ?,
+        weight = ?,
+    WHERE id = ?;
+    `,
+    [nickname, profileImg, height, weight, userId]
+  );
+
+  await AppDataSource.query(
+    `
+    UPDATE trainers t
+    JOIN users u ON u.id = t.user_id
+    SET t.specialized = ?
+    WHERE u.id = ?;
+    `,
+    [specialized, userId]
+  );
+};
+
 module.exports = {
   checkTrainer,
   userInfo,
-  userUpdate,
   trainerInfo,
-  trainerUpdate,
   ptOrderInfo,
   subOrderInfo,
   foodRcmd,
   workoutRcmd,
+  userUpdate,
+  trainerUpdate,
 };
