@@ -48,8 +48,16 @@ const weightReader = async (id) => {
 
 const bmiReader = async (id) => {
   const rawHeightReader = await AppDataSource.query(
-    `SELECT current_weight AS weight, height, created_at AS createdAt FROM workout_records
-    LEFT JOIN users ON workout_records.user_id = users.id WHERE user_id = ${id}`
+    `SELECT r.current_weight AS weight, u.height, r.createdAt 
+    FROM (
+        SELECT current_weight, user_id, created_at AS createdAt 
+        FROM workout_records 
+        WHERE user_id = ${id}
+        ORDER BY createdAt DESC 
+        LIMIT 12
+    ) AS r 
+    LEFT JOIN users u ON r.user_id = u.id;
+    `
   );
   return rawHeightReader;
 };
