@@ -78,28 +78,8 @@ describe("read Records", () => {
       ],
       "numberBmiRecords": [
           {
-              "bmi": 37.36,
-              "createdAt": "2023-09-30"
-          },
-          {
-              "bmi": 36.37,
-              "createdAt": "2023-10-01"
-          },
-          {
-              "bmi": 35.3,
-              "createdAt": "2023-10-02"
-          },
-          {
-              "bmi": 34.42,
-              "createdAt": "2023-10-03"
-          },
-          {
-              "bmi": 31.86,
-              "createdAt": "2023-10-04"
-          },
-          {
-              "bmi": 29.39,
-              "createdAt": "2023-10-05"
+              "bmi": 33.56,
+              "createdAt": "2023-10-17"
           },
           {
               "bmi": 27.8,
@@ -110,8 +90,28 @@ describe("read Records", () => {
               "createdAt": "2023-10-06"
           },
           {
-              "bmi": 33.56,
-              "createdAt": "2023-10-17"
+              "bmi": 29.39,
+              "createdAt": "2023-10-05"
+          },
+          {
+              "bmi": 31.86,
+              "createdAt": "2023-10-04"
+          },
+          {
+              "bmi": 34.42,
+              "createdAt": "2023-10-03"
+          },
+          {
+              "bmi": 35.3,
+              "createdAt": "2023-10-02"
+          },
+          {
+              "bmi": 36.37,
+              "createdAt": "2023-10-01"
+          },
+          {
+              "bmi": 37.36,
+              "createdAt": "2023-09-30"
           }
       ],
       "numberFatRecords": [
