@@ -8,17 +8,16 @@ const request = require("supertest");
 const { createApp } = require("../app");
 // DB와의 커넥션을 위해 DataSource 객체를 불러옵니다.
 const { AppDataSource } = require("../src/models/data-source");
-console.log(AppDataSource);
+
 describe("read Records", () => {
   let app;
 
   beforeAll(async() => {
     // 모든 테스트가 시작하기 전(beforeAll)에 app을 만들고, DataSource를 이니셜라이징 합니다.
     app = createApp();
-    await AppDataSource.initialize().then(() =>
-    console.log("Datasource initialized.")
-  );
-  console.log(AppDataSource);
+    await AppDataSource.initialize()
+    const tester = await AppDataSource.query(`SELECT * FROM workout_records WHERE user_id = 6`)
+    console.log(tester);
   });
 
   afterAll(async () => {
