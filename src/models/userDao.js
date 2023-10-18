@@ -32,7 +32,6 @@ const updateImgUrl = async (userId, imgUrl) => {
   return result;
 };
 
-//트랜잭션????
 const createUser = async (kakaoId, imgUrl) => {
   const result = await AppDataSource.query(
     `
@@ -46,7 +45,7 @@ const createUser = async (kakaoId, imgUrl) => {
     
     return {
       id: result.insertId,
-      img_url: imgUrl,
+      //img_url: imgUrl,
     };
 
   } else {
@@ -54,6 +53,20 @@ const createUser = async (kakaoId, imgUrl) => {
   }
 
 };
+
+const isSubscribed = async (userId) => {
+  const [result] = await AppDataSource.query(
+    `
+      SELECT *
+      FROM sub_orders
+      WHERE user_id = ?
+      AND end_at > NOW()
+    `,
+    [userId]
+  )
+
+  return !!result;
+}
 
 const findByUserId = async (userId) => {
   const [result] = await AppDataSource.query(
@@ -67,6 +80,8 @@ const findByUserId = async (userId) => {
 
   return result;
 };
+
+
 
 // 상세 업데이트
 const updateUser = async (
@@ -160,6 +175,7 @@ const updateUser = async (
 module.exports = {
   findByKakaoId,
   findByUserId,
+  isSubscribed,
   updateImgUrl,
   createUser,
   updateUser,

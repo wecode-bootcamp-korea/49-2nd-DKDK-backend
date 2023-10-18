@@ -24,7 +24,6 @@ const detailSignUp = async (req, res) => {
     specialized,
   } = req.body;
   
-
   try {
     // 키에러 체크
     if (!userType) throwError(400, "KEY_ERROR");

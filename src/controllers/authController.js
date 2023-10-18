@@ -3,31 +3,29 @@ const kakaoLogin = async (req, res) => {
 
     if (req.user) {
   
-      if (!req.user.userType) {
+      if (typeof req.user.userType === "undefined") {
         
-        // 회원가입 응답
-        const { token, userId, imgUrl  } = req.user;
+        // 상세정보 미작성 회원
+        const { token } = req.user;
         const response = {
           message: "NEW_USER",
           statusCode: 201,
-          token : token,
-         // userId,
-         // imgUrl,
+          token 
         };
   
         console.log("response : ", response)
         res.json(response);
   
-      } else if (req.user.userType) {
+      } else {
   
-        // 로그인 응답 
-        const { token, userType } = req.user;
+        // 상세정보 작성 회원
+        const { token, userType, isSubscribed } = req.user;
         const response = {
           message: "LOGIN_SUCCESS",
           statusCode: 200,
           token,
           userType,
-          //isSubscribed 추가 예정
+          isSubscribed
         };
   
         console.log("response : ", response)
