@@ -71,7 +71,11 @@ const createRecord = async (id, addRecord) => {
   //당일 기록 미존재 시, 기록 생성
   if (dateCheckerPole !== formattedUserDate) {
     const recordCreator = await recordDao.recordCreator(addRecord);
+    if (!addRecord.weight) {
     return recordCreator;
+    }
+    const userWeightUpdater = await recordDao.userWeightUpdater(id, addRecord); 
+    return userWeightUpdater;
   }
 
   //당일 기록 존재 시, 기록 업데이트

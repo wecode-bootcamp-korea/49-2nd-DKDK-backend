@@ -8,7 +8,7 @@ const readRecord = async (req, res) => {
     const { id } = req.userId;
     const readRecord = await recordService.readRecord(Number(id));
     if (!readRecord) {
-    return res.status(400).json({message : "NO_USER"});
+      return res.status(400).json({ message: "NO_USER" });
     }
     res.status(200).json(readRecord);
   } catch (error) {
@@ -16,10 +16,9 @@ const readRecord = async (req, res) => {
   }
 };
 
-
 const createRecord = async (req, res) => {
   try {
-    const { id }} = req.userId;
+    const id = req.userId;
     const addRecord = req.body;
     const {
       waterContent,
@@ -30,7 +29,11 @@ const createRecord = async (req, res) => {
       maxHeartrate,
     } = addRecord;
     const createRecord = await recordService.createRecord(addRecord);
-    return res.status(200).json(createRecord);
+
+    if (!createRecord) {
+      return res.status(400).json({ message: "NOT_UPDATED" });
+    }
+    return res.status(200).json({ message: "UPDATED" });
   } catch (error) {
     console.log(error);
   }

@@ -30,7 +30,7 @@ const userRecordReader = async (id) => {
   return userRecentRecords;
 };
 
-const recordCreator = async (addRecord) => {
+const recordCreator = async (id, addRecord) => {
   const creator = `
     INSERT INTO workout_records 
     (
@@ -46,7 +46,7 @@ const recordCreator = async (addRecord) => {
     (?, ?, ?, ?, ?, ?, ?);    
       `;
   const values = [
-    addRecord.userId,
+    id,
     addRecord.waterContent,
     addRecord.workoutTime,
     addRecord.currentWeight,
@@ -58,7 +58,7 @@ const recordCreator = async (addRecord) => {
   return recordCreator;
 };
 
-const recordUpdater = async (addRecord) => {
+const recordUpdater = async (id, addRecord) => {
   const updater = `
     UPDATE workout_records
     SET 
@@ -85,11 +85,21 @@ const recordUpdater = async (addRecord) => {
     addRecord.bodyFat,
     addRecord.maxHeartrate,
     addRecord.maxHeartrate,
-    addRecord.userId,
+    id,
   ];
   const recordUpdater = await AppDataSource.query(updater, values);
   return recordUpdater;
 };
+
+const userWeightUpdater = async (id, addRecord) => {
+  const userWeightUpdater =`UPDATE users SET weight = ? WHERE id = ?;`
+  const weightValues = [
+    addRecord.weight,
+    id
+  ]
+  const weightUpdater = await AppDataSource.query(userWeightUpdater, weightValues);
+  return weightUpdater;
+}
 
 const avgWorkoutTimeUser = async (id) => {
   const avgWorkoutTimeUserLoad = await AppDataSource.query(
@@ -98,19 +108,11 @@ const avgWorkoutTimeUser = async (id) => {
   return avgWorkoutTimeUserLoad;
 };
 
-const avgWorkoutTimeTotal = async (id) => {
+const avgWorkoutTimeTotal = async () => {
   const avgWorkoutTimeTotalLoad = await AppDataSource.query(
     `SELECT AVG(workout_time) AS workoutTime FROM workout_records`
   );
   return avgWorkoutTimeTotalLoad;
-};
-
-const recordIdChecker = async (addRecord) => {
-  const id = addRecord.userId;
-  const idChecker = await AppDataSource.query(
-    `SELECT user_id AS userId FROM workout_records WHERE user_id = ${id}`
-  );
-  return idChecker;
 };
 
 const recordIdParamsChecker = async (id) => {
@@ -120,9 +122,7 @@ const recordIdParamsChecker = async (id) => {
   return idParamsChecker;
 };
 
-const recordTimeChecker = async (addRecord) => {
-  const id = addRecord.userId;
-  const createdAt = addRecord.createdAt;
+const recordTimeChecker = async (id) => {
   const checker = await AppDataSource.query(
     `SELECT created_at AS createdAt FROM workout_records WHERE user_id = ${id} ORDER BY created_at DESC LIMIT 1`
   );
@@ -133,11 +133,9 @@ module.exports = {
   recordCreator,
   recordUpdater,
   recordTimeChecker,
-  recordIdChecker,
   recordIdParamsChecker,
   userRecordReader,
   avgWorkoutTimeTotal,
   avgWorkoutTimeUser,
- 
-
+  userWeightUpdater,
 };
