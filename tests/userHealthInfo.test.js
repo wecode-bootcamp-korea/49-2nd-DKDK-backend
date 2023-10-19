@@ -67,17 +67,7 @@ describe("GET User Information", () => {
   // 다음과 같이 본인이 작성한 코드에 맞춰 다양한 케이스를 모두 테스트해야 합니다.
   // 그래야 의도에 맞게 코드가 잘 작성되었는지 테스트 단계에서부터 확인할 수 있습니다!
   test("SUCCESS: GET - INFO_LOADED", async () => {
-    // TEST DB에는 개발/서비스 DB에 있는 정보가 없을 수 있기 때문에 SELECT문을 활용,
-    // beforeAll에서 생성한 user정보를 불러와 user.id를 추출 -> GET요청에 함수형으로 넣음
-    // 이유: user.id는 auto_increment이기 때문에, 생성/삭제가 반복되면 pk인 id는 계에속 올라감
-    // const testUserInfo = await AppDataSource.query(
-    //   `
-    //   SELECT id FROM users WHERE nickname = '테스터'
-    //   `
-    // );
-
     const res = await request(app).get(`/userHealthInfo?userId=1}`);
-    //   .expect(200)
     expect(200);
     expect(res.body.message).toEqual("MYPAGE_LOADED");
     expect(res.body).toHaveProperty("data");
@@ -89,8 +79,5 @@ describe("GET User Information", () => {
       foodRcmd: [],
       workoutRcmd: []
     });
-    // expect(res.body.data).
-
-    //   .expect({ message: 'MYPAGE_LOADED'});
   });
 });
