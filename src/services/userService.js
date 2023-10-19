@@ -15,8 +15,8 @@ const detailUpdateUser = async (
   workoutLoad,
   specialized
 ) => {
-  try {
-    // 회원 가입 여부 확인
+
+    // 회원 가입 여부 확인 -> 생략 가능?
     const isUser = await findByUserId(userId);
     if (!isUser) throwError(400, "INVAILD_USER");
 
@@ -45,11 +45,6 @@ const detailUpdateUser = async (
     
     return result;
     
-  } catch (err) {
-    console.error(err);
-    return err;
-    
-  }
 };
 
 module.exports = {

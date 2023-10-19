@@ -36,8 +36,7 @@ passport.use(
 
             // 구독자인지 t/f
             const isSubscribedUser = await isSubscribed(userId);
-            console.log(isSubscribedUser)
-             
+  
             //로그인 성공시 카카오에서 받은 imgurl 업데이트
             const userImgUpdate = await updateUserImgUrl(userId, imgUrl);
             if (!userImgUpdate) throwError(400, "FAIL_TO_UPDATE_IMG_URL")

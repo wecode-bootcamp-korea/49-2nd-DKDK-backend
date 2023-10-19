@@ -86,6 +86,44 @@ describe("Sign up", () => {
       .expect({ message: "INVALID_USER_TYPE" });
   });
 
+  test("FALIED : INVAILD_PHONE_NUMBER", async () => {
+    await request(app)
+      .post("/user/signup")
+      .set("Authorization", accessToken)
+      .send({
+        userType: 1,
+        nickname: "슈슈",
+        phoneNumber: "072925164",
+        gender: "남성",
+        birthday: "1990/03/26",
+        height: 180,
+        weight: 70,
+        interestedWorkout: 1,
+        workoutLoad: 1,
+      })
+      .expect(400)
+      .expect({ message: "INVAILD_PHONE_NUMBER" });
+  });
+
+  test("FALIED : INVAILD_NUMERIC", async () => {
+    await request(app)
+      .post("/user/signup")
+      .set("Authorization", accessToken)
+      .send({
+        userType: 1,
+        nickname: "슈슈",
+        phoneNumber: "01072925164",
+        gender: "남성",
+        birthday: "1990/03/26",
+        height: -180,
+        weight: 70,
+        interestedWorkout: 1,
+        workoutLoad: 1,
+      })
+      .expect(400)
+      .expect({ message: "INVAILD_NUMERIC" });
+  });
+
 
 
 

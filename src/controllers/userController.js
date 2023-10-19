@@ -5,8 +5,9 @@ const { detailUpdateUser } = userServicve;
 
 const updateUserInfo = async (req, res) => {
 
+  // 미들웨어 추가 시 삭제 및 수정
   const accessToken = req.headers.authorization;
-  if(!accessToken) throwError("INVALID_TOKEN")
+  if(!accessToken) throwError(400, "INVALID_TOKEN")
 
   const { id } = jwt.verify(accessToken, process.env.SECRET);
   const userId = id;
@@ -26,8 +27,6 @@ const updateUserInfo = async (req, res) => {
   
   try {
     // 키에러 체크
-    if (!userType) throwError(400, "KEY_ERROR");
-
     const commonFields = [
       nickname,
       phoneNumber,
@@ -67,13 +66,13 @@ const updateUserInfo = async (req, res) => {
 
     console.log("userController signUpUser : ", signUpUser)
 
-    return res.status(200).json({
+     res.status(200).json({
       message: "SIGNUP_SUCCESS",
     });
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     
-    return res.status(err.statusCode || 500).json({
+    res.status(err.status || 500).json({
       message: err.message || "FAIL_TO_SIGNUP",
     });
   }
