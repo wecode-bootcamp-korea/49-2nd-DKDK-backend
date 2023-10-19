@@ -26,18 +26,25 @@ describe("GET User Information", () => {
   test("FAILED: GET - NO USER ID", async () => {
     // supertest의 request를 활용하여 app에 테스트용 request를 보냅니다.
     const res = await request(app)
-      .get("/mypage?grade=1600") // HTTP Method, 엔드포인트 주소를 작성합니다.
+      .get("/userHealthInfo") // HTTP Method, 엔드포인트 주소를 작성합니다.
       .expect(400) // expect()로 예상되는 statusCode, response를 넣어 테스트할 수 있습니다.
       
       expect(res.body.message).toEqual("KEY_ERROR - ID");
   });
 
+  test("FAILED: GET - NO SUCH USER", async () => {
+    const res = await request(app)
+      .get("/userHealthInfo?userId=13")
+      .expect(400)
+
+      expect(res.body.message).toEqual("KEY_ERROR_NO_SUCH_USER");
+  });
 
   // 다음과 같이 본인이 작성한 코드에 맞춰 다양한 케이스를 모두 테스트해야 합니다.
   // 그래야 의도에 맞게 코드가 잘 작성되었는지 테스트 단계에서부터 확인할 수 있습니다!
   test("SUCCESS: GET - INFO_LOADED", async () => {
     const res = await request(app)
-      .get("/mypage?userId=4&grade=1600")
+      .get("/userHealthInfo?userId=4&grade=1600")
     //   .expect(200)
     expect(200)
     expect(res.body.message).toEqual('MYPAGE_LOADED')
@@ -45,11 +52,5 @@ describe("GET User Information", () => {
     //   .expect({ message: 'MYPAGE_LOADED'});
   });
 
-  test("FAILED: GET - NO GRADE", async () => {
-    const res = await request(app)
-      .get("/mypage?userId=1")
-      .expect(400)
 
-      expect(res.body.message).toEqual("KEY_ERROR - grade");
-  });
 });

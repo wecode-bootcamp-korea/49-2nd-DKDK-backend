@@ -1,5 +1,5 @@
-const mypageController = require("./mypageController");
+const userHealthInfoController = require("./userHealthInfoController");
 
 module.exports = {
-  mypageController,
+  userHealthInfoController,
 };
