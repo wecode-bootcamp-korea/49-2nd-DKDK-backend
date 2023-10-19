@@ -5,7 +5,7 @@ const checkExistence = async (userId) => {
   ` SELECT id FROM users where id = ?`,
   [userId]
   );
-  return exist.length === 0 ? false : true;
+  return exist.length === 1;
   };
 
 // Trainer회원인지 일반 회원인지 체크
@@ -24,7 +24,7 @@ const checkTrainer = async (userId) => {
   return isTrainer[0].isTrainer;
 };
 
-// GET 유저 정보
+// GET - 유저 정보
 const userInfo = async (userId) => {
   return await AppDataSource.query(
     `
@@ -45,7 +45,7 @@ const userInfo = async (userId) => {
   );
 };
 
-// GET 트레이너 정보
+// GET - 트레이너 정보
 const trainerInfo = async (userId) => {
   const trainerInfo = await AppDataSource.query(
     `
@@ -66,7 +66,7 @@ const trainerInfo = async (userId) => {
   return trainerInfo.length === 0 ? "NOT_A_TRAINER" : trainerInfo;
 };
 
-// 잠정 완료
+// GET - PT 주문정보
 const ptOrderInfo = async (userId) => {
   const ptOrderDetail = await AppDataSource.query(
     `
@@ -91,14 +91,9 @@ const ptOrderInfo = async (userId) => {
     [userId]
   );
   return ptOrderDetail.length === 0 ? "NO_PT_ORDERS" : ptOrderDetail;
-  // if (ptOrderDetail.length == 0) {
-  //   return "NO_PT_ORDERS";
-  // } else {
-  //   return ptOrderDetail;
-  // }
 };
 
-// 잠정 완료
+// GET - 구독권 정보
 const subOrderInfo = async (userId) => {
   const subOrderDetails = await AppDataSource.query(
     `
@@ -117,7 +112,7 @@ const subOrderInfo = async (userId) => {
   return subOrderDetails.length === 0 ? "NO_SUB_ORDERS" : subOrderDetails;
 };
 
-// 잠정 완료
+// GET - 식단
 const foodRcmd = async (grade) => {
   return await AppDataSource.query(
     `
@@ -143,7 +138,7 @@ const foodRcmd = async (grade) => {
   );
 };
 
-// 잠정 완료
+// GET - 추천 운동
 const workoutRcmd = async (userId) => {
   return await AppDataSource.query(
     `
@@ -156,7 +151,6 @@ const workoutRcmd = async (userId) => {
     [userId]
   );
 };
-
 
 // 유저정보 수정
 const userUpdate = async (

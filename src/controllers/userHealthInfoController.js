@@ -17,28 +17,8 @@ const viewUserHealthInfo = async (req, res, next) => {
   }
 };
 
-// const userHealthInfoUpdate = async (req, res, next) => {
-//   try {
-//     const {
-//       nickname,
-//       profileImg,
-//       height,
-//       weight,
-//       workoutLoad,
-//       interestedWorkout,
-//       userId,
-//     } = req.body;
-//     return res.status(200).json({
-//       message: "USER_INFORMATION_UPDATED",
-//       data: ""
-//     })
-//   } catch (err) {
-//     throwError(400, "INTERNAL_ERROR");
-//     console.error(err);
-//   }
-// };
+
 
 module.exports = {
   viewUserHealthInfo,
-  // userHealthInfoeUpdate,
 };
