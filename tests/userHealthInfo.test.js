@@ -12,7 +12,7 @@ describe("GET User Information", () => {
     // 모든 테스트가 시작하기 전(beforeAll)에 app을 만들고, DataSource를 이니셜라이징 합니다.
     app = createApp();
     await AppDataSource.initialize();
-    
+
     // GET 테스트를 위한 DB필수정보 생성
 
     // 1. workout category
@@ -23,7 +23,7 @@ describe("GET User Information", () => {
       (2, '필라테스'),
       (3, '요가');
       `
-    )
+    );
 
     // 2. USER정보 생성
     await AppDataSource.query(
@@ -31,8 +31,8 @@ describe("GET User Information", () => {
       (id, nickname, birthday, gender, phone_number, user_type, height, weight, interested_workout, workout_load)
         VALUES
       (1, '테스터', '2023-10-10', 1, 01012341234, 1, 186.00, 78.00, 1, 1);
-      `);
-
+      `
+    );
   });
 
   afterAll(async () => {
@@ -51,17 +51,17 @@ describe("GET User Information", () => {
     // supertest의 request를 활용하여 app에 테스트용 request를 보냅니다.
     const res = await request(app)
       .get("/userHealthInfo") // HTTP Method, 엔드포인트 주소를 작성합니다.
-      .expect(400) // expect()로 예상되는 statusCode, response를 넣어 테스트할 수 있습니다.
-      
-      expect(res.body.message).toEqual("KEY_ERROR - ID");
+      .expect(400); // expect()로 예상되는 statusCode, response를 넣어 테스트할 수 있습니다.
+
+    expect(res.body.message).toEqual("KEY_ERROR - ID");
   });
 
   test("FAILED: GET - NO SUCH USER", async () => {
     const res = await request(app)
       .get("/userHealthInfo?userId=999999")
-      .expect(400)
+      .expect(400);
 
-      expect(res.body.message).toEqual("KEY_ERROR_NO_SUCH_USER");
+    expect(res.body.message).toEqual("KEY_ERROR_NO_SUCH_USER");
   });
 
   // 다음과 같이 본인이 작성한 코드에 맞춰 다양한 케이스를 모두 테스트해야 합니다.
@@ -70,18 +70,27 @@ describe("GET User Information", () => {
     // TEST DB에는 개발/서비스 DB에 있는 정보가 없을 수 있기 때문에 SELECT문을 활용,
     // beforeAll에서 생성한 user정보를 불러와 user.id를 추출 -> GET요청에 함수형으로 넣음
     // 이유: user.id는 auto_increment이기 때문에, 생성/삭제가 반복되면 pk인 id는 계에속 올라감
-    const userInfo = await AppDataSource.query(
-      `
-      SELECT id FROM users WHERE nickname = '테스터'
-      `);
-    
-    const res = await request(app)
-      .get(`/userHealthInfo?userId=1}`)
+    // const testUserInfo = await AppDataSource.query(
+    //   `
+    //   SELECT id FROM users WHERE nickname = '테스터'
+    //   `
+    // );
+
+    const res = await request(app).get(`/userHealthInfo?userId=1}`);
     //   .expect(200)
-    expect(200)
-    expect(res.body.message).toEqual('MYPAGE_LOADED')
-    expect(res.body).toHaveProperty('data')
+    expect(200);
+    expect(res.body.message).toEqual("MYPAGE_LOADED");
+    expect(res.body).toHaveProperty("data");
+    expect(res.body.data).toMatchObject({
+      userInfo: [{}],
+      trainerInfo: "NOT_A_TRAINER",
+      ptOrderInfo: "NO_PT_ORDERS",
+      subOrderInfo: "NO_SUB_ORDERS",
+      foodRcmd: [],
+      workoutRcmd: []
+    });
+    // expect(res.body.data).
+
     //   .expect({ message: 'MYPAGE_LOADED'});
   });
-
 });
