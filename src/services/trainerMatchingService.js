@@ -5,10 +5,41 @@ const getTrainerProduct = async (userId, offset, limit) => {
   //트레이너 확인 후 토큰 확인해서 구독 여부
   const isTrainer = trainerMatchingDao.isTrainer(userId);
   const isSubscript = trainerMatchingDao.isSubscript(userId);
+  const isSub = true;
   if (isTrainer || isSubscript) {
-    throwError(400, "IS_NOT_SUBSCIBE");
+    // throwError(400, "IS_NOT_SUBSCIBE");
+    // 키 값 발행해 주기
+    isSub = false;
   }
-  return await trainerMatchingDao.getTrainerMatching(offset, limit);
+  const data = await trainerMatchingDao.getTrainerMatching(offset, limit);
+  return { isSubscript: isSub, data: data };
 };
 
-module.exports = { getTrainerProduct };
+const getSortTrainerProduct = async (
+  userId,
+  offset,
+  limit,
+  sort,
+  kind,
+  gender
+) => {
+  //트레이너 확인 후 토큰 확인해서 구독 여부
+  const isTrainer = trainerMatchingDao.isTrainer(userId);
+  const isSubscript = trainerMatchingDao.isSubscript(userId);
+  const isSub = true;
+  if (isTrainer || isSubscript) {
+    // throwError(400, "IS_NOT_SUBSCIBE");
+    // 키 값 발행해 주기
+    isSub = false;
+  }
+  const data = await trainerMatchingDao.sortTrainerMatching(
+    offset,
+    limit,
+    sort,
+    kind,
+    gender
+  );
+  return { isSubscript: isSub, data: data };
+};
+
+module.exports = { getTrainerProduct, getSortTrainerProduct };
