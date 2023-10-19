@@ -1,29 +1,40 @@
 const { communityDao } = require("../models");
-const { createPostDao, getPostDao, deletePostDao, createCommentDao } =
+const { deleteCommentDao } = require("../models/communityDao");
+const { createPostDao, deletePostDao, createCommentDao, isSubscriptDao } =
   communityDao;
 
-const getPostService = async (userId, postId) => {
-  return getPostDao(userId, postId);
-};
-
-const createPostService = async (userId, content, img_url) => {
-  createPostDao(userId, content, img_url);
-  return "POST_CREATE";
-};
-
 const deletePostService = async (userId, postId) => {
-  deletePostDao(userId, postId);
+  await deletePostDao(userId, postId);
   return "POST_DELETE";
 };
 
-const createCommentService = async (userId, postId, content) => {
-  createCommentDao(userId, postId, content);
+const deleteCommentService = async (userId, content) => {
+  await deleteCommentDao(userId, content);
+  return "DELETE_CONTENT";
+};
+
+const getAllPostService = async (userId, postId) => {
+  getAllPostDao(userId, postId);
+  return "GET_POST";
+};
+
+const createPostService = async (userId, content, img_url) => {
+  const checkSubscript = await isSubscriptDao(userId);
+  if (checkSubscript.length == 0) throwError(400, "NOT_SUBSCRIBER");
+  return await createPostDao(userId, content, img_url);
+};
+
+const createCommentService = async (userId, content) => {
+  const checkSubscript = await isSubscriptDao(userId);
+  if (checkSubscript.length == 0) throwError(400, "NOT_SUBSCRIBER");
+  await await createCommentDao(userId, content);
   return "COMMMENT_CREATE";
 };
 
 module.exports = {
-  getPostService,
   createPostService,
   deletePostService,
   createCommentService,
+  getAllPostService,
+  deleteCommentService,
 };

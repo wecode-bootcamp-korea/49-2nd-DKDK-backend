@@ -1,26 +1,12 @@
 const { throwError } = require("../utils");
 const { communityService } = require("../services");
 const {
-  getPostService,
   createPostService,
   deletePostService,
   createCommentService,
+  getAllPostService,
+  deleteCommentService,
 } = communityService;
-
-const getPostController = async (req, res, next) => {
-  try {
-    const userId = req.user.id;
-    const postId = req.query.tab;
-    if (!postId) throwError(400, "N0_POST_ID");
-    return res.status(200).json({
-      message: "GET_POST",
-      data: await getPostService(userId, postId),
-    });
-  } catch (err) {
-    console.error(err);
-    next(err);
-  }
-};
 
 const createPostController = async (req, res, next) => {
   try {
@@ -52,8 +38,54 @@ const deletePostController = async (req, res, next) => {
   }
 };
 
+const getAllPostController = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const postId = req.query.tab;
+    if (!postId) throwError(400, "N0_POST_ID");
+    return res.status(200).json({
+      message: "GET_POST",
+      data: await getAllPostService(userId, postId),
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+const createCommentController = async (req, res, next) => {
+  try {
+    const userId = req.body;
+    const postId = req.query.tab;
+    if (!post) throwError(400, "게시물이 없습니다");
+    return res.status(200).json({
+      message: "CREATE_COMMENT",
+      data: await createCommentService(userId, postId),
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+const deleteContnetController = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const { content } = req.body;
+    if (!userId) throwError(400, "KEY_ERROR");
+    return res
+      .status(200)
+      .json({ message: await deleteCommentService(userId, content) });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
 module.exports = {
-  getPostController,
   createPostController,
   deletePostController,
+  getAllPostController,
+  createCommentController,
+  deleteContnetController,
 };

@@ -1,13 +1,17 @@
 const {
-  getPostController,
   createPostController,
   deletePostController,
+  getAllPostController,
+  createCommentController,
+  deleteContnetController,
 } = require("./communityControllers");
 
 module.exports = {
   communityController: {
-    getPostController,
     createPostController,
     deletePostController,
+    getAllPostController,
+    createCommentController,
+    deleteContnetController,
   },
 };

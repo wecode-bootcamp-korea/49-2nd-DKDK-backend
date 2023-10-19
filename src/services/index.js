@@ -1,15 +1,17 @@
 const {
-  getPostService,
   createPostService,
   deletePostService,
   createCommentService,
+  getAllPostService,
+  deleteCommentService,
 } = require("./communityServices");
 
 module.exports = {
   communityService: {
-    getPostService,
     createPostService,
     deletePostService,
     createCommentService,
+    getAllPostService,
+    deleteCommentService,
   },
 };

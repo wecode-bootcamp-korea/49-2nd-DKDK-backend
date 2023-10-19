@@ -1,17 +1,22 @@
 const express = require("express");
 const { communityController } = require("../controllers");
 
-const { getPostController, createPostController, deletePostController } =
-  communityController;
+const {
+  getAllPostController,
+  createPostController,
+  deletePostController,
+  createCommentController,
+  deleteContnetController,
+} = communityController;
 
 const router = express.Router();
 
-router.get("/", getPostController);
+router.get("/", getAllPostController);
 router.post("/like");
 router.post("/", createPostController);
 router.delete("/post?=", deletePostController);
 router.get("/post?=");
-router.post("/comment");
-router.delete("/comment");
+router.post("/comment", createCommentController);
+router.delete("/comment", deleteContnetController);
 
 module.exports = router;

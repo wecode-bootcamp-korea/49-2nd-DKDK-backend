@@ -1,15 +1,19 @@
 const {
   createPostDao,
-  getPostDao,
   deletePostDao,
   createCommentDao,
+  getAllPostDao,
+  deleteCommentDao,
+  isSubscriptDao,
 } = require("./communityDao");
 
 module.exports = {
   communityDao: {
     createPostDao,
-    getPostDao,
     deletePostDao,
     createCommentDao,
+    getAllPostDao,
+    deleteCommentDao,
+    isSubscriptDao,
   },
 };
