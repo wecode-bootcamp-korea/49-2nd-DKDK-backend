@@ -1,11 +1,14 @@
 const { AppDataSource } = require("./dataSource");
 
+//트레이너 전체 정보
 const getTrainerMatching = async () => {
   const [result] = await AppDataSource.query(`
     SELECT * FROM products
     `);
   return result;
 };
+
+//정렬된 트레이너 정보 쿼리빌더 사용할까?
 // 트레이너 여부
 const isTrainer = async (userId) => {
   const result = await AppDataSource.query(
