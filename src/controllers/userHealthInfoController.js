@@ -2,13 +2,13 @@ const { userHealthInfoService } = require("../services");
 
 const viewUserHealthInfo = async (req, res, next) => {
   try {
-    const { userId } = req.query;
+    const { userId, workoutRcmdLimit } = req.query;
     if (!userId) {
       return res.status(400).json({ message: "KEY_ERROR - ID" });
     }
     return res.status(200).json({
       message: "MYPAGE_LOADED",
-      data: await userHealthInfoService.getUserInfo(userId),
+      data: await userHealthInfoService.getUserInfo(userId, workoutRcmdLimit),
     });
   } catch (error) {
     console.error(error);

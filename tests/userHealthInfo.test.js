@@ -33,14 +33,69 @@ describe("GET User Information", () => {
       (1, '테스터', '2023-10-10', 1, 01012341234, 1, 186.00, 78.00, 1, 1);
       `
     );
+
+    // 3 - 1 . 식단데이터 생성을 위한 음식 타입 생성
+    await AppDataSource.query(
+      `
+      INSERT INTO food_types (id, type) VALUES
+      (1, '밥'),
+      (2, '국'),
+      (3, '메인1'),
+      (4, '메인2'),
+      (5, '반찬');
+      `
+    )
+
+    // 3 - 2 . 식단데이터 생성을 위한 meal_plan 생성
+    await AppDataSource.query(
+      `
+      INSERT INTO meal_plans (id, grade) VALUES
+      (1, 1400),
+      (2, 1600),
+      (3, 1800)
+      `
+    )
+    // 3 - 3 . 식단데이터 생생
+    await AppDataSource.query(
+      `
+      INSERT INTO foods (id, meal_plan_id, type_id, name, kcal, weight) VALUES
+      (1, 1, 1, '보리밥', 235, 140),
+      (2, 1, 2, '미역쇠고기국', 35, 12),
+      (3, 1, 3, '메추리알장조림', 80, 40),
+      (4, 1, 4, '오이초무침', 30, 70),
+      (5, 1, 5, '마늘종 볶음', 40, 25),
+      (6, 2, 1, '보리밥', 235, 140),
+      (7, 2, 2, '미역쇠고기국', 35, 12),
+      (8, 2, 3, '메추리알장조림', 80, 40),
+      (9, 2, 4, '오이초무침', 30, 70),
+      (10, 2, 5, '마늘종 볶음', 40, 25),
+      (11, 3, 1, '보리밥', 235, 140),
+      (12, 3, 2, '미역쇠고기국', 35, 12),
+      (13, 3, 3, '메추리알장조림', 80, 40),
+      (14, 3, 4, '오이초무침', 30, 70),
+      (15, 3, 5, '마늘종 볶음', 40, 25);
+      `
+    )
+    // 4 - 1 . 운동루틴 생성
+    await AppDataSource.query(
+      `
+      INSERT INTO workouts (id, category_id, name, repetition, \`set\`) VALUES
+      (1, 1, 'Shoulder Press', '20회', 5);
+      `
+    )
+
   });
 
   afterAll(async () => {
     // 테스트 데이터베이스의 불필요한 데이터를 전부 지워줍니다.
     // 테이블에 있는 데이터를 날려주는 코드
     await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 0;`);
-    await AppDataSource.query(`TRUNCATE TABLE workout_categories;`);
     await AppDataSource.query(`TRUNCATE TABLE users;`);
+    await AppDataSource.query(`TRUNCATE TABLE workout_categories;`);
+    await AppDataSource.query(`TRUNCATE TABLE food_types;`);
+    await AppDataSource.query(`TRUNCATE TABLE meal_plans;`);
+    await AppDataSource.query(`TRUNCATE TABLE foods;`);
+    await AppDataSource.query(`TRUNCATE TABLE workouts;`);
     await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 1;`);
 
     // 모든 테스트가 끝나게 되면(afterAll) DB 커넥션을 끊어줍니다.
@@ -67,17 +122,71 @@ describe("GET User Information", () => {
   // 다음과 같이 본인이 작성한 코드에 맞춰 다양한 케이스를 모두 테스트해야 합니다.
   // 그래야 의도에 맞게 코드가 잘 작성되었는지 테스트 단계에서부터 확인할 수 있습니다!
   test("SUCCESS: GET - INFO_LOADED", async () => {
-    const res = await request(app).get(`/userHealthInfo?userId=1}`);
+    const res = await request(app).get(`/userHealthInfo?userId=1&workoutRcmdId=1`);
     expect(200);
     expect(res.body.message).toEqual("MYPAGE_LOADED");
     expect(res.body).toHaveProperty("data");
-    expect(res.body.data).toMatchObject({
-      userInfo: [{}],
+    expect(res.body.data).toEqual({
+      userInfo: [{
+               "height": "186",
+               "interested_workout": "헬스",
+               "nickname": "테스터",
+               "profileImage": null,
+               "subEndDate": "false",
+               "weight": "78",
+             }],
       trainerInfo: "NOT_A_TRAINER",
       ptOrderInfo: "NO_PT_ORDERS",
       subOrderInfo: "NO_SUB_ORDERS",
-      foodRcmd: [],
-      workoutRcmd: []
+      foodRcmd: [{
+          "id": 3,
+          "mealPlan": [
+            { 
+              "imgUrl": null,
+              "kcal": 235,
+              "name": "보리밥",
+              "typeId": 1,
+              "weight": 140,
+            },
+            {
+              "imgUrl": null,
+              "kcal": 35,
+              "name": "미역쇠고기국",
+              "typeId": 2,
+              "weight": 12,
+            },
+            {
+              "imgUrl": null,
+              "kcal": 80,
+              "name": "메추리알장조림",
+              "typeId": 3,
+              "weight": 40,
+            },
+            {
+              "imgUrl": null,
+              "kcal": 30,
+              "name": "오이초무침",
+              "typeId": 4,
+              "weight": 70,
+            },
+            {
+              "imgUrl": null,
+              "kcal": 40,
+              "name": "마늘종 볶음",
+              "typeId": 5,
+              "weight": 25,
+            }
+          ]
+      }],
+      workoutRcmd: [{
+               "category": "헬스",
+               "category_id": 1,
+               "id": 1,
+               "img_url": null,
+               "name": "Shoulder Press",
+               "repetition": "20회",
+               "set": 5,
+              }]
     });
   });
 });
