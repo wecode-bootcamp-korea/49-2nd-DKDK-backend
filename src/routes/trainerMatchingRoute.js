@@ -1,11 +1,14 @@
 const express = require("express");
 
 const { trainerMatchingController } = require("../controllers");
-// cosnt {} =require("../middlewares") 미들웨어 merge후 추가
+const { asyncWrap } = require("../middlewares/errorHandler");
 
 const trainerMatchingRouter = express.Router();
 
-trainerMatchingRouter.get("/", trainerMatchingController.getTrainerProduct);
+trainerMatchingRouter.get(
+  "/",
+  asyncWrap(trainerMatchingController.getTrainerProduct)
+);
 // trainerMatchingRouter.post("/");
 // trainerMatchingRouter.delete("/");
 
