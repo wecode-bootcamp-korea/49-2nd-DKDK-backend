@@ -3,7 +3,19 @@ const { AppDataSource } = require("./dataSource");
 //트레이너 전체 정보
 const getTrainerMatching = async (limit, offset) => {
   const [result] = await AppDataSource.query(`
-    SELECT * FROM products
+    SELECT 
+    p.id AS id,
+    p.trainer_id AS trainer_id,
+    p.available_area AS available_area,
+    p.available_time AS available_time,
+    p.category_name AS category_name,
+    p.term AS term,
+    p.price AS price,
+    p.content AS content,
+    p.created_at AS created_at ,
+
+
+    FROM products p 
     `);
   return result;
 };
