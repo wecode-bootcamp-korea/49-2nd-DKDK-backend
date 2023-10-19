@@ -29,7 +29,7 @@ const kakaoLogin = async (req, res) => {
       
       }
     } else {
-      res.status(500).json({
+      res.status(400).json({
         message: "FAIL_TO_SIGN_UP",
       });
     }

@@ -54,13 +54,11 @@ const updateUserInfo = async (req, res) => {
       specialized
     );
 
-    console.log("userController signUpUser : ", signUpUser);
-
     res.status(200).json({
       message: "SIGNUP_SUCCESS",
     });
   } catch (err) {
-    console.error(err.message);
+    //console.error(err.message);
 
     res.status(err.status || 500).json({
       message: err.message || "FAIL_TO_SIGNUP",
@@ -78,7 +76,7 @@ const checkDuplicateNickname = async (req, res) => {
       message: isDuplicate, 
     });
   } catch (err) {
-    console.error(err.message);
+    //console.error(err.message);
     res.status(err.status || 500).json({
       message: err.message || "FAIL_TO_CHECK_NICKNAME",
     });

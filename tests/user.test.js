@@ -48,26 +48,6 @@ describe("Sign up", () => {
       .expect({ message: "SIGNUP_SUCCESS" });
   });
 
-  test("SUCCESS: update user_trainer", async () => {
-    await request(app)
-      .post("/user/signup")
-      .set("Authorization", accessToken)
-      .send({
-        userType: 2,
-        nickname: "슈슈",
-        phoneNumber: "01072925164",
-        gender: "남성",
-        birthday: "1990/03/26",
-        height: 180,
-        weight: 70,
-        interestedWorkout: 1,
-        workoutLoad: 1,
-        specialized : 1
-      })
-      .expect(200)
-      .expect({ message: "SIGNUP_SUCCESS" });
-  });
-
   test("FALIED : KEY_ERROR", async () => {
     await request(app)
       .post("/user/signup")

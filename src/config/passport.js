@@ -82,7 +82,7 @@ passport.use(
         }
 
       } catch (error) {
-        console.error(error);
+        //console.error(error.message);
         done(error); // 로그인 실패
       }
     }
