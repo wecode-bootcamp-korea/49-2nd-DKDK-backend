@@ -6,7 +6,7 @@ const { readRecordService, createRecordService } = recordService;
 const readRecord = async (req, res) => {
   try {
     const { id } = req.params;
-    const readRecordService = await recordService.readRecordService(Number(id));
+    const readRecordService = await recordService.readRecordService2(Number(id));
     if (readRecordService === undefined) {
     return res.status(400).json("NO_USER");
     }
@@ -15,6 +15,19 @@ const readRecord = async (req, res) => {
     console.log(error);
   }
 };
+
+// const readRecord = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const readRecordService = await recordService.readRecordService(Number(id));
+//     if (readRecordService === undefined) {
+//     return res.status(400).json("NO_USER");
+//     }
+//     res.status(200).json(readRecordService);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 const createRecord = async (req, res) => {
   try {

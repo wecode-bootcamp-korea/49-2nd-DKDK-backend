@@ -14,7 +14,14 @@ const {
   recordIdParamsChecker,
   recordIdChecker,
   bodyfatReader,
+  userRecordReader
 } = recordDao;
+
+const readRecordService2 = async(id) => {
+  const readRecentRecords = await recordDao.userRecordReader(id);
+  console.log(readRecentRecords)
+  return readRecentRecords;
+}
 
 const createRecordService = async (addRecord) => {
   //유저아이디가 존재하는지 확인
@@ -147,4 +154,5 @@ const readRecordService = async (id) => {
 module.exports = {
   createRecordService,
   readRecordService,
+  readRecordService2,
 };

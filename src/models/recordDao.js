@@ -1,5 +1,23 @@
 const { dataSource, AppDataSource } = require("./dataSource");
 
+const userRecordReader = async (id) => {
+  const userRecentRecords = await AppDataSource.query(
+    `SELECT r.user_id AS userId, r.water_content AS water_content, r.workout_time AS workoutTime,
+    r.current_weight AS weight, u.height, r.muscle_mass AS muscleMass, r.body_fat AS bodyFat, r.max_heartrate AS maxHeartrate, r.createdAt 
+    FROM (
+        SELECT water_content, workout_time, current_weight, user_id, muscle_mass, body_fat, max_heartrate, created_at AS createdAt 
+        FROM workout_records 
+        WHERE user_id = ${id}
+        ORDER BY createdAt DESC 
+        LIMIT 12
+    ) AS r 
+    LEFT JOIN users u ON r.user_id = u.id;
+    `
+  );
+  return userRecentRecords;
+};
+
+
 const maxHeartbeatReader = async (id) => {
   const heartbeatReader = await AppDataSource.query(
     `SELECT max_heartrate AS maxHeartrate, created_at AS createdAt
@@ -188,4 +206,5 @@ module.exports = {
   recordIdParamsChecker,
   musclemassReader,
   bodyfatReader,
+  userRecordReader,
 };
