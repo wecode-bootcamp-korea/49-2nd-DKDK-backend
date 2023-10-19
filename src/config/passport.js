@@ -6,7 +6,6 @@ require("dotenv").config();
 const { userDao } = require("../models");
 const { findUserByKakaoId, updateUserImgUrl, isSubscribed, createUser } = userDao;
 
-// 카카오 전략
 passport.use(
   "kakao",
   new KakaoStrategy(

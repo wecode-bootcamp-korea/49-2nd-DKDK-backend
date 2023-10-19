@@ -2,7 +2,6 @@ const { AppDataSource } = require("../models/dataSource");
 const { createConnection } = require("typeorm");
 const { throwError } = require("../utils");
 
-// isSubscribed 추가
 const findUserByKakaoId = async (kakaoId) => {
   const [result] = await AppDataSource.query(
     `
@@ -14,7 +13,6 @@ const findUserByKakaoId = async (kakaoId) => {
   );
 
   return result;
-
 };
 
 const updateUserImgUrl = async (userId, imgUrl) => {
@@ -40,15 +38,12 @@ const createUser = async (kakaoId, imgUrl) => {
     [kakaoId, imgUrl]
   );
   if (result.insertId) {
-    
     return {
       id: result.insertId,
     };
-
   } else {
-    throwError(401, "FAIL_TO_CREATE_USER")
+    throwError(401, "FAIL_TO_CREATE_USER");
   }
-
 };
 
 const isSubscribed = async (userId) => {
@@ -60,10 +55,10 @@ const isSubscribed = async (userId) => {
       AND end_at > NOW()
     `,
     [userId]
-  )
+  );
 
   return !!result;
-}
+};
 
 const findByUserId = async (userId) => {
   const [result] = await AppDataSource.query(
@@ -78,8 +73,19 @@ const findByUserId = async (userId) => {
   return result;
 };
 
+const findUserByNickname = async (nickname) => {
+  const [result] = await AppDataSource.query(
+    `
+     SELECT nickname
+     FROM users
+     WHERE nickname = ?
+  `,
+    [nickname]
+  );
+  
+  return !!result;
+};
 
-// 상세 업데이트
 const updateUser = async (
   userId,
   userType,
@@ -94,9 +100,7 @@ const updateUser = async (
   specialized
 ) => {
   const connection = await createConnection();
-
   try {
-    //트랜젝션 시작
     const result = await connection.transaction(async (transactionalEntityManager) => {
       //1. 유저 정보 업데이트
       const userUpdate = await transactionalEntityManager.query(
@@ -114,26 +118,14 @@ const updateUser = async (
                 workout_load =?
             WHERE id = ?
           `,
-        [
-          userType,
-          nickname,
-          phoneNumber,
-          gender,
-          birthday,
-          height,
-          weight,
-          interestedWorkout,
-          workoutLoad,
-          userId,
-        ]
-
+        [userType, nickname, phoneNumber, gender, birthday, height, weight, interestedWorkout, workoutLoad, userId]
       );
 
       //2. 트레이너 회원의 경우 트레이너 정보 생성
       const userTypes = {
-        USER : 1,
-        TRAINER : 2
-      }
+        USER: 1,
+        TRAINER: 2,
+      };
       if (userType === userTypes.TRAINER) {
         const createTrainer = await transactionalEntityManager.query(
           `
@@ -144,26 +136,21 @@ const updateUser = async (
           [userId, specialized]
         );
       }
-      
+
       if (userUpdate.affectedRows > 0) {
-         
-       return {
-          userId : userId,
-          userType : userType,
-        }
-        
+        return {
+          userId: userId,
+          userType: userType,
+        };
       } else {
         throwError(401, "FAIL_TO_UPDATE_USER");
       }
     });
     return result;
-
   } catch (err) {
-    //롤백 및 에러 처리
     console.error(err);
     throwError(400, "TRANSACTION_ERROR");
   } finally {
-    //연결 닫기
     await connection.close();
   }
 };
@@ -174,5 +161,6 @@ module.exports = {
   isSubscribed,
   updateUserImgUrl,
   createUser,
+  findUserByNickname,
   updateUser,
 };

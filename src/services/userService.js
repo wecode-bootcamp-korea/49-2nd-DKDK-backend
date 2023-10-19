@@ -1,6 +1,6 @@
 const { throwError } = require("../utils");
 const { userDao } = require("../models");
-const { findByUserId, updateUser } = userDao;
+const { findByUserId, findUserByNickname, updateUser } = userDao;
 
 const detailUpdateUser = async (
   userId,
@@ -16,7 +16,7 @@ const detailUpdateUser = async (
   specialized
 ) => {
 
-    // 회원 가입 여부 확인 -> 생략 가능?
+    // 회원 가입 여부 확인 -> 추후 생략
     const isUser = await findByUserId(userId);
     if (!isUser) throwError(400, "INVAILD_USER");
 
@@ -42,9 +42,19 @@ const detailUpdateUser = async (
     );
     
     return result;
-    
 };
+
+const isNicknameDuplicate = async (nickname) => {
+  const isNicknameTaken = await findUserByNickname(nickname)
+  
+  if (!isNicknameTaken) {
+    return "AVAILABLE_NICKNAME"
+  } else {
+    return "DUPLICATE_NICKNAME"
+  }
+}
 
 module.exports = {
   detailUpdateUser,
+  isNicknameDuplicate
 };
