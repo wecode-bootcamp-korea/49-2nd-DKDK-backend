@@ -3,7 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const { routes } = require("./src/routes");
-const { errorHandler } = require("./src/middlewares");
+const { errorHandler } = require("./src/middlewares/errorHandler");
 
 const createApp = () => {
   const app = express();
@@ -13,7 +13,7 @@ const createApp = () => {
   app.use(morgan("combined"));
 
   app.use(routes);
-  app.use(errorHandler.errorHandler);
+  app.use(errorHandler);
   return app;
 };
 
