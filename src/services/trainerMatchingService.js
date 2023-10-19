@@ -7,8 +7,6 @@ const getTrainerProduct = async (userId, offset, limit) => {
   const isSubscript = trainerMatchingDao.isSubscript(userId);
   const isSub = true;
   if (isTrainer || isSubscript) {
-    // throwError(400, "IS_NOT_SUBSCIBE");
-    // 키 값 발행해 주기
     isSub = false;
   }
   const data = await trainerMatchingDao.getTrainerMatching(offset, limit);
@@ -28,8 +26,6 @@ const getSortTrainerProduct = async (
   const isSubscript = trainerMatchingDao.isSubscript(userId);
   const isSub = true;
   if (isTrainer || isSubscript) {
-    // throwError(400, "IS_NOT_SUBSCIBE");
-    // 키 값 발행해 주기
     isSub = false;
   }
   //쿼리 빌더 필요
