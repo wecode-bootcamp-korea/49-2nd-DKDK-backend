@@ -13,3 +13,8 @@ const {
   musclemassReader,
   bodyfatReader,
 } = require("./recordDao");
+const userHealthInfoDao = require("./userHealthInfoDao");
+
+module.exports = {
+  userHealthInfoDao,
+};
