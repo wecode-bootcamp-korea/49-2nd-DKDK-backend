@@ -13,7 +13,7 @@ const createApp = () => {
   app.use(morgan("combined"));
 
   app.use(routes);
-  app.use(errorHandler);
+  app.use(errorHandler.errorHandler);
   return app;
 };
 
