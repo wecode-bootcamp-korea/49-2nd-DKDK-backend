@@ -5,4 +5,4 @@ const getTrainerProduct = async (req, res) => {
   const data = await trainerMatchingService.getTrainerProduct(userId);
 };
 
-module.exports = {};
+module.exports = { getTrainerProduct };
