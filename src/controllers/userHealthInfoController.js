@@ -17,8 +17,6 @@ const viewUserHealthInfo = async (req, res, next) => {
   }
 };
 
-
-
 module.exports = {
   viewUserHealthInfo,
 };

@@ -8,22 +8,6 @@ const checkExistence = async (userId) => {
   return exist.length === 1;
   };
 
-// Trainer회원인지 일반 회원인지 체크
-const checkTrainer = async (userId) => {
-  const isTrainer = await AppDataSource.query(
-    `SELECT CASE
-        WHEN (SELECT u.nickname FROM trainers t
-            JOIN users u ON t.user_id  = u.id
-            WHERE u.id = ?) IS NULL
-            THEN 'false'
-            ELSE 'true'
-        END AS isTrainer;
-    `,
-    [userId]
-  );
-  return isTrainer[0].isTrainer;
-};
-
 // GET - 유저 정보
 const userInfo = async (userId) => {
   return await AppDataSource.query(
@@ -152,80 +136,12 @@ const workoutRcmd = async (userId) => {
   );
 };
 
-// 유저정보 수정
-const userUpdate = async (
-  userId,
-  nickname,
-  profileImg,
-  height,
-  weight,
-  workoutLoad,
-  interestedWorkout
-) => {
-  return await AppDataSource.query(
-    `
-    UPDATE users
-        SET nickname = ?,
-        img_url = ?,
-        height = ?,
-        weight = ?,
-        workout_load = ?,
-        interested_workout = ?
-    WHERE id = ?
-    `,
-    [
-      nickname,
-      profileImg,
-      height,
-      weight,
-      workoutLoad,
-      interestedWorkout,
-      userId,
-    ]
-  );
-};
-
-// 트레이너가 자기 정보 업데이트
-const trainerUpdate = async (
-  userId,
-  nickname,
-  profileImg,
-  height,
-  weight,
-  specialized
-) => {
-  await AppDataSource.query(
-    `
-    UPDATE users
-    SET nickname = ?,
-        profileImg = ?,
-        height = ?,
-        weight = ?,
-    WHERE id = ?;
-    `,
-    [nickname, profileImg, height, weight, userId]
-  );
-
-  await AppDataSource.query(
-    `
-    UPDATE trainers t
-    JOIN users u ON u.id = t.user_id
-    SET t.specialized = ?
-    WHERE u.id = ?;
-    `,
-    [specialized, userId]
-  );
-};
-
 module.exports = {
   checkExistence,
-  checkTrainer,
   userInfo,
   trainerInfo,
   ptOrderInfo,
   subOrderInfo,
   foodRcmd,
   workoutRcmd,
-  userUpdate,
-  trainerUpdate,
 };
