@@ -41,7 +41,6 @@ const readRecord = async(id) => {
 
   //프론트가 요청한 응답형태로 포맷팅합니다.
   const numberMuscle = readRecentRecords[0].numberMuscleRecords;
-  console.log(numberMuscle)
   const numberWeight = readRecentRecords[0].numberWeightRecords;
   const numberFat = readRecentRecords[0].numberFatRecords;
   const numberHeartbeat = readRecentRecords[0].numberHeartbeatRecords
@@ -55,9 +54,9 @@ const readRecord = async(id) => {
   return formattedRecords;
 }
 
-const createRecord = async (addRecord) => {
+const createRecord = async (id, addRecord) => {
   //유저아이디가 존재하는지 확인
-  const userIdLoader = await recordDao.recordIdChecker(addRecord);
+  const userIdLoader = await recordDao.recordIdParamsChecker(id);
   if (!userIdLoader) {
     return userIdLoader;
   }
