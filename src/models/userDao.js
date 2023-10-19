@@ -13,8 +13,6 @@ const findUserByKakaoId = async (kakaoId) => {
     [kakaoId]
   );
 
-  console.log("userDao findByKakaoId result: ", result);
-
   return result;
 
 };
@@ -158,9 +156,8 @@ const updateUser = async (
         throwError(401, "FAIL_TO_UPDATE_USER");
       }
     });
-
-    console.log("dao result : ", result)
     return result;
+
   } catch (err) {
     //롤백 및 에러 처리
     console.error(err);

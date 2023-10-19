@@ -40,8 +40,6 @@ const detailUpdateUser = async (
       workoutLoad,
       specialized
     );
-
-    console.log("service result : ", result)
     
     return result;
     

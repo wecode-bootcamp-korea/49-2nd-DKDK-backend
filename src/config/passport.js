@@ -18,8 +18,6 @@ passport.use(
       try {
         const kakaoId = profile.id;
         const imgUrl = profile._json.properties.profile_image;
-        console.log("passport kakaoId : ", kakaoId);
-        console.log("passport imgUrl : ", imgUrl);
 
         const exUser = await findUserByKakaoId(kakaoId);
 
@@ -47,8 +45,6 @@ passport.use(
               isSubscribed: isSubscribedUser
             };
 
-            console.log("exUserData : ", exUserData)
-
             if (!exUserData) throwError(400, "FAIL_TO_GET_EX_USER")
 
             done(null, exUserData);
@@ -71,7 +67,6 @@ passport.use(
         } else {
 
           const newUser = await createUser(kakaoId, imgUrl);
-          console.log("passport signup newUser : ", newUser);
 
           // jwt 토큰 발행
           const userId = newUser.id
