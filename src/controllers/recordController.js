@@ -1,33 +1,20 @@
 const express = require("express");
 const recordService = require("../services/recordService");
 const { throwError } = require("../utils/throwError");
-const { readRecordService, createRecordService } = recordService;
 
 const readRecord = async (req, res) => {
   try {
     const { id } = req.params;
-    const readRecordService = await recordService.readRecordService2(Number(id));
-    if (readRecordService === undefined) {
-    return res.status(400).json("NO_USER");
+    const readRecord = await recordService.readRecord(Number(id));
+    if (!readRecord) {
+    return res.status(400).json({message : "NO_USER"});
     }
-    res.status(200).json(readRecordService);
+    res.status(200).json(readRecord);
   } catch (error) {
     console.log(error);
   }
 };
 
-// const readRecord = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const readRecordService = await recordService.readRecordService(Number(id));
-//     if (readRecordService === undefined) {
-//     return res.status(400).json("NO_USER");
-//     }
-//     res.status(200).json(readRecordService);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 const createRecord = async (req, res) => {
   try {
@@ -41,8 +28,8 @@ const createRecord = async (req, res) => {
       bodyFat,
       maxHeartrate,
     } = addRecord;
-    const addRecordService = await recordService.createRecordService(addRecord);
-    return res.status(200).json(addRecordService);
+    const createRecord = await recordService.createRecord(addRecord);
+    return res.status(200).json(createRecord);
   } catch (error) {
     console.log(error);
   }

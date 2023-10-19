@@ -2,95 +2,32 @@ const { dataSource, AppDataSource } = require("./dataSource");
 
 const userRecordReader = async (id) => {
   const userRecentRecords = await AppDataSource.query(
-    `SELECT r.user_id AS userId, r.water_content AS water_content, r.workout_time AS workoutTime,
-    r.current_weight AS weight, u.height, r.muscle_mass AS muscleMass, r.body_fat AS bodyFat, r.max_heartrate AS maxHeartrate, r.createdAt 
+  `
+    SELECT 
+      JSON_ARRAYAGG(JSON_OBJECT('value', j.muscleMass, 'date', j.date)) AS numberMuscleRecords,
+      JSON_ARRAYAGG(JSON_OBJECT('value', j.weight, 'date', j.date)) AS numberWeightRecords,
+      JSON_ARRAYAGG(JSON_OBJECT('value', j.bodyFat, 'date', j.date)) AS numberFatRecords,
+      JSON_ARRAYAGG(JSON_OBJECT('value', j.maxHeartrate, 'date', j.date)) AS numberHeartbeatRecords
     FROM (
-        SELECT water_content, workout_time, current_weight, user_id, muscle_mass, body_fat, max_heartrate, created_at AS createdAt 
-        FROM workout_records 
-        WHERE user_id = ${id}
-        ORDER BY createdAt DESC 
-        LIMIT 12
-    ) AS r 
-    LEFT JOIN users u ON r.user_id = u.id;
-    `
+      SELECT 
+        r.user_id AS userId, 
+        r.water_content AS waterContent, 
+        r.workout_time AS workoutTime,
+        r.current_weight AS weight, 
+        u.height, 
+        r.muscle_mass AS muscleMass, 
+        r.body_fat AS bodyFat, 
+        r.max_heartrate AS maxHeartrate, 
+        DATE_FORMAT(r.created_at, '%Y-%m-%d') AS date 
+      FROM workout_records r
+      LEFT JOIN users u ON r.user_id = u.id
+      WHERE r.user_id = ${id}
+    ORDER BY r.created_at ASC 
+    LIMIT 12
+  ) AS j; 
+  `
   );
   return userRecentRecords;
-};
-
-
-const maxHeartbeatReader = async (id) => {
-  const heartbeatReader = await AppDataSource.query(
-    `SELECT max_heartrate AS maxHeartrate, created_at AS createdAt
-      FROM workout_records
-      WHERE user_id = ${id}
-      ORDER BY createdAt DESC
-    LIMIT 12;`
-  );
-  return heartbeatReader;
-};
-
-const musclemassReader = async (id) => {
-  const rawMuscleMassReader = await AppDataSource.query(
-    `SELECT muscle_mass AS muscleMass, created_at AS createdAt
-    FROM workout_records
-    WHERE user_id = ${id}
-    ORDER BY createdAt DESC
-    LIMIT 12;
-    `
-  );
-  return rawMuscleMassReader;
-};
-
-const bodyfatReader = async (id) => {
-  const rawBodyFatReader = await AppDataSource.query(
-    `SELECT body_fat AS bodyFat, created_at AS createdAt
-    FROM workout_records
-    WHERE user_id = ${id}
-    ORDER BY createdAt DESC
-    LIMIT 12;
-    `
-  );
-  return rawBodyFatReader;
-};
-
-const weightReader = async (id) => {
-  const rawWeightReader = await AppDataSource.query(
-    `SELECT current_weight AS weight, created_at AS createdAt FROM 
-    workout_records WHERE user_id = ${id}
-    ORDER BY 
-      created_at DESC
-      LIMIT 12;`
-  );
-  return rawWeightReader;
-};
-
-const bmiReader = async (id) => {
-  const rawHeightReader = await AppDataSource.query(
-    `SELECT r.current_weight AS weight, u.height, r.createdAt 
-    FROM (
-        SELECT current_weight, user_id, created_at AS createdAt 
-        FROM workout_records 
-        WHERE user_id = ${id}
-        ORDER BY createdAt DESC 
-        LIMIT 12
-    ) AS r 
-    LEFT JOIN users u ON r.user_id = u.id;
-    `
-  );
-  return rawHeightReader;
-};
-
-const timeReader = async (id) => {
-  const rawTimeReader = await AppDataSource.query(
-    `SELECT MAX(workout_time) AS workoutTime, created_at AS createdAt
-    FROM workout_records
-    WHERE user_id = ${id}
-    GROUP BY created_at
-    ORDER BY createdAt DESC
-    LIMIT 12;
-    `
-  );
-  return rawTimeReader;
 };
 
 const recordCreator = async (addRecord) => {
@@ -124,7 +61,7 @@ const recordCreator = async (addRecord) => {
 const recordUpdater = async (addRecord) => {
   const updater = `
     UPDATE workout_records
-    SET
+    SET 
       water_content = CASE WHEN ? IS NOT NULL THEN ? ELSE water_content END,
       workout_time = CASE WHEN ? IS NOT NULL THEN ? ELSE workout_time END,
       current_weight = CASE WHEN ? IS NOT NULL THEN ? ELSE current_weight END,
@@ -193,18 +130,14 @@ const recordTimeChecker = async (addRecord) => {
 };
 
 module.exports = {
-  recordTimeChecker,
-  recordIdChecker,
   recordCreator,
   recordUpdater,
-  weightReader,
+  recordTimeChecker,
+  recordIdChecker,
+  recordIdParamsChecker,
+  userRecordReader,
   avgWorkoutTimeTotal,
   avgWorkoutTimeUser,
-  timeReader,
-  bmiReader,
-  maxHeartbeatReader,
-  recordIdParamsChecker,
-  musclemassReader,
-  bodyfatReader,
-  userRecordReader,
+ 
+
 };
