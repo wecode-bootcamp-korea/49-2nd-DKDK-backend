@@ -32,6 +32,7 @@ const getSortTrainerProduct = async (
     // 키 값 발행해 주기
     isSub = false;
   }
+  //쿼리 빌더 필요
   const data = await trainerMatchingDao.sortTrainerMatching(
     offset,
     limit,

@@ -6,7 +6,7 @@ const { trainerMatchingController } = require("../controllers");
 const trainerMatchingRouter = express.Router();
 
 trainerMatchingRouter.get("/", trainerMatchingController.getTrainerProduct);
-trainerMatchingRouter.post("/");
-trainerMatchingRouter.delete("/");
+// trainerMatchingRouter.post("/");
+// trainerMatchingRouter.delete("/");
 
 module.exports = { trainerMatchingRouter };
