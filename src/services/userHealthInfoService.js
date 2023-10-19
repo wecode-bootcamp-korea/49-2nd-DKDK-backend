@@ -31,31 +31,7 @@ const getUserInfo = async (userId) => {
   };
 };
 
-// const updateMypage = async (
-//   nickname,
-//   profileImg,
-//   height,
-//   weight,
-//   workoutLoad,
-//   interestedWorkout,
-//   userId
-// ) => {
-//   try {
-//     await userHealthInfoDao.userUpdate(
-//       nickname,
-//       profileImg,
-//       height,
-//       weight,
-//       workoutLoad,
-//       interestedWorkout,
-//       userId
-//     );
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
-
 module.exports = {
   getUserInfo,
-  // updateMypage,
 };
+
