@@ -13,12 +13,24 @@ describe("GET User Information", () => {
     app = createApp();
     await AppDataSource.initialize();
     
-    // GET 테스트를 위한 유저 정보 생성
+    // GET 테스트를 위한 DB필수정보 생성
+
+    // 1. workout category
     await AppDataSource.query(
-      `INSERT INTO users 
-      (nickname, birthday, gender, phone_number, user_type, height, weight, interested_workout, workout_load)
+      `INSERT INTO workout_categories (id, category)
+      VALUES
+      (1, '헬스'),
+      (2, '필라테스'),
+      (3, '요가');
+      `
+    )
+
+    // 2. USER정보 생성
+    await AppDataSource.query(
+      `INSERT INTO users
+      (id, nickname, birthday, gender, phone_number, user_type, height, weight, interested_workout, workout_load)
         VALUES
-      ('테스터', '2023-10-10', 1, 01012341234, 1, 186.00, 78.00, 1, 1);
+      (1, '테스터', '2023-10-10', 1, 01012341234, 1, 186.00, 78.00, 1, 1);
       `);
 
   });
@@ -26,8 +38,11 @@ describe("GET User Information", () => {
   afterAll(async () => {
     // 테스트 데이터베이스의 불필요한 데이터를 전부 지워줍니다.
     // 테이블에 있는 데이터를 날려주는 코드
-    await AppDataSource.query(`DELETE FROM users WHERE nickname = '테스터';`);
-    
+    await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 0;`);
+    await AppDataSource.query(`TRUNCATE TABLE workout_categories;`);
+    await AppDataSource.query(`TRUNCATE TABLE users;`);
+    await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 1;`);
+
     // 모든 테스트가 끝나게 되면(afterAll) DB 커넥션을 끊어줍니다.
     await AppDataSource.destroy();
   });
@@ -61,7 +76,7 @@ describe("GET User Information", () => {
       `);
     
     const res = await request(app)
-      .get(`/userHealthInfo?userId=${userInfo[0].id}`)
+      .get(`/userHealthInfo?userId=1}`)
     //   .expect(200)
     expect(200)
     expect(res.body.message).toEqual('MYPAGE_LOADED')
