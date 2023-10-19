@@ -1,6 +1,10 @@
-const { mypageDao } = require("../models");
+const { userHealthInfoDao } = require('../models');
+const { throwError } = require('../utils/throwError');
 
-const mypage = async (userId) => {
+const getUserInfo = async (userId) => {
+  const exist = await userHealthInfoDao.checkExistence(userId);
+
+  if (!exist) throwError(400, "KEY_ERROR_NO_SUCH_USER");
   const bmiCalculator = () => {
     const height = userInfo[0].height;
     const weight = userInfo[0].weight;
@@ -10,12 +14,12 @@ const mypage = async (userId) => {
     if (bmi > 23) return 1400;
   };
 
-  const userInfo = await mypageDao.userInfo(userId);
-  const trainerInfo = await mypageDao.trainerInfo(userId);
-  const ptOrderInfo = await mypageDao.ptOrderInfo(userId);
-  const subOrderInfo = await mypageDao.subOrderInfo(userId);
-  const workoutRcmd = await mypageDao.workoutRcmd(userId);
-  const foodRcmd = await mypageDao.foodRcmd(bmiCalculator());
+  const userInfo = await userHealthInfoDao.userInfo(userId);
+  const trainerInfo = await userHealthInfoDao.trainerInfo(userId);
+  const ptOrderInfo = await userHealthInfoDao.ptOrderInfo(userId);
+  const subOrderInfo = await userHealthInfoDao.subOrderInfo(userId);
+  const workoutRcmd = await userHealthInfoDao.workoutRcmd(userId);
+  const foodRcmd = await userHealthInfoDao.foodRcmd(bmiCalculator());
 
   return {
     userInfo: userInfo,
@@ -37,7 +41,7 @@ const mypage = async (userId) => {
 //   userId
 // ) => {
 //   try {
-//     await mypageDao.userUpdate(
+//     await userHealthInfoDao.userUpdate(
 //       nickname,
 //       profileImg,
 //       height,
@@ -52,6 +56,6 @@ const mypage = async (userId) => {
 // };
 
 module.exports = {
-  mypage,
+  getUserInfo,
   // updateMypage,
 };

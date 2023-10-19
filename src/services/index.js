@@ -1,5 +1,5 @@
-const mypageService = require("./mypageService");
+const userHealthInfoService = require("./userHealthInfoService");
 
 module.exports = {
-  mypageService,
+  userHealthInfoService,
 };

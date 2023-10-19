@@ -1,6 +1,6 @@
-const { mypageService } = require("../services");
+const { userHealthInfoService } = require("../services");
 
-const mypageView = async (req, res, next) => {
+const viewUserHealthInfo = async (req, res, next) => {
   try {
     const { userId } = req.query;
     if (!userId) {
@@ -8,16 +8,16 @@ const mypageView = async (req, res, next) => {
     }
     return res.status(200).json({
       message: "MYPAGE_LOADED",
-      data: await mypageService.mypage(userId),
+      data: await userHealthInfoService.getUserInfo(userId),
     });
-  } catch (err) {
-    console.error(err);
-    res.status(err.statusCode || 500).json({ message: err.message });
-    next(err);
+  } catch (error) {
+    console.error(error);
+    res.status(error.status || 500).json({ message: error.message });
+    next(error);
   }
 };
 
-// const mypageUpdate = async (req, res, next) => {
+// const userHealthInfoUpdate = async (req, res, next) => {
 //   try {
 //     const {
 //       nickname,
@@ -39,6 +39,6 @@ const mypageView = async (req, res, next) => {
 // };
 
 module.exports = {
-  mypageView,
-  // mypageUpdate,
+  viewUserHealthInfo,
+  // userHealthInfoeUpdate,
 };

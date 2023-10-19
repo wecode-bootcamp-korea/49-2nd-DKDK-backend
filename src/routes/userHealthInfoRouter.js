@@ -1,9 +1,9 @@
 const express = require('express');
-const { mypageController } = require('../controllers');
+const { userHealthInfoController } = require('../controllers');
 
 const userHealthInfoRouter = express.Router();
 
-userHealthInfoRouter.get('/', mypageController.mypageView);
+userHealthInfoRouter.get('/', userHealthInfoController.viewUserHealthInfo);
 // mypageRouter.patch('/', mypageControllers);
 
 module.exports = { userHealthInfoRouter }

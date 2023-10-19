@@ -1,5 +1,13 @@
 const { AppDataSource } = require("./dataSource");
 
+const checkExistence = async (userId) => {
+  const exist = await AppDataSource.query(
+  ` SELECT id FROM users where id = ?`,
+  [userId]
+  );
+  return exist.length === 0 ? false : true;
+  };
+
 // Trainer회원인지 일반 회원인지 체크
 const checkTrainer = async (userId) => {
   const isTrainer = await AppDataSource.query(
@@ -216,6 +224,7 @@ const trainerUpdate = async (
 };
 
 module.exports = {
+  checkExistence,
   checkTrainer,
   userInfo,
   trainerInfo,

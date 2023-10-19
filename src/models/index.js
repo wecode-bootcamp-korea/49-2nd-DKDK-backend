@@ -1,5 +1,5 @@
-const mypageDao = require("./mypageDao");
+const userHealthInfoDao = require("./userHealthInfoDao");
 
 module.exports = {
-  mypageDao,
+  userHealthInfoDao,
 };
