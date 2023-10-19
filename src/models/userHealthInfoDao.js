@@ -9,7 +9,7 @@ const checkExistence = async (userId) => {
   };
 
 // GET - 유저 정보
-const userInfo = async (userId) => {
+const getUser = async (userId) => {
   return await AppDataSource.query(
     `
     SELECT u.img_url AS profileImage,
@@ -30,7 +30,7 @@ const userInfo = async (userId) => {
 };
 
 // GET - 트레이너 정보
-const trainerInfo = async (userId) => {
+const getTrainerInfo = async (userId) => {
   const trainerInfo = await AppDataSource.query(
     `
     SELECT
@@ -51,7 +51,7 @@ const trainerInfo = async (userId) => {
 };
 
 // GET - PT 주문정보
-const ptOrderInfo = async (userId) => {
+const getPtOrderByUserId = async (userId) => {
   const ptOrderDetail = await AppDataSource.query(
     `
     SELECT
@@ -78,7 +78,7 @@ const ptOrderInfo = async (userId) => {
 };
 
 // GET - 구독권 정보
-const subOrderInfo = async (userId) => {
+const getSubOrdersInfoByUserId = async (userId) => {
   const subOrderDetails = await AppDataSource.query(
     `
     SELECT so.user_id AS userId,
@@ -97,7 +97,7 @@ const subOrderInfo = async (userId) => {
 };
 
 // GET - 식단
-const foodRcmd = async (grade) => {
+const getRandFoodByGrade = async (grade) => {
   return await AppDataSource.query(
     `
     SELECT f.meal_plan_id as id,
@@ -123,25 +123,25 @@ const foodRcmd = async (grade) => {
 };
 
 // GET - 추천 운동
-const workoutRcmd = async (userId) => {
+const getRandWorkoutByUserId = async (userId, limit = 5) => {
   return await AppDataSource.query(
     `
     SELECT * FROM workouts w
     JOIN workout_categories wc ON wc.id = w.category_id
     WHERE w.category_id = (SELECT interested_workout FROM users u WHERE u.id = ?)
     ORDER BY RAND()
-    LIMIT 5;
+    LIMIT ?;
     `,
-    [userId]
+    [userId, limit]
   );
 };
 
 module.exports = {
   checkExistence,
-  userInfo,
-  trainerInfo,
-  ptOrderInfo,
-  subOrderInfo,
-  foodRcmd,
-  workoutRcmd,
+  getUser,
+  getTrainerInfo,
+  getPtOrderByUserId,
+  getSubOrdersInfoByUserId,
+  getRandFoodByGrade,
+  getRandWorkoutByUserId,
 };
