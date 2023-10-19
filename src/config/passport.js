@@ -4,7 +4,7 @@ const { generateToken, throwError } = require("../utils");
 require("dotenv").config();
 
 const { userDao } = require("../models");
-const { findByKakaoId, updateImgUrl, isSubscribed, createUser } = userDao;
+const { findUserByKakaoId, updateUserImgUrl, isSubscribed, createUser } = userDao;
 
 // 카카오 전략
 passport.use(
@@ -21,7 +21,7 @@ passport.use(
         console.log("passport kakaoId : ", kakaoId);
         console.log("passport imgUrl : ", imgUrl);
 
-        const exUser = await findByKakaoId(kakaoId);
+        const exUser = await findUserByKakaoId(kakaoId);
 
         if (exUser) {
           const userType = exUser.user_type;
@@ -39,7 +39,7 @@ passport.use(
             console.log(isSubscribedUser)
              
             //로그인 성공시 카카오에서 받은 imgurl 업데이트
-            const userImgUpdate = await updateImgUrl(userId, imgUrl);
+            const userImgUpdate = await updateUserImgUrl(userId, imgUrl);
             if (!userImgUpdate) throwError(400, "FAIL_TO_UPDATE_IMG_URL")
 
             const exUserData = {

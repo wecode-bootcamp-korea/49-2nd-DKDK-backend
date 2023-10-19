@@ -2,9 +2,9 @@ const express = require('express')
 const userRoute = express.Router();
 
 const { userController } = require('../controllers')
-const { detailSignUp } = userController;
+const { updateUserInfo } = userController;
 
-userRoute.post('/signup', detailSignUp) 
+userRoute.post('/signup', updateUserInfo) 
 //userRoute.post('/nicknameCheck') 
 
 module.exports = { userRoute };

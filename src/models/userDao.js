@@ -3,7 +3,7 @@ const { createConnection } = require("typeorm");
 const { throwError } = require("../utils");
 
 // isSubscribed 추가
-const findByKakaoId = async (kakaoId) => {
+const findUserByKakaoId = async (kakaoId) => {
   const [result] = await AppDataSource.query(
     `
         SELECT id, user_type
@@ -19,7 +19,7 @@ const findByKakaoId = async (kakaoId) => {
 
 };
 
-const updateImgUrl = async (userId, imgUrl) => {
+const updateUserImgUrl = async (userId, imgUrl) => {
   const result = await AppDataSource.query(
     `
       UPDATE users 
@@ -45,7 +45,6 @@ const createUser = async (kakaoId, imgUrl) => {
     
     return {
       id: result.insertId,
-      //img_url: imgUrl,
     };
 
   } else {
@@ -57,7 +56,7 @@ const createUser = async (kakaoId, imgUrl) => {
 const isSubscribed = async (userId) => {
   const [result] = await AppDataSource.query(
     `
-      SELECT *
+      SELECT id
       FROM sub_orders
       WHERE user_id = ?
       AND end_at > NOW()
@@ -86,7 +85,6 @@ const findByUserId = async (userId) => {
 const updateUser = async (
   userId,
   userType,
-  //imgUrl,
   nickname,
   phoneNumber,
   gender,
@@ -134,7 +132,11 @@ const updateUser = async (
       );
 
       //2. 트레이너 회원의 경우 트레이너 정보 생성
-      if (userType === "2") {
+      const userTypes = {
+        USER : 1,
+        TRAINER : 2
+      }
+      if (userType === userTypes.TRAINER) {
         const createTrainer = await transactionalEntityManager.query(
           `
             INSERT INTO trainers
@@ -170,10 +172,10 @@ const updateUser = async (
 };
 
 module.exports = {
-  findByKakaoId,
+  findUserByKakaoId,
   findByUserId,
   isSubscribed,
-  updateImgUrl,
+  updateUserImgUrl,
   createUser,
   updateUser,
 };

@@ -3,14 +3,14 @@ const { checkEmptyValues, generateToken, throwError } = require("../utils");
 const { userServicve } = require("../services");
 const { detailUpdateUser } = userServicve;
 
-const detailSignUp = async (req, res) => {
+const updateUserInfo = async (req, res) => {
 
   const accessToken = req.headers.authorization;
+  if(!accessToken) throwError("INVALID_TOKEN")
+
   const { id } = jwt.verify(accessToken, process.env.SECRET);
   const userId = id;
 
-  if(!accessToken) throwError("INVALID_TOKEN")
-  
   const {
     userType,
     nickname,
@@ -40,9 +40,12 @@ const detailSignUp = async (req, res) => {
     ];
 
     //트레이너만 specialized 입력
-    if (userType === "1" || userType === "2") {
-      const fieldsToCheck = userType === "2" ? [...commonFields, specialized] : commonFields;
-
+    const userTypes = {
+      USER : 1,
+      TRAINER : 2
+    }
+    if (userType === userTypes.USER || userType === userTypes.TRAINER) {
+      const fieldsToCheck = userType === userTypes.TRAINER ? [...commonFields, specialized] : commonFields;
       checkEmptyValues(...fieldsToCheck);
     } else {
       throwError(400, "INVALID_USER_TYPE");
@@ -77,5 +80,5 @@ const detailSignUp = async (req, res) => {
 };
 
 module.exports = {
-  detailSignUp,
+  updateUserInfo,
 };
