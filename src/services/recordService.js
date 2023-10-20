@@ -79,8 +79,8 @@ const createRecord = async (id, recordData) => {
   }
 
   //당일 기록 존재 시, 기록 업데이트
-  const recordUpdater = await recordDao.recordUpdater(recordData);
-  return recordUpdater;
+  const updateWorkoutRecords = await recordDao.updateWorkoutRecords(recordData);
+  return updateWorkoutRecords;
 };
 
 module.exports = {

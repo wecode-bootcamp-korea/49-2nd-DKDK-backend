@@ -2,7 +2,7 @@ const {
   recordTimeChecker,
   recordIdChecker,
   recordCreator,
-  recordUpdater,
+  updateWorkoutRecords,
   weightReader,
   avgWorkoutTimeTotal,
   avgWorkoutTimeUser,

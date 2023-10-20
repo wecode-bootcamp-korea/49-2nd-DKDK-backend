@@ -58,7 +58,7 @@ const recordCreator = async (id, recordData) => {
   return recordCreator;
 };
 
-const recordUpdater = async (id, recordData) => {
+const updateWorkoutRecords = async (id, recordData) => {
   const updater = `
     UPDATE workout_records
     SET 
@@ -87,8 +87,8 @@ const recordUpdater = async (id, recordData) => {
     recordData.maxHeartrate,
     id,
   ];
-  const recordUpdater = await AppDataSource.query(updater, values);
-  return recordUpdater;
+  const updateWorkoutRecords = await AppDataSource.query(updater, values);
+  return updateWorkoutRecords;
 };
 
 const userWeightUpdater = async (id, recordData) => {
@@ -131,7 +131,7 @@ const recordTimeChecker = async (id) => {
 
 module.exports = {
   recordCreator,
-  recordUpdater,
+  updateWorkoutRecords,
   recordTimeChecker,
   recordIdParamsChecker,
   userRecordReader,
