@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { throwError } = require("../utilities/throwError");
+const { throwError } = require("../utils/throwError");
 const { SECRET } = process.env;
 
 const validateToken = async (req, res, next) => {
@@ -13,7 +13,7 @@ const validateToken = async (req, res, next) => {
     next();
   } catch (error) {
     error.status = error.status || 400;
-    error.message = error.message.toUpperCase().replaceAll(" ", "_");
+    error.message = error.message.toUpperCase().replace(/ /g, "_");
     next(error);
   }
 };
