@@ -4,12 +4,8 @@ const { userServicve } = require("../services");
 const { detailUpdateUser, isNicknameDuplicate } = userServicve;
 
 const updateUserInfo = async (req, res) => {
-  // 미들웨어 추가 시 삭제 및 수정
-  const accessToken = req.headers.authorization;
-  if (!accessToken) throwError(400, "INVALID_TOKEN");
-
-  const { id } = jwt.verify(accessToken, process.env.SECRET);
-  const userId = id;
+  
+  const userId = req.userId;
 
   const {
     userType,

@@ -309,7 +309,7 @@ CREATE TABLE `workouts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping routines for database 'dkdktest'
+-- Dumping routines for database 'dkdk'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -346,9 +346,7 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20231013085624'),
   ('20231016070702'),
   ('20231016074624'),
-  ('20231016171957'),
   ('20231016172928'),
-  ('20231017013328'),
   ('20231017013635'),
   ('20231018140931');
 UNLOCK TABLES;
