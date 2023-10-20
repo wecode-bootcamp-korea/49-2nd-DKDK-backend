@@ -12,8 +12,8 @@ describe("Sign up", () => {
     app = createApp();
     await AppDataSource.initialize();
     const user = await AppDataSource.query(`
-      INSERT INTO users (kakao_id, img_url)
-      VALUES ('12345', "https://img.allurekorea.com/allure/2020/12/style_5fdf11d599bdd-916x1200.jpg");
+      INSERT INTO users (id, kakao_id, img_url)
+      VALUES (99, '12345', "https://img.allurekorea.com/allure/2020/12/style_5fdf11d599bdd-916x1200.jpg");
     `);
 
     userId = user.insertId;
@@ -132,7 +132,7 @@ describe("Check Duplicated Nickname", () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`
       INSERT INTO users (id, kakao_id, nickname, img_url)
-      VALUES (1, '12345', '중복닉네임', "https://img.allurekorea.com/allure/2020/12/style_5fdf11d599bdd-916x1200.jpg");
+      VALUES (100, '12345', '중복닉네임', "https://img.allurekorea.com/allure/2020/12/style_5fdf11d599bdd-916x1200.jpg");
     `);
   });
 
