@@ -4,7 +4,7 @@ const getTrainerProduct = async (req, res) => {
   const userId = req.userId;
   const { offset, limit, sort, kind, gender } = req.query;
 
-  return await trainerMatchingService.getTrainerProduct(
+  const data = await trainerMatchingService.getTrainerProduct(
     userId,
     offset,
     limit,
@@ -12,6 +12,7 @@ const getTrainerProduct = async (req, res) => {
     kind,
     gender
   );
+  res.status(200).json({ message: "GET_SUCCESS", data: data });
 };
 
 module.exports = { getTrainerProduct };

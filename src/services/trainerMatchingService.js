@@ -29,4 +29,4 @@ const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
   return { isSubscribed: isSub, data: data };
 };
 
-module.exports = { getTrainerProduct, getSortTrainerProduct };
+module.exports = { getTrainerProduct };
