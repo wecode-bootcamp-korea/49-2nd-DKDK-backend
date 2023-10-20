@@ -38,7 +38,6 @@ const postTrainerProduct = async (userId) => {
   await trainerMatchingDao.postTrainerMatching(
     userId,
     imgUrl,
-    name,
     availableArea,
     price,
     availableTime,

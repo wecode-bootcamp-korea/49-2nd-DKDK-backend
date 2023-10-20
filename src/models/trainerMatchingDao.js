@@ -68,14 +68,54 @@ const isSubscribed = async (userId) => {
 const postTrainerMatching = async (
   userId,
   imgUrl,
-  name,
   availableArea,
   price,
   availableTime,
   term,
   content
 ) => {
-  await AppDataSource.query(``);
+  await AppDataSource.query(`
+  UPDATE users 
+  SET img_url = ${imgUrl}
+  WHERE id = ${userId};
+  `);
+  const [trainerId] = await AppDataSource.query(
+    `
+    SELECT t.id AS id
+    FROM trainer t
+    JOIN users u ON u.id = t.user_id
+    WHERE u.id = ?;`,
+    [userId]
+  );
+  const [category] = await AppDataSource.query(
+    `
+    SELECT wc.category AS name
+    FROM workout_category wc
+    JOIN trainers t ON t.specialized = wc.id
+    WHERE t.id = ?;`,
+    [trainerId.id]
+  );
+  await AppDataSource.query(
+    `
+  INSERT INTO products ( 
+    trainer_id,
+    available_area,
+    available_time,
+    category_name,
+    term,
+    price,
+    content)
+  VALUES (?, ?, ?, ?, ?, ?, ?);`,
+    [
+      trainerId.id,
+      availableArea,
+      availableTime,
+      category.name,
+      term,
+      price,
+      content,
+    ]
+  );
 };
 
 module.exports = {
