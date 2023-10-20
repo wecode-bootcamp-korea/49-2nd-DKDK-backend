@@ -14,7 +14,7 @@ const deleteCommentService = async (userId, content) => {
 };
 
 const getAllPostService = async (userId, postId) => {
-  getAllPostDao(userId, postId);
+  await getAllPostDao(userId, postId);
   return "GET_POST";
 };
 

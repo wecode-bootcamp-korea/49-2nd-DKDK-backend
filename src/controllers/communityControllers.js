@@ -1,4 +1,4 @@
-const { throwError } = require("../utils");
+const { throwError } = require("../utils/throwError");
 const { communityService } = require("../services");
 const {
   createPostService,
@@ -10,7 +10,7 @@ const {
 
 const createPostController = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = 2;
     const { content, img_url } = req.body;
     if (userId) throwError(400, "KEY_ERROR");
     if (!content) throwError(400, "NO_CONTENT");
@@ -26,7 +26,7 @@ const createPostController = async (req, res, next) => {
 
 const deletePostController = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = 2;
     const { postId } = req.body;
     if (!postId) throwError(400, "KEY_ERROR");
     return res
@@ -40,8 +40,8 @@ const deletePostController = async (req, res, next) => {
 
 const getAllPostController = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-    const postId = req.query.tab;
+    const userId = 2;
+    const postId = req.body;
     if (!postId) throwError(400, "N0_POST_ID");
     return res.status(200).json({
       message: "GET_POST",
