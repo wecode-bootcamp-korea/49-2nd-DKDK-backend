@@ -54,7 +54,7 @@ const readRecord = async(id) => {
   return formattedRecords;
 }
 
-const createRecord = async (id, addRecord) => {
+const createRecord = async (id, recordData) => {
   //유저아이디가 존재하는지 확인
   const userIdLoader = await recordDao.recordIdParamsChecker(id);
   if (!userIdLoader) {
@@ -63,23 +63,23 @@ const createRecord = async (id, addRecord) => {
 
   //유저정보 확인 후, 기록 생성/업데이트 분기처리
   const nowDate = new Date();
-  const userDateTime = await recordDao.recordTimeChecker(addRecord);
+  const userDateTime = await recordDao.recordTimeChecker(recordData);
   const receivedDateTime = userDateTime[0].createdAt;
   const dateCheckerPole = nowDate.setHours(0, 0, 0, 0);
   const formattedUserDate = receivedDateTime.setHours(0, 0, 0, 0);
 
   //당일 기록 미존재 시, 기록 생성
   if (dateCheckerPole !== formattedUserDate) {
-    const recordCreator = await recordDao.recordCreator(addRecord);
-    if (!addRecord.weight) {
+    const recordCreator = await recordDao.recordCreator(recordData);
+    if (!recordData.weight) {
     return recordCreator;
     }
-    const userWeightUpdater = await recordDao.userWeightUpdater(id, addRecord); 
+    const userWeightUpdater = await recordDao.userWeightUpdater(id, recordData); 
     return userWeightUpdater;
   }
 
   //당일 기록 존재 시, 기록 업데이트
-  const recordUpdater = await recordDao.recordUpdater(addRecord);
+  const recordUpdater = await recordDao.recordUpdater(recordData);
   return recordUpdater;
 };
 

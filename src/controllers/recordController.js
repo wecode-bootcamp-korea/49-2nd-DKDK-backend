@@ -18,7 +18,7 @@ const readRecord = async (req, res) => {
 const createRecord = async (req, res) => {
   try {
     const id = req.userId;
-    const addRecord = req.body;
+    const recordData = req.body;
     const {
       waterContent,
       workoutTime,
@@ -26,8 +26,8 @@ const createRecord = async (req, res) => {
       muscleMass,
       bodyFat,
       maxHeartrate,
-    } = addRecord;
-    const createRecord = await recordService.createRecord(addRecord);
+    } = recordData;
+    const createRecord = await recordService.createRecord(recordData);
 
     if (!createRecord) {
       return res.status(400).json({ message: "NOT_UPDATED" });

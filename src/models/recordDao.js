@@ -30,7 +30,7 @@ const userRecordReader = async (id) => {
   return userRecentRecords;
 };
 
-const recordCreator = async (id, addRecord) => {
+const recordCreator = async (id, recordData) => {
   const creator = `
     INSERT INTO workout_records 
     (
@@ -47,18 +47,18 @@ const recordCreator = async (id, addRecord) => {
       `;
   const values = [
     id,
-    addRecord.waterContent,
-    addRecord.workoutTime,
-    addRecord.currentWeight,
-    addRecord.muscleMass,
-    addRecord.bodyFat,
-    addRecord.maxHeartrate,
+    recordData.waterContent,
+    recordData.workoutTime,
+    recordData.currentWeight,
+    recordData.muscleMass,
+    recordData.bodyFat,
+    recordData.maxHeartrate,
   ];
   const recordCreator = await AppDataSource.query(creator, values);
   return recordCreator;
 };
 
-const recordUpdater = async (id, addRecord) => {
+const recordUpdater = async (id, recordData) => {
   const updater = `
     UPDATE workout_records
     SET 
@@ -73,28 +73,28 @@ const recordUpdater = async (id, addRecord) => {
     `;
 
   const values = [
-    addRecord.waterContent,
-    addRecord.waterContent,
-    addRecord.workoutTime,
-    addRecord.workoutTime,
-    addRecord.currentWeight,
-    addRecord.currentWeight,
-    addRecord.muscleMass,
-    addRecord.muscleMass,
-    addRecord.bodyFat,
-    addRecord.bodyFat,
-    addRecord.maxHeartrate,
-    addRecord.maxHeartrate,
+    recordData.waterContent,
+    recordData.waterContent,
+    recordData.workoutTime,
+    recordData.workoutTime,
+    recordData.currentWeight,
+    recordData.currentWeight,
+    recordData.muscleMass,
+    recordData.muscleMass,
+    recordData.bodyFat,
+    recordData.bodyFat,
+    recordData.maxHeartrate,
+    recordData.maxHeartrate,
     id,
   ];
   const recordUpdater = await AppDataSource.query(updater, values);
   return recordUpdater;
 };
 
-const userWeightUpdater = async (id, addRecord) => {
+const userWeightUpdater = async (id, recordData) => {
   const userWeightUpdater =`UPDATE users SET weight = ? WHERE id = ?;`
   const weightValues = [
-    addRecord.weight,
+    recordData.weight,
     id
   ]
   const weightUpdater = await AppDataSource.query(userWeightUpdater, weightValues);
