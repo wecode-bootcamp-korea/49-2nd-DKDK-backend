@@ -23,7 +23,7 @@ const getTrainerMatching = async (
     t.specialized AS specialized,
     u.img_url AS imgUrl
     FROM products p 
-    JOIN trainer t ON t.id = p.trainer_id
+    JOIN trainers t ON t.id = p.trainer_id
     JOIN users u ON u.id = t.user_id
     WHERE 1=1
     ${categoryQuery}

@@ -1,9 +1,9 @@
 const sortQuery = (sort) => {
   switch (sort) {
-    case "customer":
-      return `ORDER BY (SELECT COUNT(*) FROM comments WHERE user_id = p.trainer_id) DESC`;
     case "activity":
-      return `ORDER BY userCount DESC`;
+      return `ORDER BY (SELECT COUNT(*) FROM comments WHERE user_id = p.trainer_id) DESC`;
+    case "customer":
+      return `ORDER BY (SELECT COUNT(*) FROM pt_orders po WHERE product_id = p.id) DESC`;
     case "price":
       return `ORDER BY p.price DESC`;
     default:
