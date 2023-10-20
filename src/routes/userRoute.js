@@ -1,13 +1,11 @@
 const express = require('express')
 const userRoute = express.Router();
-const { auth, errorHandler } = require('../middlewares');
-const { asyncWrap } =  errorHandler;
-const { validateToken } = auth;
-
+const { validateToken } = require('../middlewares/auth');
+const { asyncWrap } = require('../middlewares/errorHandler');
 const { userController } = require('../controllers')
 const { updateUserInfo, checkDuplicateNickname } = userController;
 
 userRoute.post('/signup', validateToken, asyncWrap(updateUserInfo)) 
-userRoute.post('/nicknameCheck', validateToken, asyncWrap(checkDuplicateNickname)) 
+userRoute.post('/nicknameCheck', asyncWrap(checkDuplicateNickname)) 
 
 module.exports = { userRoute };

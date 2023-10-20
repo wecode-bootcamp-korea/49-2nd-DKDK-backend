@@ -1,10 +1,10 @@
-const jwt = require("jsonwebtoken");
-const { checkEmptyValues, generateToken, throwError } = require("../utils");
+const { checkEmptyValues } = require("../utils/checkEmptyValues")
+const { throwError } = require("../utils/throwError")
 const { userServicve } = require("../services");
 const { detailUpdateUser, isNicknameDuplicate } = userServicve;
 
 const updateUserInfo = async (req, res) => {
-  
+
   const userId = req.userId;
 
   const {

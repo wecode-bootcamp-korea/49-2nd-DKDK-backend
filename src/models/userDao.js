@@ -1,6 +1,6 @@
 const { AppDataSource } = require("../models/dataSource");
 const { createConnection } = require("typeorm");
-const { throwError } = require("../utils");
+const { throwError } = require("../utils/throwError");
 
 const findUserByKakaoId = async (kakaoId) => {
   const [result] = await AppDataSource.query(

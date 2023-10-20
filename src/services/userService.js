@@ -1,4 +1,4 @@
-const { throwError } = require("../utils");
+const { throwError } = require("../utils/throwError");
 const { userDao } = require("../models");
 const { findByUserId, findUserByNickname, updateUser } = userDao;
 

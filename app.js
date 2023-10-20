@@ -5,7 +5,7 @@ const passport = require("passport");
 require("./src/config/passport");
 
 const { routes } = require("./src/routes");
-const { errorHandler } = require("./src/middlewares");
+const { errorHandler } = require("./src/middlewares/errorHandler");
 
 
 const createApp = () => {
@@ -17,7 +17,7 @@ const createApp = () => {
   app.use(passport.initialize());
 
   app.use(routes);
-  app.use(errorHandler.errorHandler);
+  app.use(errorHandler);
   return app;
 };
 

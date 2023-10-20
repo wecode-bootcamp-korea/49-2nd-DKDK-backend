@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { throwError } = require("../utils");
+const { throwError } = require("../utils/throwError");
 const { SECRET } = process.env;
 
 const validateToken = async (req, res, next) => {
