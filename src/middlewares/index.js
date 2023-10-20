@@ -1,5 +1,4 @@
-const { validateToken } = require("./validateToken")
+const auth = require("./auth");
+const errorHandler = require("./errorHandler");
 
-module.exports = {
-    validateToken, 
-}
+module.exports = { auth, errorHandler };
