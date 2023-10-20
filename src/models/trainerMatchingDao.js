@@ -13,17 +13,18 @@ const getTrainerMatching = async (limit, offset) => {
     p.price AS price,
     p.content AS content,
     p.created_at AS created_at ,
-
+    u.gender AS gender,
+    t.specialized
 
     FROM products p 
     `);
   return result;
 };
-//쿼리빌더 필요
-const sortTrainerMatching = async (offset, limit, sort, kind, gender) => {
-  cosnt[result] = await AppDataSource.query(``);
-};
-//정렬된 트레이너 정보 쿼리빌더 사용할까?
+// //쿼리빌더 필요
+// const sortTrainerMatching = async (offset, limit, sort, kind, gender) => {
+//   cosnt[result] = await AppDataSource.query(``);
+// };
+// //정렬된 트레이너 정보 쿼리빌더 사용할까?
 // 트레이너 여부
 const isTrainer = async (userId) => {
   const result = await AppDataSource.query(
@@ -40,7 +41,7 @@ const isTrainer = async (userId) => {
   return result;
 };
 // 구독자 여부 확인
-const isSubscript = async (userId) => {
+const isSubscribed = async (userId) => {
   await AppDataSource.query(
     `SELECT CASE
           WHEN (SELECT u.nickname FROM sub_orders so
@@ -55,4 +56,4 @@ const isSubscript = async (userId) => {
   return result;
 };
 
-module.exports = { getTrainerMatching, isSubscript, isTrainer };
+module.exports = { getTrainerMatching, isSubscribed, isTrainer };
