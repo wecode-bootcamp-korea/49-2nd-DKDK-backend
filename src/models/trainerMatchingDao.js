@@ -1,7 +1,13 @@
 const { AppDataSource } = require("./dataSource");
 
 //트레이너 전체 정보
-const getTrainerMatching = async (limit, offset) => {
+const getTrainerMatching = async (
+  sortQuery,
+  categoryQuery,
+  genderQuery,
+  trainerCheckQuery,
+  products
+) => {
   const [result] = await AppDataSource.query(`
     SELECT 
     p.id AS id,
@@ -14,18 +20,21 @@ const getTrainerMatching = async (limit, offset) => {
     p.content AS content,
     p.created_at AS created_at ,
     u.gender AS gender,
-    t.specialized
-
+    t.specialized AS specialized,
+    u.img_url AS imgUrl
     FROM products p 
+    JOIN trainer t ON t.id = p.trainer_id
+    JOIN users u ON u.id = t.user_id
+    WHERE 1=1
+    ${categoryQuery}
+    ${genderQuery}
+    ${trainerCheckQuery}
+    ${sortQuery}
+    ${products}
     `);
   return result;
 };
-// //쿼리빌더 필요
-// const sortTrainerMatching = async (offset, limit, sort, kind, gender) => {
-//   cosnt[result] = await AppDataSource.query(``);
-// };
-// //정렬된 트레이너 정보 쿼리빌더 사용할까?
-// 트레이너 여부
+
 const isTrainer = async (userId) => {
   const result = await AppDataSource.query(
     `SELECT CASE
