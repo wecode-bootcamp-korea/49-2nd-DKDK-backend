@@ -123,8 +123,8 @@ const updateUser = async (
 
       //2. 트레이너 회원의 경우 트레이너 정보 생성
       const userTypes = {
-        USER: 1,
-        TRAINER: 2,
+        USER: "1",
+        TRAINER: "2",
       };
       if (userType === userTypes.TRAINER) {
         const createTrainer = await transactionalEntityManager.query(

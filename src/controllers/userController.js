@@ -30,8 +30,8 @@ const updateUserInfo = async (req, res) => {
 
     //트레이너만 specialized 입력
     const userTypes = {
-      USER: 1,
-      TRAINER: 2,
+      USER: "1",
+      TRAINER: "2",
     };
     if (userType === userTypes.USER || userType === userTypes.TRAINER) {
       const fieldsToCheck = userType === userTypes.TRAINER ? [...commonFields, specialized] : commonFields;

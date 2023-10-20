@@ -34,7 +34,7 @@ describe("Sign up", () => {
       .post("/user/signup")
       .set("Authorization", accessToken)
       .send({
-        userType: 1,
+        userType: "1",
         nickname: "슈슈",
         phoneNumber: "01072925164",
         gender: "남성",
@@ -53,7 +53,7 @@ describe("Sign up", () => {
       .post("/user/signup")
       .set("Authorization", accessToken)
       .send({
-        userType: 1,
+        userType: "1",
         phoneNumber: "01072925164",
         gender: "남성",
         birthday: "1990/03/26",
@@ -71,7 +71,7 @@ describe("Sign up", () => {
       .post("/user/signup")
       .set("Authorization", accessToken)
       .send({
-        userType: 5,
+        userType: "5",
         nickname: "슈슈",
         phoneNumber: "01072925164",
         gender: "남성",
@@ -90,7 +90,7 @@ describe("Sign up", () => {
       .post("/user/signup")
       .set("Authorization", accessToken)
       .send({
-        userType: 1,
+        userType: "1",
         nickname: "슈슈",
         phoneNumber: "072925164",
         gender: "남성",
@@ -109,7 +109,7 @@ describe("Sign up", () => {
       .post("/user/signup")
       .set("Authorization", accessToken)
       .send({
-        userType: 1,
+        userType: "1",
         nickname: "슈슈",
         phoneNumber: "01072925164",
         gender: "남성",
