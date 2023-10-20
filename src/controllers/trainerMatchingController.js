@@ -36,4 +36,15 @@ const postTrainerProduct = async (req, res) => {
   res.status(200).json({ message: "POST_SUCCESS" });
 };
 
-module.exports = { getTrainerProduct, postTrainerProduct };
+const deleteTrainerProduct = async (req, res) => {
+  const userId = req.userId;
+  const { productsId } = req.body;
+  await trainerMatchingService.deleteTrainerProduct(userId, productsId);
+  res.status(200), json({ message: "DELETE_SUCCESS" });
+};
+
+module.exports = {
+  getTrainerProduct,
+  postTrainerProduct,
+  deleteTrainerProduct,
+};

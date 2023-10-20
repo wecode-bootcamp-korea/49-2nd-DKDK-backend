@@ -13,6 +13,9 @@ trainerMatchingRouter.post(
   "/",
   asyncWrap(trainerMatchingController.postTrainerProduct)
 );
-// trainerMatchingRouter.delete("/");
+trainerMatchingRouter.delete(
+  "/",
+  asyncWrap(trainerMatchingController.deleteTrainerProduct)
+);
 
 module.exports = { trainerMatchingRouter };
