@@ -11,14 +11,14 @@ const getTrainerMatching = async (
   const [result] = await AppDataSource.query(`
     SELECT 
     p.id AS id,
-    p.trainer_id AS trainer_id,
-    p.available_area AS available_area,
-    p.available_time AS available_time,
-    p.category_name AS category_name,
+    p.trainer_id AS trainerId,
+    p.available_area AS availableArea,
+    p.available_time AS availableTime,
+    p.category_name AS categoryName,
     p.term AS term,
     p.price AS price,
     p.content AS content,
-    p.created_at AS created_at ,
+    p.created_at AS createdAt ,
     u.gender AS gender,
     t.specialized AS specialized,
     u.img_url AS imgUrl
@@ -65,4 +65,22 @@ const isSubscribed = async (userId) => {
   return result.isSubscribed;
 };
 
-module.exports = { getTrainerMatching, isSubscribed, isTrainer };
+const postTrainerMatching = async (
+  userId,
+  imgUrl,
+  name,
+  availableArea,
+  price,
+  availableTime,
+  term,
+  content
+) => {
+  await AppDataSource.query(``);
+};
+
+module.exports = {
+  getTrainerMatching,
+  isSubscribed,
+  isTrainer,
+  postTrainerMatching,
+};

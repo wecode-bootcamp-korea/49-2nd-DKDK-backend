@@ -33,8 +33,18 @@ const postTrainerProduct = async (userId) => {
   const isTrainer = trainerMatchingDao.isTrainer(userId);
   const isSubscribed = trainerMatchingDao.isSubscribed(userId);
   if (isTrainer || isSubscribed) {
-    throwError(400, "unauthorized_user");
+    throwError(400, "UNAUTHORIZED_USER");
   }
+  await trainerMatchingDao.postTrainerMatching(
+    userId,
+    imgUrl,
+    name,
+    availableArea,
+    price,
+    availableTime,
+    term,
+    content
+  );
 };
 
 module.exports = { getTrainerProduct, postTrainerProduct };
