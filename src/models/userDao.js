@@ -2,27 +2,16 @@ const { AppDataSource } = require("../models/dataSource");
 const { createConnection } = require("typeorm");
 const { throwError } = require("../utils/throwError");
 
-const findUserByKakaoId = async (kakaoId) => {
+const findUserByProviderId = async (provider, providerId) => {
+  const columnName = provider === "kakao" ? "kakao_id" : "naver_id";
+
   const [result] = await AppDataSource.query(
     `
         SELECT id, user_type
         FROM users
-        WHERE kakao_id = ?
-        `,
-    [kakaoId]
-  );
-
-  return result;
-};
-
-const findUserByNaverId = async (naverId) => {
-  const [result] = await AppDataSource.query(
-    `
-        SELECT id, user_type
-        FROM users
-        WHERE naver_id = ?
-        `,
-    [naverId]
+        WHERE ${columnName} = ?
+    `,
+    [providerId]
   );
 
   return result;
@@ -41,52 +30,18 @@ const updateUserImgUrl = async (userId, imgUrl) => {
   return result;
 };
 
-const createUser = async (kakaoId, imgUrl) => {
+const createUserByProviderId = async (provider, providerId, imgUrl) => {
+  const columnName = provider === "kakao" ? "kakao_id" : "naver_id";
 
   const result = await AppDataSource.query(
     `
     INSERT INTO users 
-    (kakao_id, img_url) 
+    (${columnName}, img_url) 
     VALUES (?, ?)
     `,
-    [kakaoId, imgUrl]
+    [providerId, imgUrl]
   );
-  if (result.insertId) {
-    return {
-      id: result.insertId,
-    };
-  } else {
-    throwError(401, "FAIL_TO_CREATE_USER");
-  }
-};
 
-const createUserByKakaoId = async (kakaoId, imgUrl) => {
-  const result = await AppDataSource.query(
-    `
-    INSERT INTO users 
-    (kakao_id, img_url) 
-    VALUES (?, ?)
-    `,
-    [kakaoId, imgUrl]
-  );
-  if (result.insertId) {
-    return {
-      id: result.insertId,
-    };
-  } else {
-    throwError(401, "FAIL_TO_CREATE_USER");
-  }
-};
-
-const createUserByNaverId = async (naverId, imgUrl) => {
-  const result = await AppDataSource.query(
-    `
-    INSERT INTO users 
-    (naver_id, img_url) 
-    VALUES (?, ?)
-    `,
-    [naverId, imgUrl]
-  );
   if (result.insertId) {
     return {
       id: result.insertId,
@@ -206,14 +161,11 @@ const updateUser = async (
 };
 
 module.exports = {
-  findUserByKakaoId,
-  findUserByNaverId,
+  findUserByProviderId,
   findByUserId,
   isSubscribed,
   updateUserImgUrl,
-  createUser,
-  createUserByKakaoId,
-  createUserByNaverId,
+  createUserByProviderId,
   findUserByNickname,
   updateUser,
 };
