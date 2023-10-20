@@ -1,5 +1,6 @@
 const passport = require("passport");
 const KakaoStrategy = require("passport-kakao").Strategy;
+//const NaverStrategy = require("passport-naver").Strategy;
 const { generateToken } = require("../utils/generateToken");
 const { throwError } = require("../utils/throwError");
 require("dotenv").config();
