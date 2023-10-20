@@ -47,7 +47,7 @@ const isTrainer = async (userId) => {
     `,
     [userId]
   );
-  return result;
+  return result.isTrainer;
 };
 // 구독자 여부 확인
 const isSubscribed = async (userId) => {
@@ -58,11 +58,11 @@ const isSubscribed = async (userId) => {
               WHERE u.id = ?) IS NULL
               THEN 'false'
               ELSE 'true'
-          END AS isTrainer;
+          END AS isSubscribed;
       `,
     [userId]
   );
-  return result;
+  return result.isSubscribed;
 };
 
 module.exports = { getTrainerMatching, isSubscribed, isTrainer };

@@ -9,7 +9,10 @@ trainerMatchingRouter.get(
   "/",
   asyncWrap(trainerMatchingController.getTrainerProduct)
 );
-// trainerMatchingRouter.post("/");
+trainerMatchingRouter.post(
+  "/",
+  asyncWrap(trainerMatchingController.postTrainerProduct)
+);
 // trainerMatchingRouter.delete("/");
 
 module.exports = { trainerMatchingRouter };

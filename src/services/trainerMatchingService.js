@@ -29,4 +29,12 @@ const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
   return { isSubscribed: isSub, data: data };
 };
 
-module.exports = { getTrainerProduct };
+const postTrainerProduct = async (userId) => {
+  const isTrainer = trainerMatchingDao.isTrainer(userId);
+  const isSubscribed = trainerMatchingDao.isSubscribed(userId);
+  if (isTrainer || isSubscribed) {
+    throwError(400, "unauthorized_user");
+  }
+};
+
+module.exports = { getTrainerProduct, postTrainerProduct };

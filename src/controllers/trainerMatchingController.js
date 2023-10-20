@@ -15,4 +15,10 @@ const getTrainerProduct = async (req, res) => {
   res.status(200).json({ message: "GET_SUCCESS", data: data });
 };
 
-module.exports = { getTrainerProduct };
+const postTrainerProduct = async (req, res) => {
+  const userId = req.userId;
+
+  await trainerMatchingService.postTrainerProduct(userId);
+};
+
+module.exports = { getTrainerProduct, postTrainerProduct };
