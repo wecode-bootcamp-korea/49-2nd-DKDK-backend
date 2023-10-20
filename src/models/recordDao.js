@@ -30,7 +30,7 @@ const userRecordReader = async (id) => {
   return userRecentRecords;
 };
 
-const recordCreator = async (id, recordData) => {
+const recordCreator = async (recordData) => {
   const creator = `
     INSERT INTO workout_records 
     (
@@ -45,8 +45,9 @@ const recordCreator = async (id, recordData) => {
     VALUES 
     (?, ?, ?, ?, ?, ?, ?);    
       `;
+
   const values = [
-    id,
+    recordData.userId,
     recordData.waterContent,
     recordData.workoutTime,
     recordData.currentWeight,
@@ -58,7 +59,7 @@ const recordCreator = async (id, recordData) => {
   return recordCreator;
 };
 
-const updateWorkoutRecords = async (id, recordData) => {
+const updateWorkoutRecords = async (recordData) => {
   const updater = `
     UPDATE workout_records
     SET 
@@ -85,17 +86,17 @@ const updateWorkoutRecords = async (id, recordData) => {
     recordData.bodyFat,
     recordData.maxHeartrate,
     recordData.maxHeartrate,
-    id,
+    recordData.userId,
   ];
   const updateWorkoutRecords = await AppDataSource.query(updater, values);
   return updateWorkoutRecords;
 };
 
-const userWeightUpdater = async (id, recordData) => {
+const userWeightUpdater = async (recordData) => {
   const userWeightUpdater =`UPDATE users SET weight = ? WHERE id = ?;`
   const weightValues = [
-    recordData.weight,
-    id
+    recordData.currentWeight,
+    recordData.userId,
   ]
   const weightUpdater = await AppDataSource.query(userWeightUpdater, weightValues);
   return weightUpdater;

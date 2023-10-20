@@ -4,7 +4,8 @@ const { throwError } = require("../utils/throwError");
 
 const readRecord = async (req, res) => {
   try {
-    const { id } = req.userId;
+    // const { id } = req.userId;
+    const { id } = req.params;
     const readRecord = await recordService.readRecord(Number(id));
     if (!readRecord) {
       return res.status(400).json({ message: "NO_USER" });
@@ -17,9 +18,10 @@ const readRecord = async (req, res) => {
 
 const createRecord = async (req, res) => {
   try {
-    const id = req.userId;
+    // const id = req.userId;
     const recordData = req.body;
     const {
+      userId,
       waterContent,
       workoutTime,
       currentWeight,
