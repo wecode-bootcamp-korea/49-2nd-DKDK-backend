@@ -1,5 +1,5 @@
 
-const kakaoLogin = async (req, res) => {
+const socialLogin = async (req, res) => {
 
     if (req.user) {
   
@@ -36,5 +36,5 @@ const kakaoLogin = async (req, res) => {
   };
   
   module.exports = {
-    kakaoLogin,
+    socialLogin,
   };

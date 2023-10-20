@@ -15,6 +15,19 @@ const findUserByKakaoId = async (kakaoId) => {
   return result;
 };
 
+const findUserByNaverId = async (naverId) => {
+  const [result] = await AppDataSource.query(
+    `
+        SELECT id, user_type
+        FROM users
+        WHERE naver_id = ?
+        `,
+    [naverId]
+  );
+
+  return result;
+};
+
 const updateUserImgUrl = async (userId, imgUrl) => {
   const result = await AppDataSource.query(
     `
@@ -29,6 +42,7 @@ const updateUserImgUrl = async (userId, imgUrl) => {
 };
 
 const createUser = async (kakaoId, imgUrl) => {
+
   const result = await AppDataSource.query(
     `
     INSERT INTO users 
@@ -36,6 +50,42 @@ const createUser = async (kakaoId, imgUrl) => {
     VALUES (?, ?)
     `,
     [kakaoId, imgUrl]
+  );
+  if (result.insertId) {
+    return {
+      id: result.insertId,
+    };
+  } else {
+    throwError(401, "FAIL_TO_CREATE_USER");
+  }
+};
+
+const createUserByKakaoId = async (kakaoId, imgUrl) => {
+  const result = await AppDataSource.query(
+    `
+    INSERT INTO users 
+    (kakao_id, img_url) 
+    VALUES (?, ?)
+    `,
+    [kakaoId, imgUrl]
+  );
+  if (result.insertId) {
+    return {
+      id: result.insertId,
+    };
+  } else {
+    throwError(401, "FAIL_TO_CREATE_USER");
+  }
+};
+
+const createUserByNaverId = async (naverId, imgUrl) => {
+  const result = await AppDataSource.query(
+    `
+    INSERT INTO users 
+    (naver_id, img_url) 
+    VALUES (?, ?)
+    `,
+    [naverId, imgUrl]
   );
   if (result.insertId) {
     return {
@@ -157,10 +207,13 @@ const updateUser = async (
 
 module.exports = {
   findUserByKakaoId,
+  findUserByNaverId,
   findByUserId,
   isSubscribed,
   updateUserImgUrl,
   createUser,
+  createUserByKakaoId,
+  createUserByNaverId,
   findUserByNickname,
   updateUser,
 };
