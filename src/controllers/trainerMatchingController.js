@@ -17,7 +17,9 @@ const getTrainerProduct = async (req, res) => {
 
 const getTrainerProductDetail = async (req, res) => {
   const userId = req.userId;
-  const { data } = await trainerMatchingService.getTrainerProductDetail(userId);
+  const { productsId } = req.query;
+  const data = await trainerMatchingService.getTrainerProductDetail(userId);
+  res.status(200).json({ message: "GET_SUCCESS", data: data });
 };
 
 const postTrainerProduct = async (req, res) => {
