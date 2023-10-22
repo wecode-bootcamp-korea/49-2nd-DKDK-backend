@@ -16,10 +16,8 @@ const getTrainerProduct = async (req, res) => {
 };
 
 const getTrainerProductDetail = async (req, res) => {
-  //   const userId = req.userId;
-  //   const { productsId } = req.body;
-  const userId = 5;
-  const productsId = 2;
+  const userId = req.userId;
+  const { productsId } = req.body;
   const data = await trainerMatchingService.getTrainerProductDetail(
     userId,
     productsId
