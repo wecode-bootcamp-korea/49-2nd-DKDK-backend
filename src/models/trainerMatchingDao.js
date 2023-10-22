@@ -31,13 +31,13 @@ const getTrainerMatching = async (
         ${genderQuery}
         ${trainerCheckQuery}
         ${sortQuery}
-        ${products}
+        ${products};
         `);
   return result;
 };
 
 //트레이너 상세 정보
-const getTrainerMatchingDetail = async (productsId) => {
+const getTrainerMatchingDetail = async (userId, productsId) => {
   const [result] = await AppDataSource.query(
     `
         SELECT 
@@ -57,14 +57,16 @@ const getTrainerMatchingDetail = async (productsId) => {
         JOIN trainers t ON t.id = p.trainer_id
         JOIN users u ON u.id = t.user_id
         WHERE p.status = 1
+        AND u.id = ?
         AND p.id = ?;
         `,
-    [productsId]
+    [userId, productsId]
   );
+  return result;
 };
 
 const isTrainer = async (userId) => {
-  const result = await AppDataSource.query(
+  const [result] = await AppDataSource.query(
     `SELECT CASE
         WHEN (SELECT u.nickname FROM trainers t
             JOIN users u ON t.user_id  = u.id
@@ -79,7 +81,7 @@ const isTrainer = async (userId) => {
 };
 // 구독자 여부 확인
 const isSubscribed = async (userId) => {
-  const result = await AppDataSource.query(
+  const [result] = await AppDataSource.query(
     `SELECT CASE
         WHEN (SELECT u.nickname FROM sub_orders so
             JOIN users u ON so.user_id  = u.id
@@ -93,7 +95,7 @@ const isSubscribed = async (userId) => {
   return result.isSubscribed;
 };
 const isPostedTrainer = async (productsId, trainerId) => {
-  const result = await AppDataSource.query(
+  const [result] = await AppDataSource.query(
     `SELECT CASE
         WHEN (SELECT p.id FROM p
             WHERE p.id = ?

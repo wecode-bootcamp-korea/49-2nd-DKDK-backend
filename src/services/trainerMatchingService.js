@@ -4,9 +4,10 @@ const { throwError } = require("../utils/throwError");
 
 const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
   //트레이너 확인 후 토큰 확인해서 구독 여부
-  const isTrainer = trainerMatchingDao.isTrainer(userId);
-  const isSubscribed = trainerMatchingDao.isSubscribed(userId);
-  const isAuth = true;
+  const isTrainer = await trainerMatchingDao.isTrainer(userId);
+  const isSubscribed = await trainerMatchingDao.isSubscribed(userId);
+
+  var isAuth = true;
   if (isTrainer || isSubscribed) {
     isAuth = false;
   }
@@ -30,15 +31,19 @@ const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
   return { isAuth: isAuth, isSubscribed: isSubscribed, data: data };
 };
 
-const getTrainerProductDetail = async (userId) => {
+const getTrainerProductDetail = async (userId, productsId) => {
   //트레이너 확인 후 토큰 확인해서 구독 여부
-  const isTrainer = trainerMatchingDao.isTrainer(userId);
-  const isSubscribed = trainerMatchingDao.isSubscribed(userId);
-  const isAuth = true;
+  const isTrainer = await trainerMatchingDao.isTrainer(userId);
+  const isSubscribed = await trainerMatchingDao.isSubscribed(userId);
+
+  var isAuth = true;
   if (isTrainer || isSubscribed) {
     isAuth = false;
   }
-  const data = await trainerMatchingDao.getTrainerMatchingDetail(userId);
+  const data = await trainerMatchingDao.getTrainerMatchingDetail(
+    userId,
+    productsId
+  );
   return { isAuth: isAuth, isSubscribed: isSubscribed, data: data };
 };
 

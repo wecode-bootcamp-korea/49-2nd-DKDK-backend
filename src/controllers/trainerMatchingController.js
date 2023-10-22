@@ -16,9 +16,14 @@ const getTrainerProduct = async (req, res) => {
 };
 
 const getTrainerProductDetail = async (req, res) => {
-  const userId = req.userId;
-  const { productsId } = req.query;
-  const data = await trainerMatchingService.getTrainerProductDetail(userId);
+  //   const userId = req.userId;
+  //   const { productsId } = req.body;
+  const userId = 5;
+  const productsId = 2;
+  const data = await trainerMatchingService.getTrainerProductDetail(
+    userId,
+    productsId
+  );
   res.status(200).json({ message: "GET_SUCCESS", data: data });
 };
 
