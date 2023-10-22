@@ -15,6 +15,11 @@ const getTrainerProduct = async (req, res) => {
   res.status(200).json({ message: "GET_SUCCESS", data: data });
 };
 
+const getTrainerProductDetail = async (req, res) => {
+  const userId = req.userId;
+  const { data } = await trainerMatchingService.getTrainerProductDetail(userId);
+};
+
 const postTrainerProduct = async (req, res) => {
   const userId = req.userId;
   //img, 이름은 해당 트레이너 정보 불러오는 거고, 지역 문자로 입력,
@@ -45,6 +50,7 @@ const deleteTrainerProduct = async (req, res) => {
 
 module.exports = {
   getTrainerProduct,
+  getTrainerProductDetail,
   postTrainerProduct,
   deleteTrainerProduct,
 };

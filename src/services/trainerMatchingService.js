@@ -6,9 +6,9 @@ const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
   //트레이너 확인 후 토큰 확인해서 구독 여부
   const isTrainer = trainerMatchingDao.isTrainer(userId);
   const isSubscribed = trainerMatchingDao.isSubscribed(userId);
-  const isSub = true;
+  const isAuth = true;
   if (isTrainer || isSubscribed) {
-    isSub = false;
+    isAuth = false;
   }
   //쿼리생성
   const sortQuery = trainerQueryBuilder.sortQuery(sort);
@@ -27,7 +27,19 @@ const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
     trainerCheckQuery,
     products
   );
-  return { isSubscribed: isSub, data: data };
+  return { isAuth: isAuth, isSubscribed: isSubscribed, data: data };
+};
+
+const getTrainerProductDetail = async (userId) => {
+  //트레이너 확인 후 토큰 확인해서 구독 여부
+  const isTrainer = trainerMatchingDao.isTrainer(userId);
+  const isSubscribed = trainerMatchingDao.isSubscribed(userId);
+  const isAuth = true;
+  if (isTrainer || isSubscribed) {
+    isAuth = false;
+  }
+  const data = await trainerMatchingDao.getTrainerMatchingDetail(userId);
+  return { isAuth: isAuth, isSubscribed: isSubscribed, data: data };
 };
 
 const postTrainerProduct = async (userId) => {
@@ -69,6 +81,7 @@ const deleteTrainerProduct = async (userId, productsId) => {
 
 module.exports = {
   getTrainerProduct,
+  getTrainerProductDetail,
   postTrainerProduct,
   deleteTrainerProduct,
 };

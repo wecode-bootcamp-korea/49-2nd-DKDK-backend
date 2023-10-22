@@ -1,33 +1,6 @@
 const { AppDataSource } = require("./dataSource");
 const { products } = require("./trainerQueryBuilder");
 
-//트레이너 상세 정보
-const getTrainerDetail = async (productsId) => {
-  const [result] = await AppDataSource.query(
-    `
-    SELECT 
-    p.id AS id,
-    p.trainer_id AS trainerId,
-    p.available_area AS availableArea,
-    p.available_time AS availableTime,
-    p.category_name AS categoryName,
-    p.term AS term,
-    p.price AS price,
-    p.content AS content,
-    p.created_at AS createdAt ,
-    u.gender AS gender,
-    t.specialized AS specialized,
-    u.img_url AS imgUrl
-    FROM products p 
-    JOIN trainers t ON t.id = p.trainer_id
-    JOIN users u ON u.id = t.user_id
-    WHERE p.status = 1
-    AND p.id = ?;
-    `,
-    [productsId]
-  );
-};
-
 //트레이너 전체 정보
 const getTrainerMatching = async (
   sortQuery,
@@ -37,30 +10,57 @@ const getTrainerMatching = async (
   products
 ) => {
   const [result] = await AppDataSource.query(`
-    SELECT 
-    p.id AS id,
-    p.trainer_id AS trainerId,
-    p.available_area AS availableArea,
-    p.available_time AS availableTime,
-    p.category_name AS categoryName,
-    p.term AS term,
-    p.price AS price,
-    p.content AS content,
-    p.created_at AS createdAt ,
-    u.gender AS gender,
-    t.specialized AS specialized,
-    u.img_url AS imgUrl
-    FROM products p 
-    JOIN trainers t ON t.id = p.trainer_id
-    JOIN users u ON u.id = t.user_id
-    WHERE p.status = 1
-    ${categoryQuery}
-    ${genderQuery}
-    ${trainerCheckQuery}
-    ${sortQuery}
-    ${products}
-    `);
+        SELECT 
+        p.id AS id,
+        p.trainer_id AS trainerId,
+        p.available_area AS availableArea,
+        p.available_time AS availableTime,
+        p.category_name AS categoryName,
+        p.term AS term,
+        p.price AS price,
+        p.content AS content,
+        p.created_at AS createdAt ,
+        u.gender AS gender,
+        t.specialized AS specialized,
+        u.img_url AS imgUrl
+        FROM products p 
+        JOIN trainers t ON t.id = p.trainer_id
+        JOIN users u ON u.id = t.user_id
+        WHERE p.status = 1
+        ${categoryQuery}
+        ${genderQuery}
+        ${trainerCheckQuery}
+        ${sortQuery}
+        ${products}
+        `);
   return result;
+};
+
+//트레이너 상세 정보
+const getTrainerMatchingDetail = async (productsId) => {
+  const [result] = await AppDataSource.query(
+    `
+        SELECT 
+        p.id AS id,
+        p.trainer_id AS trainerId,
+        p.available_area AS availableArea,
+        p.available_time AS availableTime,
+        p.category_name AS categoryName,
+        p.term AS term,
+        p.price AS price,
+        p.content AS content,
+        p.created_at AS createdAt ,
+        u.gender AS gender,
+        t.specialized AS specialized,
+        u.img_url AS imgUrl
+        FROM products p 
+        JOIN trainers t ON t.id = p.trainer_id
+        JOIN users u ON u.id = t.user_id
+        WHERE p.status = 1
+        AND p.id = ?;
+        `,
+    [productsId]
+  );
 };
 
 const isTrainer = async (userId) => {
@@ -177,6 +177,7 @@ const deleteTrainerMatching = async (productsId, stat) => {
 
 module.exports = {
   getTrainerMatching,
+  getTrainerMatchingDetail,
   isSubscribed,
   isTrainer,
   isPostedTrainer,
