@@ -11,4 +11,4 @@ const readRecord = recordController.readRecord;
 recordRouter.post("/", validateToken, recordController.createRecord);
 recordRouter.get("/", validateToken, recordController.readRecord);
 
-module.exports = recordRouter;
+module.exports = { recordRouter } ;

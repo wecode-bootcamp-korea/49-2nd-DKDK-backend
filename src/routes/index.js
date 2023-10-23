@@ -2,7 +2,7 @@ const express = require("express");
 const { authRoute } = require("./authRoute");
 const { userRoute } = require("./userRoute");
 const { userHealthInfoRouter } = require("./userHealthInfoRouter");
-const recordRouter = require("./recordRouter");
+const { recordRouter } = require("./recordRouter");
 
 const routes = express.Router();
 
