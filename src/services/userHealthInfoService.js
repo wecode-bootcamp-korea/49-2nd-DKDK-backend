@@ -1,10 +1,10 @@
-const { userHealthInfoDao } = require('../models');
-const { throwError } = require('../utils/throwError');
+const { userHealthInfoDao } = require("../models");
+const { throwError } = require("../utils/throwError");
 
 const getUserInfo = async (userId, workoutRcmdLimit) => {
-  const exist = await userHealthInfoDao.checkExistence(userId);
-
+  const exist = await userHealthInfoDao.checkExistence(userId)
   if (!exist) throwError(400, "KEY_ERROR_NO_SUCH_USER");
+
   const bmiCalculator = () => {
     const height = userInfo[0].height;
     const weight = userInfo[0].weight;
@@ -18,7 +18,10 @@ const getUserInfo = async (userId, workoutRcmdLimit) => {
   const trainerInfo = await userHealthInfoDao.getTrainerInfo(userId);
   const ptOrderInfo = await userHealthInfoDao.getPtOrderByUserId(userId);
   const subOrderInfo = await userHealthInfoDao.getSubOrdersInfoByUserId(userId);
-  const workoutRcmd = await userHealthInfoDao.getRandWorkoutByUserId(userId, workoutRcmdLimit);
+  const workoutRcmd = await userHealthInfoDao.getRandWorkoutByUserId(
+    userId,
+    workoutRcmdLimit
+  );
   const foodRcmd = await userHealthInfoDao.getRandFoodByGrade(bmiCalculator());
 
   return {
@@ -31,7 +34,67 @@ const getUserInfo = async (userId, workoutRcmdLimit) => {
   };
 };
 
-module.exports = {
-  getUserInfo,
+/*  유저 정보 수정 프로세스 */
+const getToBeUpdatedInfo = async (userId) => {
+  const exist = await userHealthInfoDao.checkExistence(userId)
+  if (!exist) throwError(400, "KEY_ERROR_NO_SUCH_USER");
+  return await userHealthInfoDao.getUserDataToModify(userId)
 };
 
+// 유저정보 수정
+const updateUserInfo = async (
+  userId,
+  gender,
+  birthday,
+  height,
+  weight,
+  workoutLoad,
+  interestedWorkout,
+  specialized,
+) => {
+  const exist = await userHealthInfoDao.checkExistence(userId);
+  if (!exist) throwError(400, "KEY_ERROR_NO_SUCH_USER");
+
+  const type = await userHealthInfoDao.checkUserType(userId);
+  console.log(type[0].user_type);
+  if (type[0].user_type !== 1 && type[0].user_type !== 2) throwError(400, "NO_SUCH_USER_TYPE"); // userType Checker
+  if (type[0].user_type == 1) {
+    const result = await userHealthInfoDao.updateUserInfoById(
+      userId,
+      gender,
+      birthday,
+      height,
+      weight,
+      workoutLoad,
+      interestedWorkout,
+    );
+    return result == 1 ? "DATA_UPDATED" : throwError(400, "DATA_UPDATE_FAIL")
+  };
+  if (type[0].user_type == 2) {
+    const result = await userHealthInfoDao.updateTrainerInfoById(
+      userId,
+      gender,
+      birthday,
+      height,
+      weight,
+      workoutLoad,
+      interestedWorkout,
+      specialized,
+    );
+    console.log("당신 납치된거야 서비스에서: ",result)
+    return result.resultUser == 1 && result.resultTrainer == 1 ? "DATA_UPDATED" : thorwError (400, "DATA_UPDATE_FAILED")
+  };
+};
+
+// 프로파일 업로드 확인
+const updateUserImg = async (userId, profileImage) => {
+  const exist = await userHealthInfoDao.checkExistence(userId);
+  if (!exist) throwError(400, "KEY_ERROR_NO_SUCH_USER");
+  return await userHealthInfoDao.updateUserProfileImg(userId, profileImg);
+}
+module.exports = {
+  getUserInfo,
+  getToBeUpdatedInfo,
+  updateUserInfo,
+  updateUserImg,
+};
