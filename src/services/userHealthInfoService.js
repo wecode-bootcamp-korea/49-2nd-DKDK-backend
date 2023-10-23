@@ -87,10 +87,10 @@ const updateUserInfo = async (
 
 // 프로파일 업로드 확인
 const updateUserImg = async (userId, profileImg) => {
+  console.log(profileImg, "여기는 서비스, 잘 들어오는거 맞는가?")
   const exist = await userHealthInfoDao.checkExistence(userId);
   if (!exist) throwError(400, "KEY_ERROR_NO_SUCH_USER");
   const result = await userHealthInfoDao.updateUserImg(userId, profileImg);
-  console.log(result, "납치된거라니까?")
   return result == 1 ? "PROFILE_IMG_UPLOADED" : throwError(400, "IMG_UPLOAD_FAIL");
 }
 module.exports = {

@@ -173,6 +173,9 @@ const getUserDataToModify = async (userId) => {
 
 // 유저 프로파일 이미지 업로드
 const updateUserImg = async (userId, profileImg) => {
+  console.log('그래서 아이디가 뭐라고?', userId)
+  console.log('그래서 url 뭐 받았는데', profileImg)
+  if (!profileImg) throwError (400, "NO_PROFILE_IMG")
   const result = await AppDataSource.query(
     `
     UPDATE users
@@ -181,7 +184,7 @@ const updateUserImg = async (userId, profileImg) => {
     `,
     [profileImg, userId]
   );
-  console.log()
+  console.log(result)
   return result.affectedRows;
 };
 
