@@ -59,7 +59,7 @@ const recordCreator = async (recordData) => {
   return recordCreator;
 };
 
-const updateWorkoutRecords = async (recordData) => {
+const workoutRecordsUpdater = async (recordData) => {
   const updater = `
     UPDATE workout_records
     SET 
@@ -88,8 +88,8 @@ const updateWorkoutRecords = async (recordData) => {
     recordData.maxHeartrate,
     recordData.userId,
   ];
-  const updateWorkoutRecords = await AppDataSource.query(updater, values);
-  return updateWorkoutRecords;
+  const workoutRecordsUpdater = await AppDataSource.query(updater, values);
+  return workoutRecordsUpdater;
 };
 
 const userWeightUpdater = async (recordData) => {
@@ -102,14 +102,14 @@ const userWeightUpdater = async (recordData) => {
   return weightUpdater;
 }
 
-const avgWorkoutTimeUser = async (id) => {
+const avgWorkoutTimeUserReader = async (id) => {
   const avgWorkoutTimeUserLoad = await AppDataSource.query(
     `SELECT AVG(workout_time) AS workoutTime FROM workout_records WHERE user_id = ${id}`
   );
   return avgWorkoutTimeUserLoad;
 };
 
-const avgWorkoutTimeTotal = async () => {
+const avgWorkoutTimeTotalReader = async () => {
   const avgWorkoutTimeTotalLoad = await AppDataSource.query(
     `SELECT AVG(workout_time) AS workoutTime FROM workout_records`
   );
@@ -132,11 +132,11 @@ const recordTimeChecker = async (id) => {
 
 module.exports = {
   recordCreator,
-  updateWorkoutRecords,
+  workoutRecordsUpdater,
   recordTimeChecker,
   recordIdParamsChecker,
   userRecordReader,
-  avgWorkoutTimeTotal,
-  avgWorkoutTimeUser,
+  avgWorkoutTimeTotalReader,
+  avgWorkoutTimeUserReader,
   userWeightUpdater,
 };

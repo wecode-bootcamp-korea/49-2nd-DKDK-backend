@@ -2,15 +2,15 @@ const recordDao = require("../models/recordDao");
 const { throwError } = require("../utils/throwError");
 
 const readRecord = async (id) => {
-  const userIdLoader = await recordDao.recordIdParamsChecker(id);
-  const userIdParamsLoader = userIdLoader[0];
+  const readUserId = await recordDao.recordIdParamsChecker(id);
+  const readUserIdParams = readUserId[0];
 
-  if (userIdParamsLoader === undefined) {
-    return userIdParamsLoader;
+  if (readUserIdParams === undefined) {
+    return readUserIdParams;
   }
   const readRecentRecords = await recordDao.userRecordReader(id);
-  const avgTimeTotal = await recordDao.avgWorkoutTimeTotal();
-  const avgTimeUser = await recordDao.avgWorkoutTimeUser(id);
+  const avgTimeTotal = await recordDao.avgWorkoutTimeTotalReader();
+  const avgTimeUser = await recordDao.avgWorkoutTimeUserReader(id);
   //시간을 표시합니다.
 
   const formattedAvgTimeTotal = Number(avgTimeTotal[0].workoutTime);
@@ -58,8 +58,8 @@ const readRecord = async (id) => {
 const createRecord = async (recordData) => {
   const id = recordData.userId;
   
-  const userIdLoader = await recordDao.recordIdParamsChecker(Number(id));
-  if (!userIdLoader) return userIdLoader;
+  const readUserId = await recordDao.recordIdParamsChecker(Number(id));
+  if (!readUserId) return readUserId;
 
   const userDateTime = await recordDao.recordTimeChecker(id);
   const checkTime = () => {
@@ -77,11 +77,11 @@ const createRecord = async (recordData) => {
     return recordCreator;
   }
 
-  const recordUpdater = await recordDao.updateWorkoutRecords(recordData);
-  if (!recordData.currentWeight) return recordUpdater;
+  const recordUpdate = await recordDao.workoutRecordsUpdater(recordData);
+  if (!recordData.currentWeight) return recordUpdate;
   
-  const userWeightUpdater = await recordDao.userWeightUpdater(recordData);
-  return userWeightUpdater;
+  const userWeightUpdate = await recordDao.userWeightUpdater(recordData);
+  return userWeightUpdate;
 };
 
 module.exports = {
