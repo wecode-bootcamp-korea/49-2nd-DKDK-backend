@@ -51,7 +51,6 @@ const readRecord = async (id) => {
   return formattedRecords;
 };
 
-// const createRecord = async (id, recordData) => {
 const createRecord = async (id, recordData) => {
  
   const readUserId = await recordDao.recordIdParamsChecker(Number(id));
