@@ -15,7 +15,6 @@ const checksubscriptionValidity = async (userId, name, amount) => {
       // userType에 해당하는 금액이 맞는지
       const result = await findByUserId(userId)
       const findUserType = result.user_type
-      console.log("findUserType : ", findUserType)
 
       const userTypes = {
         USER: "1",

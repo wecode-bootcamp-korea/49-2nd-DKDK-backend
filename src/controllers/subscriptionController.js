@@ -9,13 +9,8 @@ const subscriptionPayment = async (req, res) => {
 
     const userId = req.userId;
     const { imp_uid } = req.body;
+    checkEmptyValues(imp_uid, userId)
 
-    checkEmptyValues(imp_uid)
-
-    console.log("imp_uid : ", imp_uid)
-    console.log("userId : ", userId)
-
-    //access_token 받기
     const getToken = await axios({
         url: "https://api.iamport.kr/users/getToken",
         method: "POST",
@@ -29,8 +24,6 @@ const subscriptionPayment = async (req, res) => {
     const { access_token } = getToken.data.response;
     if(!access_token) throwError(400, "FAIL_TO_GET_TOKEN")
 
-    console.log("access_token : ", access_token)
-
     // access_token과 프런트에서 받은 imp_uip로 결제 응답 받기
     const getPaymentResponse = await axios({
         url: `https://api.iamport.kr/payments/${imp_uid}`,
@@ -41,9 +34,6 @@ const subscriptionPayment = async (req, res) => {
     //응답값에서 name과 amount 
     const { amount, name } = getPaymentResponse.data.response;
     if(!amount && !name) throwError(400, "FAIL_TO_GET_PAYMENT_RESPONSE")
-
-    console.log("amount: ", amount)
-    console.log("name: ", name)
 
     // 유효한 구독 정보라면 주문 정보 생성
     const issubscriptionValid = await checksubscriptionValidity(userId, name, amount);

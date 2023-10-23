@@ -51,15 +51,11 @@ const checkSubscriptionAndCreateSubOrder = async (userId, name, amount) => {
       [userId, subscriptionId, createdDate, endDate]
     );
 
-    if (!createSubOrder) {
-      throwError(400, "FAIL_TO_CREATE_SUB_ORDER");
-    } else {
-      console.log("주문 성공");
-    }
+    if (!createSubOrder) throwError(400, "FAIL_TO_CREATE_SUB_ORDER");
+
   } else {
     throwError(404, "SUBSCRIPTION_NOT_FOUND");
   }
-
   return !!result;
 };
 
