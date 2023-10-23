@@ -3,7 +3,7 @@ const {
   deletePostController,
   getAllPostController,
   createCommentController,
-  deleteContnetController,
+  deleteCommentController,
 } = require("./communityControllers");
 
 module.exports = {
@@ -12,6 +12,6 @@ module.exports = {
     deletePostController,
     getAllPostController,
     createCommentController,
-    deleteContnetController,
+    deleteCommentController,
   },
 };

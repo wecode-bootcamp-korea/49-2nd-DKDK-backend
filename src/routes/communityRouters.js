@@ -6,17 +6,17 @@ const {
   createPostController,
   deletePostController,
   createCommentController,
-  deleteContnetController,
+  deleteCommentController,
 } = communityController;
 
 const router = express.Router();
 
 router.get("/", getAllPostController);
-router.post("/like");
-router.post("/", createPostController);
-router.delete("/post?=", deletePostController);
+
+router.post("/posts/:userId", createPostController);
+router.delete("/post/:postId/:userId", deletePostController);
 router.get("/post?=");
-router.post("/comment", createCommentController);
-router.delete("/comment", deleteContnetController);
+router.post("/comment/:userId/:postId", createCommentController);
+router.delete("/comment/:userId/:postId/:commentId", deleteCommentController);
 
 module.exports = router;
