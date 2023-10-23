@@ -181,6 +181,7 @@ const updateUserImg = async (userId, profileImg) => {
     `,
     [profileImg, userId]
   );
+  console.log()
   return result.affectedRows;
 };
 

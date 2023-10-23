@@ -1,13 +1,19 @@
-import multer from "multer";
-import multerS3, { AUTO_CONTENT_TYPE } from "multer-s3";
-import { S3 } from "aws-sdk";
+// import multer from "multer";
+// import multerS3, { AUTO_CONTENT_TYPE } from "multer-s3";
+// import { S3 } from "aws-sdk";
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+const aws = require('aws-sdk');
+
+const {AUTO_CONTENT_TYPE} = multerS3;
+const S3 = new aws.S3();
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
 const accessKeyId = process.env.AWS_ACCESS_KEY;
 const secretAccessKey = process.env.AWS_SECRET_KEY;
 
-const s3 = new S3({
+const s3 = new aws.S3({
   accessKeyId: accessKeyId, // 액세스 키 입력
   secretAccessKey: secretAccessKey, // 비밀 액세스 키 입력
   region: region, // 사용자 사용 지역 (서울의 경우 ap-northeast-2)
@@ -24,4 +30,4 @@ const upload = multer({
   }),
 });
 
-export { upload, s3 };
+module.exports = { upload, s3 };
