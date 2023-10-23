@@ -176,12 +176,12 @@ const updateUserImg = async (userId, profileImg) => {
   const result = await AppDataSource.query(
     `
     UPDATE users
-      SET img_url = ?,
+      SET img_url = ?
     WHERE id = ?
     `,
     [profileImg, userId]
   );
-  return result;
+  return result.affectedRows;
 };
 
 // 유저정보 수정

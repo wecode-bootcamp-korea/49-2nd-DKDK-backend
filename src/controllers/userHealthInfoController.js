@@ -80,7 +80,7 @@ const userProfileImgUpload = async (req, res, next) => {
     return res.status(200).json({
       message: "USER_IMG_UPLOADED",
       data: await userHealthInfoService.updateUserImg(userId, imgUrl) // 이 친구가 어디에 몇개가 바뀌었느지 보여주면 좋을것 같음
-    })
+    });
   } catch (error) {
     console.error(error);
     res.status(error.status || 500).json({message: error.message});

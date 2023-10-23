@@ -81,16 +81,17 @@ const updateUserInfo = async (
       interestedWorkout,
       specialized,
     );
-    console.log("당신 납치된거야 서비스에서: ",result)
     return result.resultUser == 1 && result.resultTrainer == 1 ? "DATA_UPDATED" : thorwError (400, "DATA_UPDATE_FAILED")
   };
 };
 
 // 프로파일 업로드 확인
-const updateUserImg = async (userId, profileImage) => {
+const updateUserImg = async (userId, profileImg) => {
   const exist = await userHealthInfoDao.checkExistence(userId);
   if (!exist) throwError(400, "KEY_ERROR_NO_SUCH_USER");
-  return await userHealthInfoDao.updateUserProfileImg(userId, profileImg);
+  const result = await userHealthInfoDao.updateUserImg(userId, profileImg);
+  console.log(result, "납치된거라니까?")
+  return result == 1 ? "PROFILE_IMG_UPLOADED" : throwError(400, "IMG_UPLOAD_FAIL");
 }
 module.exports = {
   getUserInfo,
