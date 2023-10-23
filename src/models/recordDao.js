@@ -1,4 +1,4 @@
-const { dataSource, AppDataSource } = require("./dataSource");
+const { AppDataSource } = require("./dataSource");
 
 const userRecordReader = async (id) => {
   const userRecentRecords = await AppDataSource.query(
