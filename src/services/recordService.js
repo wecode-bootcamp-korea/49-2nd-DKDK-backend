@@ -4,10 +4,8 @@ const { throwError } = require("../utils/throwError");
 const readRecord = async (id) => {
   const readUserId = await recordDao.recordIdParamsChecker(id);
   const readUserIdParams = readUserId[0];
-
-  if (readUserIdParams === undefined) {
-    return readUserIdParams;
-  }
+  if (readUserIdParams === undefined) return readUserIdParams;
+  
   const readRecentRecords = await recordDao.userRecordReader(id);
   const avgTimeTotal = await recordDao.avgWorkoutTimeTotalReader();
   const avgTimeUser = await recordDao.avgWorkoutTimeUserReader(id);
@@ -55,9 +53,8 @@ const readRecord = async (id) => {
 };
 
 // const createRecord = async (id, recordData) => {
-const createRecord = async (recordData) => {
-  const id = recordData.userId;
-  
+const createRecord = async (id, recordData) => {
+ 
   const readUserId = await recordDao.recordIdParamsChecker(Number(id));
   if (!readUserId) return readUserId;
 
@@ -73,14 +70,14 @@ const createRecord = async (recordData) => {
     return dateCheckerPole;
   }
   if (recordCheckTime() !== checkTime()) {
-    const recordCreator = await recordDao.recordCreator(recordData);
+    const recordCreator = await recordDao.recordCreator(id, recordData);
     return recordCreator;
   }
 
-  const recordUpdate = await recordDao.workoutRecordsUpdater(recordData);
+  const recordUpdate = await recordDao.workoutRecordsUpdater(id, recordData);
   if (!recordData.currentWeight) return recordUpdate;
   
-  const userWeightUpdate = await recordDao.userWeightUpdater(recordData);
+  const userWeightUpdate = await recordDao.userWeightUpdater(id, recordData);
   return userWeightUpdate;
 };
 
