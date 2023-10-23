@@ -31,8 +31,8 @@ const readRecord = async (id) => {
       name: "전체 평균",
     },
     {
-      avgTimeUser: formattedAvgTimeUser,
-      avgTimeUserKr: avgTimeUserKr,
+      avgTimeTotal: formattedAvgTimeUser,
+      avgTimeTotalKr: avgTimeUserKr,
       name: "내 평균",
     },
   ];
