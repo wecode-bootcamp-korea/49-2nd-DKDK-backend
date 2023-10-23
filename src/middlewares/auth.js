@@ -13,7 +13,6 @@ const validateToken = async (req, res, next) => {
     next();
   } catch (error) {
     error.status = error.status || 400;
-    //error.message = error.message.toUpperCase().replaceAll(" ", "_");
     error.message = error.message.toUpperCase().replace(/ /g, "_");
     next(error);
   }
