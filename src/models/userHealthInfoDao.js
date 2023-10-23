@@ -210,7 +210,7 @@ const updateUserInfoById = async (
   return result.affectedRows;
 };
 
-// 트레이너가 자기 정보 업데이트
+// 트레이너가 정보 업데이트
 const updateTrainerInfoById = async (
   userId,
   gender,

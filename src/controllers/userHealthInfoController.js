@@ -32,7 +32,6 @@ const updateUserHealthInfo = async (req, res, next) => {
       interestedWorkout,
       specialized
     } = req.body;
-    console.log("동작그만, 사쿠라냐?", req.body);
     return res.status(200).json({
       message: "USER_INFORMATION_UPDATED",
       data: await userHealthInfoService.updateUserInfo( // 이 친구가 어디에 몇개가 바뀌었느지 보여주면 좋을것 같음
