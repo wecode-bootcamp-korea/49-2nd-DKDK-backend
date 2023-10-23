@@ -8,9 +8,7 @@ const start = async () => {
   const app = createApp();
   const port = process.env.PORT;
 
-  await AppDataSource.initialize().then(() =>
-    console.log("Datasource initialized.")
-  );
+  await AppDataSource.initialize().then(() => console.log("Datasource initialized."));
 
   //server test
   app.get("/ping", async (req, res) => {

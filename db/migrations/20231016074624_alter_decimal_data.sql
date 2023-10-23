@@ -6,10 +6,10 @@ ALTER TABLE subscriptions
 MODIFY price decimal(10,2) NOT NULL;
 
 ALTER TABLE users
-MODIFY height decimal(10,2) NOT NULL;
+MODIFY height decimal(10,2) DEFAULT NULL;
 
 ALTER TABLE users
-MODIFY weight decimal(10,2) NOT NULL;
+MODIFY weight decimal(10,2) DEFAULT NULL;
 
 ALTER TABLE workout_records
 MODIFY COLUMN workout_time DECIMAL(10, 2) DEFAULT NULL;
