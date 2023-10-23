@@ -1,5 +1,4 @@
 const recordDao = require("../models/recordDao");
-const { throwError } = require("../utils/throwError");
 
 const readRecord = async (id) => {
   const readUserId = await recordDao.recordIdParamsChecker(id);
