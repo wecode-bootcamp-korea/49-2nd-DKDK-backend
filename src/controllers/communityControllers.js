@@ -10,14 +10,15 @@ const {
 
 const createPostController = async (req, res, next) => {
   try {
-    const userId = 2;
+    const userId = req.params.userId;
+    console.log("userId before isSubscriptDao call:", userId);
+
     const { content, img_url } = req.body;
-    if (userId) throwError(400, "KEY_ERROR");
+    if (!userId) throwError(400, "KEY_ERROR");
     if (!content) throwError(400, "NO_CONTENT");
-    if (!img_url) throwError(400, "NO_IMG_URL");
     return res
       .status(201)
-      .json(await createPostService(userId, content, img_url));
+      .json({ message: await createPostService(userId, content, img_url) });
   } catch (err) {
     console.error(err);
     next(err);
@@ -26,12 +27,13 @@ const createPostController = async (req, res, next) => {
 
 const deletePostController = async (req, res, next) => {
   try {
-    const userId = 2;
-    const { postId } = req.body;
-    if (!postId) throwError(400, "KEY_ERROR");
-    return res
-      .status(200)
-      .json({ message: await deletePostService(userId, postId) });
+    const userId = req.params.userId;
+    const postId = req.params.postId;
+    if (!userId || !postId) throwError(400, "KEY_ERROR");
+    return res.status(200).json({
+      message: "DELETE_POST",
+      data: await deletePostService(userId, postId),
+    });
   } catch (err) {
     console.error(err);
     next(err);
@@ -40,9 +42,9 @@ const deletePostController = async (req, res, next) => {
 
 const getAllPostController = async (req, res, next) => {
   try {
-    const userId = 2;
-    const postId = req.body;
-    if (!postId) throwError(400, "N0_POST_ID");
+    const { userId, postId } = req.query;
+    if (!userId) throwError(400, "KEY_ERROR");
+    if (!postId) throwError(400, "NO_POST");
     return res.status(200).json({
       message: "GET_POST",
       data: await getAllPostService(userId, postId),
@@ -55,12 +57,17 @@ const getAllPostController = async (req, res, next) => {
 
 const createCommentController = async (req, res, next) => {
   try {
-    const userId = req.body;
-    const postId = req.query.tab;
-    if (!post) throwError(400, "게시물이 없습니다");
+    const userId = req.params.userId;
+    const content = req.body.content;
+    const postId = req.params.postId;
+
+    if (!userId || !content || !postId) {
+      console.log("Missing userId, content, or postId");
+      throwError(400, "KEY_ERROR");
+    }
     return res.status(200).json({
       message: "CREATE_COMMENT",
-      data: await createCommentService(userId, postId),
+      data: await createCommentService(userId, content, postId),
     });
   } catch (err) {
     console.error(err);
@@ -68,14 +75,16 @@ const createCommentController = async (req, res, next) => {
   }
 };
 
-const deleteContnetController = async (req, res, next) => {
+const deleteCommentController = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-    const { content } = req.body;
-    if (!userId) throwError(400, "KEY_ERROR");
-    return res
-      .status(200)
-      .json({ message: await deleteCommentService(userId, content) });
+    const userId = req.params.userId;
+    const commentId = req.body;
+    const postId = req.params.postId;
+    if (!userId || !commentId || !postId) throwError(400, "KEY_ERROR");
+    return res.status(200).json({
+      message: "DELETE_COMMENT",
+      data: await deleteCommentService(userId, commentId, postId),
+    });
   } catch (err) {
     console.error(err);
     next(err);
@@ -87,5 +96,5 @@ module.exports = {
   deletePostController,
   getAllPostController,
   createCommentController,
-  deleteContnetController,
+  deleteCommentController,
 };
