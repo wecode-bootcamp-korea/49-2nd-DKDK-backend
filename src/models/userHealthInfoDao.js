@@ -20,7 +20,7 @@ const checkUserType = async (userId) => {
 const getUser = async (userId) => {
   return await AppDataSource.query(
     `
-    SELECT u.img_url AS profileImage,
+    SELECT u.img_url AS profileImg,
       u.nickname as nickname,
       u.gender AS gender,
       u.phone_number AS phoneNumber,
@@ -251,9 +251,9 @@ const updateTrainerInfoById = async (
 
     const resultUser = updateUserInfo.affectedRows;
     const resultTrainer = updateTrainerInfo.affectedRows;
-    
+
     await queryRunner.commitTransaction();
-    
+
     return { resultUser, resultTrainer };
   } catch (error) {
     console.error(error);
