@@ -1,6 +1,5 @@
 const express = require("express");
 const recordService = require("../services/recordService");
-const { throwError } = require("../utils/throwError");
 
 const readRecord = async (req, res) => {
     const id  = req.userId;
