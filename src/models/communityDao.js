@@ -42,7 +42,7 @@ const deleteCommentDao = async (postId) => {
     [postId]
   );
 };
-//게시물정보모두불러오기
+//게시물디테일불러오기
 const getAllPostDao = async (userId, postId) => {
   const commentCountQuery = `
     SELECT COUNT(*) AS comment_count FROM comments WHERE comments.post_id = ?;
@@ -91,6 +91,9 @@ const getPostlistDao = async (userId) => {
   SELECT CASE WHEN (SELECT likes.id FROM likes JOIN posts ON posts.id = likes.post_id
     WHERE likes.user_id = ?) IS NULL THEN 'false' ELSE 'true' END AS isLiked
     `;
+  const isMypost = `
+  SELECT CASE WHEN EXISTS (SELECT posts.id FROM posts WHERE user_id = ?) THEN 'true' ELSE 'false' END AS isMyPost
+`;
   const postlistQuery = `
     SELECT
       users.id AS user_id,
@@ -103,8 +106,9 @@ const getPostlistDao = async (userId) => {
       (${commentCountQuery}) AS commentCount,
       (${likeCountQuery}) AS likeCount,
       (${isLiked}) AS isLiked,
+      (${isMypost}) AS isMyPost,
       posts.content AS post_content,
-      posts.create_at AS post_create_at
+      DATE_FORMAT(posts.create_at, '%Y-%m-%d') AS post_create_at
     FROM users
     LEFT JOIN comments ON users.id = comments.user_id
     LEFT JOIN likes ON users.id = likes.user_id
@@ -115,9 +119,26 @@ const getPostlistDao = async (userId) => {
   const postDetailsResult = await AppDataSource.query(postlistQuery, [
     userId,
     userId,
+    userId,
   ]);
   return postDetailsResult[0];
 };
+const getCommentDao = async (postId) => {
+  const getComment = await AppDataSource.query(
+    `
+  SELECT
+  comments.content AS content,
+  comments.post_id AS post_id,
+  comments.user_id AS user_id
+FROM comments
+LEFT JOIN posts ON posts.id = comments.post_id
+WHERE comments.post_id = ?
+  `,
+    [postId]
+  );
+  return getComment;
+};
+
 // 구독자 여부 확인
 const isSubscriptDao = async (userId) => {
   const result = await AppDataSource.query(
@@ -142,4 +163,5 @@ module.exports = {
   deleteCommentDao,
   isSubscriptDao,
   getPostlistDao,
+  getCommentDao,
 };

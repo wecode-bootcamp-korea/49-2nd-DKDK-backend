@@ -7,6 +7,7 @@ const {
   getAllPostService,
   deleteCommentService,
   getPostListService,
+  getCommentService,
 } = communityService;
 
 const createPostController = async (req, res, next) => {
@@ -105,6 +106,20 @@ const getPostListController = async (req, res, next) => {
     next(err);
   }
 };
+
+const getCommentController = async (req, res, next) => {
+  try {
+    const postId = 1;
+    if (!postId) return res.status(400).json({ message: "KEY_ERROR" });
+    return res.status(200).json({
+      message: "GET_COMMENT",
+      data: await getCommentService(postId),
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
 module.exports = {
   createPostController,
   deletePostController,
@@ -112,4 +127,5 @@ module.exports = {
   createCommentController,
   deleteCommentController,
   getPostListController,
+  getCommentController,
 };

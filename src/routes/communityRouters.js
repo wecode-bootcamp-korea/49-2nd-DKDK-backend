@@ -1,5 +1,6 @@
 const express = require("express");
 const { communityController } = require("../controllers");
+const { getCommentController } = require("../controllers/communityControllers");
 
 const {
   getAllPostController,
@@ -18,5 +19,6 @@ router.delete("/post/:postId/:userId", deletePostController);
 router.get("/post?=", getAllPostController);
 router.post("/comment/:userId/:postId", createCommentController);
 router.delete("/comment/:userId/:postId", deleteCommentController);
+router.get("/comment", getCommentController);
 
 module.exports = router;

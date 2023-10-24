@@ -6,6 +6,7 @@ const {
   deleteCommentDao,
   isSubscriptDao,
   getPostlistDao,
+  getCommentDao,
 } = require("./communityDao");
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
     deleteCommentDao,
     isSubscriptDao,
     getPostlistDao,
+    getCommentDao,
   },
 };
