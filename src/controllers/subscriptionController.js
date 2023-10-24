@@ -11,6 +11,10 @@ const subscriptionPayment = async (req, res) => {
     const { imp_uid } = req.body;
     checkEmptyValues(imp_uid, userId)
 
+    console.log("userId : ", userId)
+    console.log("req.body : ", req.body)
+
+    //상점에 접근하는 accessToken 발급
     const getToken = await axios({
         url: "https://api.iamport.kr/users/getToken",
         method: "POST",
@@ -24,12 +28,14 @@ const subscriptionPayment = async (req, res) => {
     const { access_token } = getToken.data.response;
     if(!access_token) throwError(400, "FAIL_TO_GET_TOKEN")
 
-    // access_token과 프런트에서 받은 imp_uip로 결제 응답 받기
+    // access_token과 프런트에서 받은 imp_uip로 결제 정보 받기
     const getPaymentResponse = await axios({
         url: `https://api.iamport.kr/payments/${imp_uid}`,
         method : "GET",
         headers:{ "Authorization": access_token }
     })
+
+    console.log(getPaymentResponse.data.response)
     
     //응답값에서 name과 amount 
     const { amount, name } = getPaymentResponse.data.response;
@@ -39,12 +45,15 @@ const subscriptionPayment = async (req, res) => {
     const issubscriptionValid = await checksubscriptionValidity(userId, name, amount);
 
     if (issubscriptionValid) {
-        res.status(200).json({ message: "PAYMENT_SUCCESS" });
+        res.status(200).json(
+            { message: "PAYMENT_SUCCESS",
+              isSubscribed: true
+        });
     } else {
         console.error();
         res.status(400).json({ message: error.message});
     }
-}
+ }
 
 module.exports = { 
     subscriptionPayment, 

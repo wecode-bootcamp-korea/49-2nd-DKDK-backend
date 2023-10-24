@@ -14,16 +14,17 @@ const checksubscriptionValidity = async (userId, name, amount) => {
 
       // userType에 해당하는 금액이 맞는지
       const result = await findByUserId(userId)
-      const findUserType = result.user_type
+      console.log(result.user_type)
+      const findUserType = result.user_type;
 
       const userTypes = {
         USER: "1",
         TRAINER: "2",
       };
 
-      if (findUserType === userTypes.USER && amount !== 10000) {
+      if (findUserType == userTypes.USER && amount !== 10000) {
         throwError(400, "INVALID_AMOUNT");
-    } else if (findUserType === userTypes.TRAINER && amount !== 20000) {
+    } else if (findUserType == userTypes.TRAINER && amount !== 20000) {
         throwError(400, "INVALID_AMOUNT");
     }
 

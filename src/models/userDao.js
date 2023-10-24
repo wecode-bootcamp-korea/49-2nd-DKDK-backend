@@ -66,6 +66,7 @@ const isSubscribed = async (userId) => {
 };
 
 const findByUserId = async (userId) => {
+  console.log( "dao userId : ", userId)
   const [result] = await AppDataSource.query(
     `
     SELECT id, user_type
@@ -74,6 +75,8 @@ const findByUserId = async (userId) => {
     `,
     [userId]
   );
+
+  console.log("dao findByUserId : ", result)
 
   return result;
 };
