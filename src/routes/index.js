@@ -2,11 +2,12 @@ const express = require("express");
 const { authRoute } = require("./authRoute");
 const { userRoute } = require("./userRoute");
 const { userHealthInfoRouter } = require("./userHealthInfoRouter");
+const { recordRouter } = require("./recordRouter");
 
 const routes = express.Router();
 
 routes.use("/auth", authRoute);
 routes.use("/user", userRoute);
-routes.use("/userHealthInfo", userHealthInfoRouter);
+routes.use("/records", recordRouter);
 
 module.exports = { routes };
