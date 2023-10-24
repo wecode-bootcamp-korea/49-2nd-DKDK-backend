@@ -11,9 +11,6 @@ const subscriptionPayment = async (req, res) => {
     const { imp_uid } = req.body;
     checkEmptyValues(imp_uid, userId)
 
-    console.log("userId : ", userId)
-    console.log("req.body : ", req.body)
-
     //상점에 접근하는 accessToken 발급
     const getToken = await axios({
         url: "https://api.iamport.kr/users/getToken",
@@ -34,8 +31,6 @@ const subscriptionPayment = async (req, res) => {
         method : "GET",
         headers:{ "Authorization": access_token }
     })
-
-    console.log(getPaymentResponse.data.response)
     
     //응답값에서 name과 amount 
     const { amount, name } = getPaymentResponse.data.response;
@@ -50,7 +45,7 @@ const subscriptionPayment = async (req, res) => {
               isSubscribed: true
         });
     } else {
-        console.error();
+        //console.error();
         res.status(400).json({ message: error.message});
     }
  }
