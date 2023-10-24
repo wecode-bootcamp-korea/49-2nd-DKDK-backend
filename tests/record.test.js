@@ -139,7 +139,7 @@ describe("RECORD SERVICE: CREATE/UPDATE RECORD", () => {
         currentWeight: 78,
         muscleMass: 23,
         bodyFat: 23,
-        maxHeartrate: 145,
+        maxHeartrate: 145
       })
       .expect();
   });
@@ -149,7 +149,7 @@ describe("RECORD SERVICE: CREATE/UPDATE RECORD", () => {
       .post("/records")
       .set("Authorization", accessToken)
       .send({
-        waterContent: 24,
+        waterContent: 24
       })
       .expect(200)
       .expect();
@@ -171,7 +171,7 @@ describe("RECORD SERVICE: CREATE/UPDATE RECORD", () => {
       .post("/records")
       .set("Authorization", accessToken)
       .send({
-        maxHeartrate: 145,
+        maxHeartrate: 145
       })
       .expect(200)
       .expect();
@@ -182,7 +182,7 @@ describe("RECORD SERVICE: CREATE/UPDATE RECORD", () => {
       .post("/records")
       .set("Authorization", accessToken)
       .send({
-        bodyFat: 23,
+        bodyFat: 23
       })
       .expect(200)
       .expect();
@@ -193,7 +193,7 @@ describe("RECORD SERVICE: CREATE/UPDATE RECORD", () => {
       .post("/records")
       .set("Authorization", accessToken)
       .send({
-        workoutTime: 1,
+        workoutTime: 1
       })
       .expect(200)
       .expect();
@@ -204,7 +204,7 @@ describe("RECORD SERVICE: CREATE/UPDATE RECORD", () => {
       .post("/records")
       .set("Authorization", accessToken)
       .send({
-        bodyFat: 23,
+        bodyFat: 23
       })
       .expect(200)
       .expect();
@@ -215,7 +215,7 @@ describe("RECORD SERVICE: CREATE/UPDATE RECORD", () => {
       .post("/records")
       .set("Authorization", accessToken)
       .send({
-        muscleMass: 23,
+        muscleMass: 23
       })
       .expect(200)
       .expect();
