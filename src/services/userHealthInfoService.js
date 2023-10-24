@@ -56,7 +56,6 @@ const updateUserInfo = async (
   if (!exist) throwError(400, "KEY_ERROR_NO_SUCH_USER");
 
   const type = await userHealthInfoDao.checkUserType(userId);
-  console.log(type[0].user_type);
   if (type[0].user_type !== 1 && type[0].user_type !== 2) throwError(400, "NO_SUCH_USER_TYPE"); // userType Checker
   if (type[0].user_type == 1) {
     const result = await userHealthInfoDao.updateUserInfoById(
@@ -87,7 +86,6 @@ const updateUserInfo = async (
 
 // 프로파일 업로드 확인
 const updateUserImg = async (userId, profileImg) => {
-  console.log(profileImg, "여기는 서비스, 잘 들어오는거 맞는가?")
   const exist = await userHealthInfoDao.checkExistence(userId);
   if (!exist) throwError(400, "KEY_ERROR_NO_SUCH_USER");
   const result = await userHealthInfoDao.updateUserImg(userId, profileImg);
