@@ -22,9 +22,6 @@ const viewUserHealthInfo = async (req, res, next) => {
 const updateUserHealthInfo = async (req, res, next) => {
   try {
     const userId = req.userId
-    if (!userId) {
-      return res.status(400).json({ message: "KEY_ERROR - ID" });
-    };
     const {
       gender,
       birthday,
@@ -35,7 +32,7 @@ const updateUserHealthInfo = async (req, res, next) => {
       specialized
     } = req.body;
     return res.status(200).json({
-      message: "USER_INFORMATION_UPDATED",
+      message: "USER_INFO_UPDATED",
       data: await userHealthInfoService.updateUserInfo(
         userId,
         gender,

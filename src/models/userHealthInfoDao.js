@@ -26,8 +26,12 @@ const getUser = async (userId) => {
       u.phone_number AS phoneNumber,
       u.height AS height,
       u.weight AS weight,
+      u.birthday AS birthday,
       wc.category AS interested_workout,
-      u.workout_load AS workoutLoad,
+      CASE
+        WHEN u.workout_load = 1 THEN '상'
+        WHEN u.workout_load = 2 THEN '중'
+        ELSE '하' END AS workoutLoad,
       CASE
         WHEN (SELECT so.end_at FROM sub_orders so WHERE so.user_id = u.id) IS NULL THEN 'false'
         ELSE (SELECT DATE(so.end_at) FROM sub_orders so WHERE so.user_id = u.id)
@@ -68,6 +72,12 @@ const getPtOrderByUserId = async (userId) => {
     SELECT
       (SELECT u.nickname FROM users u WHERE u.id = t.user_id) AS trainerName,
       (SELECT u.img_url FROM users u WHERE u.id = t.user_id) AS profileImg,
+      CASE
+        WHEN (SELECT u.gender FROM users u WHERE u.id = t.user_id) = 1 THEN "남성"
+        ELSE "여성" END AS gender,
+      (SELECT u.phone_number FROM users u WHERE u.id = t.user_id) AS phoneNumber,
+      (SELECT u.height FROM users u WHERE u.id = t.user_id) AS height,
+      (SELECT u.weight FROM users u WHERE u.id = t.user_id) AS weight,
       t.specialized AS specialized,
       (SELECT COUNT(DISTINCT po.buyer_user_id)
         FROM pt_orders po
@@ -75,7 +85,7 @@ const getPtOrderByUserId = async (userId) => {
         WHERE p.trainer_id = t.id) AS customers,
       (SELECT COUNT(*) FROM comments c WHERE c.user_id = t.user_id) AS comments,
       wc.category AS category,
-      DATE(DATE_ADD(p.created_at, INTERVAL p.term MONTH)) AS end_at,
+      DATE_FORMAT(DATE_ADD(p.created_at, INTERVAL p.term MONTH), '%Y-%m-%d') AS end_at,
       p.available_area AS availableArea
     FROM pt_orders po
     JOIN products p ON p.id = po.product_id

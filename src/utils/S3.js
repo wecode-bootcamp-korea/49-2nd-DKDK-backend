@@ -6,7 +6,7 @@ const multerS3 = require("multer-s3");
 const aws = require('aws-sdk');
 
 const {AUTO_CONTENT_TYPE} = multerS3;
-const S3 = new aws.S3();
+// const S3 = new aws.S3();
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
