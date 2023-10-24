@@ -18,7 +18,7 @@ router.post("/post/:userId", createPostController);
 router.delete("/post/:postId/:userId", deletePostController);
 router.get("/post?=", getAllPostController);
 router.post("/comment/:userId/:postId", createCommentController);
-router.delete("/comment/:userId/:postId", deleteCommentController);
+router.post("/comment", deleteCommentController);
 router.get("/comment", getCommentController);
 
 module.exports = router;

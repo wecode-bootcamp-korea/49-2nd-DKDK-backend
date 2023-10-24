@@ -33,13 +33,13 @@ const createCommentDao = async (userId, content, postId) => {
   );
 };
 //댓글 삭제
-const deleteCommentDao = async (postId) => {
+const deleteCommentDao = async (postId, commentId) => {
   console.log(postId);
   return await AppDataSource.query(
     `
-    UPDATE comments SET status = 2 WHERE AND post_id= ?
+    UPDATE comments SET status = 2 WHERE post_id =? AND comments.id = ?
     `,
-    [postId]
+    [postId, commentId]
   );
 };
 //게시물디테일불러오기

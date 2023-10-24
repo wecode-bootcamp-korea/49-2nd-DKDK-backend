@@ -15,9 +15,8 @@ const deletePostService = async (userId, postId) => {
   return await deletePostDao(userId, postId);
 };
 
-const deleteCommentService = async (userId, commentId, postId) => {
-  await deleteCommentDao(userId, commentId, postId);
-  return "DELETE_CONTENT";
+const deleteCommentService = async (postId, commentId) => {
+  await deleteCommentDao(postId, commentId);
 };
 
 const getAllPostService = async (userId, postId) => {

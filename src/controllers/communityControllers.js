@@ -78,13 +78,13 @@ const createCommentController = async (req, res, next) => {
 
 const deleteCommentController = async (req, res, next) => {
   try {
-    const userId = req.params.userId;
-    const commentId = req.body;
-    const postId = req.params.postId;
-    if (!userId || !commentId || !postId) throwError(400, "KEY_ERROR");
+    const postId = 1;
+    const commentId = 4;
+    if (!postId) return res.status(400).json({ message: "KEY_ERROR" });
+    if (!commentId) return res.status(400).json({ message: "NO_COMMENT" });
     return res.status(200).json({
       message: "DELETE_COMMENT",
-      data: await deleteCommentService(userId, commentId, postId),
+      data: await deleteCommentService(postId, commentId),
     });
   } catch (err) {
     console.error(err);
