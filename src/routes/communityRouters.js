@@ -7,15 +7,15 @@ const {
   deletePostController,
   createCommentController,
   deleteCommentController,
+  getPostListController,
 } = communityController;
 
 const router = express.Router();
 
-router.get("/", getAllPostController);
-
+router.get("/", getPostListController);
 router.post("/post/:userId", createPostController);
 router.delete("/post/:postId/:userId", deletePostController);
-router.get("/post?=");
+router.get("/post?=", getAllPostController);
 router.post("/comment/:userId/:postId", createCommentController);
 router.delete("/comment/:userId/:postId", deleteCommentController);
 

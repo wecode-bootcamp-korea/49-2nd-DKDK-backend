@@ -4,6 +4,7 @@ const {
   createCommentService,
   getAllPostService,
   deleteCommentService,
+  getPostListService,
 } = require("./communityServices");
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
     createCommentService,
     getAllPostService,
     deleteCommentService,
+    getPostListService,
   },
 };

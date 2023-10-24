@@ -7,6 +7,7 @@ const {
   createCommentDao,
   getAllPostDao,
   isSubscriptDao,
+  getPostlistDao,
 } = communityDao;
 
 const deletePostService = async (userId, postId) => {
@@ -20,6 +21,10 @@ const deleteCommentService = async (userId, commentId, postId) => {
 
 const getAllPostService = async (userId, postId) => {
   return await getAllPostDao(userId, postId);
+};
+
+const getPostListService = async (userId) => {
+  return await getPostlistDao(userId);
 };
 
 const createPostService = async (userId, content, img_url) => {
@@ -42,4 +47,5 @@ module.exports = {
   createCommentService,
   getAllPostService,
   deleteCommentService,
+  getPostListService,
 };

@@ -6,6 +6,7 @@ const {
   createCommentService,
   getAllPostService,
   deleteCommentService,
+  getPostListService,
 } = communityService;
 
 const createPostController = async (req, res, next) => {
@@ -90,10 +91,25 @@ const deleteCommentController = async (req, res, next) => {
   }
 };
 
+const getPostListController = async (req, res, next) => {
+  try {
+    // const { userId } = req.userId;
+    const userId = 2;
+    if (!userId) return res.status(400).json({ message: "KEY_ERROR" });
+    return res.status(200).json({
+      message: "GET_POST",
+      data: await getPostListService(userId),
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
 module.exports = {
   createPostController,
   deletePostController,
   getAllPostController,
   createCommentController,
   deleteCommentController,
+  getPostListController,
 };

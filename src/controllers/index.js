@@ -4,6 +4,7 @@ const {
   getAllPostController,
   createCommentController,
   deleteCommentController,
+  getPostListController,
 } = require("./communityControllers");
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
     getAllPostController,
     createCommentController,
     deleteCommentController,
+    getPostListController,
   },
 };

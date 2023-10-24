@@ -16,7 +16,7 @@ const createPostDao = async (userId, content, img_url) => {
 const deletePostDao = async (userId, postId) => {
   return await AppDataSource.query(
     `
-        DELETE FROM posts WHERE user_id =? AND id = ? 
+        UPDATE posts SET status = 2 WHERE user_id = ? AND id = ? 
         `,
     [userId, postId]
   );
@@ -33,13 +33,13 @@ const createCommentDao = async (userId, content, postId) => {
   );
 };
 //댓글 삭제
-const deleteCommentDao = async (userId, commentId, postId) => {
-  console.log(userId, commentId, postId);
+const deleteCommentDao = async (postId) => {
+  console.log(postId);
   return await AppDataSource.query(
     `
-    DELETE FROM comments WHERE user_id = ? AND id= ? AND post_id=?
+    UPDATE comments SET status = 2 WHERE AND post_id= ?
     `,
-    [userId, commentId, postId]
+    [postId]
   );
 };
 //게시물정보모두불러오기
@@ -80,7 +80,44 @@ const getAllPostDao = async (userId, postId) => {
     post_details: postDetailsResult[0],
   };
 };
+const getPostlistDao = async (userId) => {
+  const commentCountQuery = `
+    SELECT COUNT(*) FROM comments JOIN posts ON posts.id = comments.post_id 
+  `;
+  const likeCountQuery = `
+  SELECT COUNT(*) FROM likes JOIN posts ON posts.id = likes.post_id
+  `;
+  const isLiked = `
+  SELECT CASE WHEN (SELECT likes.id FROM likes JOIN posts ON posts.id = likes.post_id
+    WHERE likes.user_id = ?) IS NULL THEN 'false' ELSE 'true' END AS isLiked
+    `;
+  const postlistQuery = `
+    SELECT
+      users.id AS user_id,
+      users.nickname,
+      users.img_url,
+      posts.id AS post_id,
+      posts.title AS title,
+      posts.img_url AS post_img,
+      comments.content AS comment_content,
+      (${commentCountQuery}) AS commentCount,
+      (${likeCountQuery}) AS likeCount,
+      (${isLiked}) AS isLiked,
+      posts.content AS post_content,
+      posts.create_at AS post_create_at
+    FROM users
+    LEFT JOIN comments ON users.id = comments.user_id
+    LEFT JOIN likes ON users.id = likes.user_id
+    LEFT JOIN posts ON users.id = posts.user_id
+    WHERE users.id = ?;
+  `;
 
+  const postDetailsResult = await AppDataSource.query(postlistQuery, [
+    userId,
+    userId,
+  ]);
+  return postDetailsResult[0];
+};
 // 구독자 여부 확인
 const isSubscriptDao = async (userId) => {
   const result = await AppDataSource.query(
@@ -104,4 +141,5 @@ module.exports = {
   getAllPostDao,
   deleteCommentDao,
   isSubscriptDao,
+  getPostlistDao,
 };
