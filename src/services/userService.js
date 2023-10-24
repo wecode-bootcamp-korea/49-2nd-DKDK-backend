@@ -16,7 +16,7 @@ const detailUpdateUser = async (
   specialized
 ) => {
 
-    // 회원 가입 여부 확인 -> 추후 생략
+    // 회원 존재 여부
     const isUser = await findByUserId(userId);
     if (!isUser) throwError(400, "INVAILD_USER");
 
