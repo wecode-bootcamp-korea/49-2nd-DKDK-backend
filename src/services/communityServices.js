@@ -10,8 +10,7 @@ const {
 } = communityDao;
 
 const deletePostService = async (userId, postId) => {
-  await deletePostDao(userId, postId);
-  return "POST_DELETE";
+  return await deletePostDao(userId, postId);
 };
 
 const deleteCommentService = async (userId, commentId, postId) => {
@@ -34,8 +33,7 @@ const createCommentService = async (userId, content, postId) => {
   console.log(userId, content, postId);
   const checkSubscript = await isSubscriptDao(userId);
   if (checkSubscript === "false") throwError(400, "NOT_SUBSCRIBER");
-  await createCommentDao(userId, content, postId);
-  return "COMMMENT_CREATE";
+  return await createCommentDao(userId, content, postId);
 };
 
 module.exports = {

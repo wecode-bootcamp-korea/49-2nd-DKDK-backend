@@ -1,3 +1,4 @@
+const { post } = require("../routes/communityRouters");
 const { AppDataSource } = require("./dataSource");
 
 //글 쓰기
@@ -33,9 +34,10 @@ const createCommentDao = async (userId, content, postId) => {
 };
 //댓글 삭제
 const deleteCommentDao = async (userId, commentId, postId) => {
+  console.log(userId, commentId, postId);
   return await AppDataSource.query(
     `
-    DELETE FROM comments WHERE user_id = ? AND comments.id = ?
+    DELETE FROM comments WHERE user_id = ? AND id= ? AND post_id=?
     `,
     [userId, commentId, postId]
   );
