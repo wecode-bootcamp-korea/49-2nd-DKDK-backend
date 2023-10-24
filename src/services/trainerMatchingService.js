@@ -1,5 +1,5 @@
 const { trainerMatchingDao, trainerQueryBuilder } = require("../models");
-const { products } = require("../models/trainerQueryBuilder");
+const { products, offsetQuery } = require("../models/trainerQueryBuilder");
 const { throwError } = require("../utils/throwError");
 
 const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
@@ -19,14 +19,14 @@ const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
     isTrainer,
     userId
   );
-  const products = trainerQueryBuilder.products(offset, limit);
+  const offsetQuery = trainerQueryBuilder.offsetQuery(offset, limit);
 
   const data = await trainerMatchingDao.getTrainerMatching(
     sortQuery,
     categoryQuery,
     genderQuery,
     trainerCheckQuery,
-    products
+    offsetQuery
   );
   return { isAuth: isAuth, isSubscribed: isSubscribed, data: data };
 };
@@ -42,22 +42,19 @@ const getTrainerProductDetail = async (userId, productsId) => {
   if (isTrainer || isSubscribed) {
     isAuth = false;
   }
-  const data = await trainerMatchingDao.getTrainerMatchingDetail(
-    userId,
-    productsId
-  );
+  const data = await trainerMatchingDao.getTrainerMatchingDetail(productsId);
   return { isAuth: isAuth, isSubscribed: isSubscribed, data: data };
 };
 
-const postTrainerProduct = async (userId) => {
+const createTrainerProduct = async (userId) => {
   const isTrainer = trainerMatchingDao.isTrainer(userId);
+  if (isTrainer) throwError(400, "INVALID_USER");
   const isSubscribed = trainerMatchingDao.isSubscribed(userId);
-  if (isTrainer || isSubscribed) {
-    throwError(400, "UNAUTHORIZED_USER");
-  }
+  if (isSubscribed) throwError(400, "UNAUTHORIZED_USER");
+
   const trainerId = trainerMatchingDao.findCategoryName(userId);
   const categoryName = trainerMatchingDao.findCategoryName(trainerId);
-  await trainerMatchingDao.postTrainerMatching(
+  await trainerMatchingDao.createTrainerMatching(
     userId,
     trainerId,
     imgUrl,
@@ -89,6 +86,6 @@ const deleteTrainerProduct = async (userId, productsId) => {
 module.exports = {
   getTrainerProduct,
   getTrainerProductDetail,
-  postTrainerProduct,
+  createTrainerProduct,
   deleteTrainerProduct,
 };

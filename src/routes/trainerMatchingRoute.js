@@ -11,14 +11,15 @@ trainerMatchingRouter.get(
 );
 trainerMatchingRouter.post(
   "/",
-  asyncWrap(trainerMatchingController.postTrainerProduct)
+  asyncWrap(trainerMatchingController.createTrainerProduct)
 );
 trainerMatchingRouter.delete(
   "/",
   asyncWrap(trainerMatchingController.deleteTrainerProduct)
 );
+//위의 get과 겹치게 되지 않는지
 trainerMatchingRouter.get(
-  "/detail",
+  "/detail/:trainerProductId",
   asyncWrap(trainerMatchingController.getTrainerProductDetail)
 );
 

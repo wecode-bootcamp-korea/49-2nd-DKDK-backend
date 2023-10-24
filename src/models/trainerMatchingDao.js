@@ -1,5 +1,4 @@
 const { AppDataSource } = require("./dataSource");
-const { products } = require("./trainerQueryBuilder");
 
 //트레이너 전체 정보
 const getTrainerMatching = async (
@@ -7,7 +6,7 @@ const getTrainerMatching = async (
   categoryQuery,
   genderQuery,
   trainerCheckQuery,
-  products
+  offsetQuery
 ) => {
   const [result] = await AppDataSource.query(`
         SELECT 
@@ -31,13 +30,13 @@ const getTrainerMatching = async (
         ${genderQuery}
         ${trainerCheckQuery}
         ${sortQuery}
-        ${products};
+        ${offsetQuery};
         `);
   return result;
 };
 
 //트레이너 상세 정보
-const getTrainerMatchingDetail = async (userId, productsId) => {
+const getTrainerMatchingDetail = async (productId) => {
   const [result] = await AppDataSource.query(
     `
         SELECT 
@@ -57,10 +56,9 @@ const getTrainerMatchingDetail = async (userId, productsId) => {
         JOIN trainers t ON t.id = p.trainer_id
         JOIN users u ON u.id = t.user_id
         WHERE p.status = 1
-        AND u.id = ?
         AND p.id = ?;
         `,
-    [userId, productsId]
+    [productId]
   );
   return result;
 };
@@ -94,7 +92,7 @@ const isSubscribed = async (userId) => {
   );
   return result.isSubscribed;
 };
-const isPostedTrainer = async (productsId, trainerId) => {
+const isPostedTrainer = async (productId, trainerId) => {
   const [result] = await AppDataSource.query(
     `SELECT CASE
         WHEN (SELECT p.id FROM p
@@ -104,7 +102,7 @@ const isPostedTrainer = async (productsId, trainerId) => {
             ELSE 'true'
         END AS isPostedTrainer;
           `,
-    [productsId, trainerId]
+    [productId, trainerId]
   );
   return result.isPostedTrainer;
 };
@@ -120,7 +118,8 @@ const findTrainerId = async (userId) => {
   );
   return trainerId.id;
 };
-const findCategoryName = async (trainerId) => {
+
+const findSpecializedCategoryByTrainerId = async (trainerId) => {
   const [category] = await AppDataSource.query(
     `
     SELECT wc.category AS name
@@ -131,7 +130,7 @@ const findCategoryName = async (trainerId) => {
   );
   return category.name;
 };
-const postTrainerMatching = async (
+const createTrainerMatching = async (
   userId,
   trainerId,
   imgUrl,
@@ -169,11 +168,11 @@ const postTrainerMatching = async (
     ]
   );
 };
-const deleteTrainerMatching = async (productsId, stat) => {
+const upadateTrainerMatching = async (productId, status) => {
   await AppDataSource.query(`
     UPDATE producsts
-        status  = ${stat}
-        WHERE id = ${productsId};
+        status  = ${status}
+        WHERE id = ${productId};
     `);
 };
 
@@ -183,8 +182,8 @@ module.exports = {
   isSubscribed,
   isTrainer,
   isPostedTrainer,
-  postTrainerMatching,
+  createTrainerMatching,
   findTrainerId,
-  findCategoryName,
-  deleteTrainerMatching,
+  findSpecializedCategoryByTrainerId,
+  upadateTrainerMatching,
 };

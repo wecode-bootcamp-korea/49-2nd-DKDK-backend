@@ -23,7 +23,7 @@ const trainerCheckQuery = (isTrainer, userId) => {
   return isTrainer != false && isTrainer ? `AND u.id = ${userId}` : "";
 };
 
-const products = async (offset, limit) => {
+const offsetQuery = async (offset, limit) => {
   if (offset == null || offset == undefined) return "";
   return `LIMIT ${limit} OFFSET ${offset}`;
 };
@@ -33,5 +33,5 @@ module.exports = {
   categoryQuery,
   genderQuery,
   trainerCheckQuery,
-  products,
+  offsetQuery,
 };

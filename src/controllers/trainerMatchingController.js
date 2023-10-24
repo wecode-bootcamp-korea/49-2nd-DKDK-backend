@@ -16,24 +16,16 @@ const getTrainerProduct = async (req, res) => {
 };
 
 const getTrainerProductDetail = async (req, res) => {
-  const userId = req.userId;
   const { productsId } = req.body;
-  const data = await trainerMatchingService.getTrainerProductDetail(
-    userId,
-    productsId
-  );
+  const data = await trainerMatchingService.getTrainerProductDetail(productsId);
   res.status(200).json({ message: "GET_SUCCESS", data: data });
 };
 
-const postTrainerProduct = async (req, res) => {
+const createTrainerProduct = async (req, res) => {
   const userId = req.userId;
-  //img, 이름은 해당 트레이너 정보 불러오는 거고, 지역 문자로 입력,
-  // 가격 숫자로 입력, 가능시간, 문자로 입력, 1/3/6개월 선택해서 보내드려요
-  // 그리고 사진 등록, text 입력해서 내용 들어갑니다!
-  // 추가 하나 더ㅠ 가능한 시간 문자로 입력해서 들어가요
   const { imgUrl, name, availableArea, price, availableTime, term, content } =
     req.body;
-  await trainerMatchingService.postTrainerProduct(
+  await trainerMatchingService.createTrainerProduct(
     userId,
     imgUrl,
     name,
@@ -48,7 +40,7 @@ const postTrainerProduct = async (req, res) => {
 
 const deleteTrainerProduct = async (req, res) => {
   const userId = req.userId;
-  const { productsId } = req.body;
+  const { productsId } = req.query;
   await trainerMatchingService.deleteTrainerProduct(userId, productsId);
   res.status(200), json({ message: "DELETE_SUCCESS" });
 };
@@ -56,6 +48,6 @@ const deleteTrainerProduct = async (req, res) => {
 module.exports = {
   getTrainerProduct,
   getTrainerProductDetail,
-  postTrainerProduct,
+  createTrainerProduct,
   deleteTrainerProduct,
 };
