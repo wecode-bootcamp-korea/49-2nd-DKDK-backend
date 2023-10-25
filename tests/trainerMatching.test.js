@@ -41,8 +41,15 @@ describe("GET Trainer Information", () => {
       `INSERT INTO products
           (id, trainer_id, available_area, available_time, category_name, term, price, content)
             VALUES
-          (1, '트레이너', '1994-01-01', 1, 01012341234, 2, 182.00, 75.00, 1, 1);
+          (1, 1, '서울 강남구', '오후1시-오후3시', '헬스', 2, 182.00, 75.00, 1, 1);
           `
+    );
+    await AppDataSource.query(
+      `INSERT INTO products
+            (id, trainer_id, available_area, available_time, category_name, term, price, content)
+              VALUES
+            (1, 2, '서울 강남구', '오후2시-오후4시', '헬스', 2, 182.00, 75.00, 1, 1);
+            `
     );
   });
 });

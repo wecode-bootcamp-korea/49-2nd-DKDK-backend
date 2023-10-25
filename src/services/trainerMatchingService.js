@@ -1,7 +1,4 @@
-const { UsingJoinColumnOnlyOnOneSideAllowedError } = require("typeorm");
 const { trainerMatchingDao, trainerQueryBuilder } = require("../models");
-const { isPostedTrainer } = require("../models/trainerMatchingDao");
-const { products, offsetQuery } = require("../models/trainerQueryBuilder");
 const { throwError } = require("../utils/throwError");
 
 const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
@@ -122,7 +119,7 @@ const deleteTrainerProduct = async (userId, productsId) => {
   if (!isPostedTrainer) {
     throwError(401, "IS_NOT_OWNER");
   }
-  await trainerMatchingDao.upadateTrainerMatching(products, 2);
+  await trainerMatchingDao.upadateTrainerMatching(productsId, 2);
 };
 
 module.exports = {
