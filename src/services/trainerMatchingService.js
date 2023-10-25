@@ -37,6 +37,7 @@ const getTrainerProduct = async (
   );
 
   return {
+    trainerId: trainerId,
     isSubscribed: isSubscribed,
     isPostedTrainer: isPostedTrainer,
     data: data,
