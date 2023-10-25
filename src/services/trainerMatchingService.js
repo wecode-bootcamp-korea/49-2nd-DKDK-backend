@@ -64,6 +64,7 @@ const getTrainerProductDetail = async (userId, productsId) => {
   return {
     isSubscribed: isSubscribed,
     isPostedTrainer: isPostedTrainer,
+    trainerId: trainerId,
     data: data,
   };
 };

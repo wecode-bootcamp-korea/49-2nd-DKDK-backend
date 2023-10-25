@@ -16,7 +16,7 @@ const categoryQuery = (category) => {
 };
 
 const genderQuery = (gender) => {
-  return gender != 0 && gender ? `AND u.gender LIKE ${gender}` : "";
+  return gender != 0 && gender ? `AND u.gender = ${gender}` : "";
 };
 
 const trainerCheckQuery = (isTrainer, trainerId) => {
