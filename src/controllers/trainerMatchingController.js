@@ -3,7 +3,6 @@ const { trainerMatchingService } = require("../services");
 const getTrainerProduct = async (req, res) => {
   const userId = req.userId;
   const { offset, limit, sort, category, gender, isTrainer } = req.query;
-  console.log("query: ", req.query);
   const data = await trainerMatchingService.getTrainerProduct(
     userId,
     offset,
@@ -31,7 +30,6 @@ const createTrainerProduct = async (req, res) => {
   const userId = req.userId;
   // const userId = 5;
   const { imgUrl, name, place, price, time, period, content } = req.body;
-  console.log(req.body);
   await trainerMatchingService.createTrainerProduct(
     userId,
     name,

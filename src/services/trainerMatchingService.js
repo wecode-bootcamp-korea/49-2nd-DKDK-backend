@@ -20,11 +20,8 @@ const getTrainerProduct = async (
 
   //쿼리생성
   const sortQuery = trainerQueryBuilder.sortQuery(sort);
-  console.log("sort: ", sortQuery, sort);
   const categoryQuery = trainerQueryBuilder.categoryQuery(category);
-  console.log("cate: ", categoryQuery, category);
   const genderQuery = trainerQueryBuilder.genderQuery(gender);
-  console.log("gender: ", genderQuery, gender);
   const trainerCheckQuery = trainerQueryBuilder.trainerCheckQuery(
     isTrainer,
     trainerId
@@ -89,7 +86,6 @@ const createTrainerProduct = async (
   if (!isSubscribed) throwError(400, "UNAUTHORIZED_USER");
   //이미 글을 올린 트레이너인지
   const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(userId);
-  console.log("isposted: ", isPostedTrainer);
   if (!isPostedTrainer) throwError(400, "DUPLICATE_SUBMISSION");
 
   const trainerId = await trainerMatchingDao.findTrainerId(userId);

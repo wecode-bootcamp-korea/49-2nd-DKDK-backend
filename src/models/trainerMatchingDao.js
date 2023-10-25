@@ -33,13 +33,6 @@ const getTrainerMatching = async (
         ${sortQuery}
         ${offsetQuery};
         `);
-  console.log(
-    categoryQuery,
-    genderQuery,
-    trainerCheckQuery,
-    sortQuery,
-    offsetQuery
-  );
   return result;
 };
 //트레이너 상세 정보
