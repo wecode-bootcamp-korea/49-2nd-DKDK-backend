@@ -3,7 +3,6 @@ const { trainerMatchingService } = require("../services");
 const getTrainerProduct = async (req, res) => {
   const userId = req.userId;
   const { offset, limit, sort, kind, gender, isTrainer } = req.query;
-
   const data = await trainerMatchingService.getTrainerProduct(
     userId,
     offset,
@@ -30,16 +29,15 @@ const getTrainerProductDetail = async (req, res) => {
 const createTrainerProduct = async (req, res) => {
   const userId = req.userId;
   // const userId = 5;
-  const { imgUrl, name, availableArea, price, availableTime, term, content } =
-    req.body;
+  const { imgUrl, name, place, price, time, period, content } = req.body;
+  console.log(req.body);
   await trainerMatchingService.createTrainerProduct(
     userId,
-    imgUrl,
     name,
-    availableArea,
+    place,
     price,
-    availableTime,
-    term,
+    time,
+    period,
     content
   );
   res.status(200).json({ message: "POST_SUCCESS" });
@@ -47,7 +45,8 @@ const createTrainerProduct = async (req, res) => {
 
 const deleteTrainerProduct = async (req, res) => {
   const userId = req.userId;
-  const { productId } = req.query;
+  const { productId } = req.body;
+  console.log("product: ", productId);
   await trainerMatchingService.deleteTrainerProduct(userId, productId);
   res.status(200), json({ message: "DELETE_SUCCESS" });
 };

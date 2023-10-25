@@ -51,7 +51,9 @@ const getTrainerMatchingDetail = async (productId) => {
         p.created_at AS createdAt ,
         u.gender AS gender,
         t.specialized AS specialized,
-        u.img_url AS imgUrl
+        u.img_url AS imgUrl,
+        u.height AS height,
+        u.weight AS weight
         FROM products p 
         JOIN trainers t ON t.id = p.trainer_id
         JOIN users u ON u.id = t.user_id
@@ -99,8 +101,8 @@ const isPostedTrainer = async (trainerId) => {
         WHEN (SELECT p.id FROM products p
             WHERE p.trainer_id = ?
             AND p.status = 1) IS NULL
-            THEN 0
-            ELSE 1
+            THEN 1
+            ELSE 0
         END AS isPostedTrainer;
           `,
     [trainerId]
@@ -133,13 +135,13 @@ const findSpecializedCategoryByTrainerId = async (trainerId) => {
   return category.name;
 };
 const createTrainerMatching = async (
-  userId,
   trainerId,
-  imgUrl,
-  availableArea,
+  userId,
+  name,
+  place,
   price,
-  availableTime,
-  term,
+  time,
+  period,
   content,
   categoryName
 ) => {
@@ -160,21 +162,13 @@ const createTrainerMatching = async (
     price,
     content)
   VALUES (?, ?, ?, ?, ?, ?, ?);`,
-    [
-      trainerId,
-      availableArea,
-      availableTime,
-      categoryName,
-      term,
-      price,
-      content,
-    ]
+    [trainerId, place, time, categoryName, period, price, content]
   );
 };
 const upadateTrainerMatching = async (productId, status) => {
   await AppDataSource.query(`
     UPDATE producsts
-        status  = ${status}
+        SET status  = ${status}
         WHERE id = ${productId};
     `);
 };

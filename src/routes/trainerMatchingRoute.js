@@ -16,8 +16,8 @@ trainerMatchingRouter.post(
   validateToken,
   asyncWrap(trainerMatchingController.createTrainerProduct)
 );
-trainerMatchingRouter.delete(
-  "/",
+trainerMatchingRouter.post(
+  "/delete",
   validateToken,
   asyncWrap(trainerMatchingController.deleteTrainerProduct)
 );

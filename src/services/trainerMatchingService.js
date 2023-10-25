@@ -71,12 +71,11 @@ const getTrainerProductDetail = async (userId, productsId) => {
 
 const createTrainerProduct = async (
   userId,
-  imgUrl,
   name,
-  availableArea,
+  place,
   price,
-  availableTime,
-  term,
+  time,
+  period,
   content
 ) => {
   //트레이너인지
@@ -87,6 +86,7 @@ const createTrainerProduct = async (
   if (!isSubscribed) throwError(400, "UNAUTHORIZED_USER");
   //이미 글을 올린 트레이너인지
   const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(userId);
+  console.log("isposted: ", isPostedTrainer);
   if (!isPostedTrainer) throwError(400, "DUPLICATE_SUBMISSION");
 
   const trainerId = await trainerMatchingDao.findTrainerId(userId);
@@ -94,13 +94,13 @@ const createTrainerProduct = async (
     await trainerMatchingDao.findSpecializedCategoryByTrainerId(trainerId);
 
   await trainerMatchingDao.createTrainerMatching(
-    userId,
     trainerId,
-    imgUrl,
-    availableArea,
+    userId,
+    name,
+    place,
     price,
-    availableTime,
-    term,
+    time,
+    period,
     content,
     categoryName
   );
