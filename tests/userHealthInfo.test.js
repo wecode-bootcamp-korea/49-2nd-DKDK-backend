@@ -1,7 +1,9 @@
 const request = require("supertest");
-const { generateToken } = require("../src/utils/generateToken");
 const { createApp } = require("../app");
 const { AppDataSource } = require("../src/models/dataSource");
+const { generateToken } = require("../src/utils/generateToken");
+const awsMock = require('aws-sdk-mock');
+
 
 describe("TEST 1.GET USER INFO ", () => {
   let app;
@@ -80,8 +82,6 @@ describe("TEST 1.GET USER INFO ", () => {
   });
 
   afterAll(async () => {
-    // 테스트 데이터베이스의 불필요한 데이터를 전부 지워줍니다.
-    // 테이블에 있는 데이터를 날려주는 코드
     await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 0;`);
     await AppDataSource.query(`TRUNCATE TABLE users;`);
     await AppDataSource.query(`TRUNCATE TABLE workout_categories;`);
@@ -91,7 +91,6 @@ describe("TEST 1.GET USER INFO ", () => {
     await AppDataSource.query(`TRUNCATE TABLE workouts;`);
     await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 1;`);
 
-    // 모든 테스트가 끝나게 되면(afterAll) DB 커넥션을 끊어줍니다.
     await AppDataSource.destroy();
   });
 
@@ -193,7 +192,7 @@ describe("TEST 1.GET USER INFO ", () => {
       .get("/userHealthInfo/update")
       .set("Authorization", validAccessToken)
       .expect(200);
-    expect(res.body.message).toEqual("TOBE_UPDATED_INFO_LOADED");
+    expect(res.body.message).toEqual("MODIFYING_USER_INFO_LOADED");
     expect(res.body).toHaveProperty("data");
     expect(res.body.data).toEqual([
       {
@@ -218,8 +217,8 @@ describe("TEST 2. USER INFO UPDATE", () => {
 
   beforeAll(async () => {
     app = createApp();
-    await AppDataSource.initialize();
 
+    await AppDataSource.initialize();
     // GET 테스트를 위한 DB필수정보 생성
     // 1. workout category
     await AppDataSource.query(
@@ -252,8 +251,17 @@ describe("TEST 2. USER INFO UPDATE", () => {
       VALUES (1, 2, 1);
       `
     );
+    // Mock the AWS S3 upload method
+    awsMock.mock('S3', 'upload', (params, callback) => {
+      // Simulate a successful S3 upload
+      const s3Url = `https://${params.Bucket}.s3.amazonaws.com/${params.Key}`;
+      callback(null, { Location: s3Url });
+    });
   });
   afterAll(async () => {
+    // Restore the original AWS S3 upload method
+    awsMock.restore('S3');
+    
     // 테스트 데이터베이스의 불필요한 데이터를 전부 지워줍니다.
     // 테이블에 있는 데이터를 날려주는 코드
     await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 0;`);
@@ -265,24 +273,77 @@ describe("TEST 2. USER INFO UPDATE", () => {
     await AppDataSource.destroy();
   });
 
-  test("1. SUCCESS - POST USER INFO UPDATED", async () => {
+  test("2-1 POST SUCCESS - USER INFO UPDATED", async() => {
     const validAccessToken = generateToken(1);
     console.log(validAccessToken);
+    try {
     const res = await request(app)
-      .patch("/userHealthInfo") // HTTP Method, 엔드포인트 주소를 작성합니다.
+      .post("/userHealthInfo")
       .set("Authorization", validAccessToken)
-      .send({
-        "gender": 1,
-        "birthday" : "1990-09-27",
-        "height": 170.10,
-        "weight": 45.45,
-        "workoutLoad": 1,
-        "interestedWorkout": 1,
-        "specialized": 1
-        })
-      expect(200); // expect()로 예상되는 statusCode, response를 넣어 테스트할 수 있습니다.
+      .attach('image', '/Users/rooneylee/Desktop/wecode/Project3/49-3rd-DKDK-backend/tests/test-image.jpg') // Attach an image to the request
+      .field('gender', 1)
+      .field("birthday", "1990-09-27")
+      .field("height", 170.10)
+      .field("weight", 45.45,)
+      .field("workoutLoad", 1,)
+      .field("interestedWorkout", 1,)
+      .field("specialized", 1)
 
-    expect(res.body.message).toEqual("USER_INFO_UPDATED");
-    expect(res.body.data).toEqual("DATA_UPDATED");
-  });
+      expect(200);
+      expect(res.body.message).toEqual("USER_INFO_UPDATED");
+      expect(res.body.data).toEqual("DATA_UPDATED");
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    })
 });
+
+// describe('AWS S3 Service', () => {
+//   let app;
+//   beforeEach(() => {
+//     // Mock the AWS S3 upload method
+//     awsMock.mock('S3', 'upload', (params, callback) => {
+//       // Simulate a successful S3 upload
+//       const s3Url = `https://${params.Bucket}.s3.amazonaws.com/${params.Key}`;
+//       callback(null, { Location: s3Url });
+//     });
+//   });
+
+//   afterEach(() => {
+//     // Restore the original AWS S3 upload method
+//     awsMock.restore('S3');
+//   });
+
+  // test('should upload an image to AWS S3', (done) => {
+  //   request(app)
+  //     .post('/userHealthInfo') // Replace with the actual route to handle image uploads
+  //     .attach('image', 'test-image.jpg') // Attach an image to the request
+  //     .end((err, res) => {
+  //       if (err) {
+  //         return done(err);
+  //       }
+  //       expect(res.status).toBe(200);
+  //       expect(res.body).toHaveProperty('imageUrl');
+  //       done();
+  //     });
+  // });
+
+//   test('should handle S3 upload errors', (done) => {
+//     awsMock.mock('S3', 'upload', (params, callback) => {
+//       // Simulate an S3 upload error
+//       callback(new Error('S3 upload error'));
+//     });
+
+//     request(app)
+//       .post('/userHealthInfo') // Replace with the actual route to handle image uploads
+//       .attach('image', 'test-image.jpg') // Attach an image to the request
+//       .end((err, res) => {
+//         if (err) {
+//           return done(err);
+//         }
+//         expect(res.status).toBe(500); // Check for an error status code
+//         done();
+//       });
+//   });
+// });

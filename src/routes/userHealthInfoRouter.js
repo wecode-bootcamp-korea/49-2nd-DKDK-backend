@@ -1,13 +1,12 @@
 const express = require('express');
-const {userHealthInfoController} = require('../controllers');
-const {validateToken} = require('../middlewares/auth');
-// const { upload } = require('../utils/S3')
-
+const { userHealthInfoController } = require('../controllers');
+const { validateToken } = require('../middlewares/auth');
+const { handleImageUpload } = require('../utils/s3Service')
 const userHealthInfoRouter = express.Router();
 
 userHealthInfoRouter.get('/', validateToken, userHealthInfoController.viewUserHealthInfo);
 userHealthInfoRouter.get('/update', validateToken, userHealthInfoController.getUpdatingUserInfo);
-userHealthInfoRouter.patch('/', validateToken, userHealthInfoController.updateUserHealthInfo);
-userHealthInfoRouter.post('/', validateToken, userHealthInfoController.userProfileImgUpload); // 사진 따로 ..
-// userHealthInfoRouter.post('/', validateToken, upload, userHealthInfoController.userProfileImgUpload); // auth가 먼저, upload 보다
-module.exports = {userHealthInfoRouter};
+userHealthInfoRouter.post('/', validateToken, handleImageUpload, userHealthInfoController.updateUserHealthInfo);
+userHealthInfoRouter.post('/test', handleImageUpload, userHealthInfoController.imgUploadTest,);
+
+module.exports = { userHealthInfoRouter };

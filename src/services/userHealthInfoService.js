@@ -38,6 +38,7 @@ const getToBeUpdatedInfo = async (userId) => {
 // 유저정보 수정
 const updateUserInfo = async (
   userId,
+  imageUrl,
   gender,
   birthday,
   height,
@@ -51,6 +52,7 @@ const updateUserInfo = async (
   if (type[0].user_type == 1) {
     const result = await userHealthInfoDao.updateUserInfoById(
       userId,
+      imageUrl,
       gender,
       birthday,
       height,
@@ -63,6 +65,7 @@ const updateUserInfo = async (
   if (type[0].user_type == 2) {
     const result = await userHealthInfoDao.updateTrainerInfoById(
       userId,
+      imageUrl,
       gender,
       birthday,
       height,

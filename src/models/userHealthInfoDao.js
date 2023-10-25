@@ -65,7 +65,7 @@ const getTrainerInfo = async (userId) => {
   return trainerInfo.length === 0 ? "NOT_A_TRAINER" : trainerInfo;
 };
 
-// GET - PT 주문정보
+// GET - PT 주문정보 (최적화 필요)
 const getPtOrderByUserId = async (userId) => {
   const ptOrderDetail = await AppDataSource.query(
     `
@@ -181,23 +181,10 @@ const getUserDataToModify = async (userId) => {
   );
 };
 
-// 유저 프로파일 이미지 업로드
-const updateUserImg = async (userId, profileImg) => {
-  if (!profileImg) throwError (400, "NO_PROFILE_IMG")
-  const result = await AppDataSource.query(
-    `
-    UPDATE users
-      SET img_url = ?
-    WHERE id = ?
-    `,
-    [profileImg, userId]
-  );
-  return result.affectedRows;
-};
-
-// 유저정보 수정
+// 유저정보 수정 - 이미지 포함
 const updateUserInfoById = async (
   userId,
+  imageUrl,
   gender,
   birthday,
   height,
@@ -208,7 +195,8 @@ const updateUserInfoById = async (
   const result = await AppDataSource.query(
     `
     UPDATE users
-      SET gender = ?,
+      SET img_url = ?,
+      gender = ?,
       birthday = ?,
       height = ?,
       weight = ?,
@@ -216,7 +204,16 @@ const updateUserInfoById = async (
       interested_workout = ?
     WHERE id = ?
     `,
-    [gender, birthday, height, weight, workoutLoad, interestedWorkout, userId]
+    [
+      imageUrl,
+      gender,
+      birthday,
+      height,
+      weight,
+      workoutLoad,
+      interestedWorkout,
+      userId,
+    ]
   );
   return result.affectedRows;
 };
@@ -224,6 +221,7 @@ const updateUserInfoById = async (
 // 트레이너가 정보 업데이트
 const updateTrainerInfoById = async (
   userId,
+  imageUrl,
   gender,
   birthday,
   height,
@@ -240,7 +238,8 @@ const updateTrainerInfoById = async (
     const updateUserInfo = await queryRunner.query(
       `
     UPDATE users
-      SET gender = ?,
+      SET img_url = ?,
+      gender = ?,
       birthday = ?,
       height = ?,
       weight = ?,
@@ -248,7 +247,7 @@ const updateTrainerInfoById = async (
       interested_workout = ?
     WHERE id = ?
     `,
-      [gender, birthday, height, weight, workoutLoad, interestedWorkout, userId]
+      [imageUrl, gender, birthday, height, weight, workoutLoad, interestedWorkout, userId]
     );
     const updateTrainerInfo = await queryRunner.query(
       `
@@ -286,6 +285,5 @@ module.exports = {
   getRandWorkoutByUserId,
   updateUserInfoById,
   updateTrainerInfoById,
-  updateUserImg,
   getUserDataToModify,
 };
