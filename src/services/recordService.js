@@ -53,6 +53,11 @@ const readRecord = async (id) => {
 
 const createRecord = async (id, recordData) => {
  
+  if (recordData.waterContent > 100) return 
+  if (recordData.muscleMass > 100) return
+  if (recordData.bodyFat > 100) return
+  if (recordData.workoutTime > 24) return
+  
   const readUserId = await recordDao.recordIdParamsChecker(Number(id));
   if (!readUserId) return readUserId;
 
