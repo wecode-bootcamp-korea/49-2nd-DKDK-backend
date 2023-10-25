@@ -32,6 +32,14 @@ const getTrainerMatching = async (
         ${sortQuery}
         ${offsetQuery};
         `);
+  console.log(
+    result,
+    categoryQuery,
+    genderQuery,
+    trainerCheckQuery,
+    sortQuery,
+    offsetQuery
+  );
   return result;
 };
 //트레이너 상세 정보
@@ -116,6 +124,7 @@ const findTrainerId = async (userId) => {
     WHERE u.id = ?;`,
     [userId]
   );
+  if (trainerId === undefined) return 0;
   return trainerId.id;
 };
 // 트레이너 전문분야 찾기

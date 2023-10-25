@@ -12,6 +12,7 @@ const getTrainerProduct = async (req, res) => {
     kind,
     gender
   );
+  console.log(data);
   res.status(200).json({ message: "GET_SUCCESS", data: data });
 };
 
@@ -22,8 +23,8 @@ const getTrainerProductDetail = async (req, res) => {
 };
 
 const createTrainerProduct = async (req, res) => {
-  // const userId = req.userId;
-  const userId = 5;
+  const userId = req.userId;
+  // const userId = 5;
   const { imgUrl, name, availableArea, price, availableTime, term, content } =
     req.body;
   await trainerMatchingService.createTrainerProduct(

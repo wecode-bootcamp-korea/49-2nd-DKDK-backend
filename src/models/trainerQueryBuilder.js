@@ -19,13 +19,15 @@ const genderQuery = (gender) => {
   return gender != 0 && gender ? `AND u.gender LIKE ${gender}` : "";
 };
 
-const trainerCheckQuery = (isTrainer, userId) => {
-  return isTrainer != false && isTrainer ? `AND u.id = ${userId}` : "";
+const trainerCheckQuery = (isTrainer, trainerId) => {
+  return isTrainer == true && isTrainer
+    ? `AND p.trainer_id = ${trainerId}`
+    : "";
 };
 
 const offsetQuery = async (offset, limit) => {
   if (offset == null || offset == undefined) return "";
-  return `LIMIT ${limit} OFFSET ${offset}`;
+  return `LIMIT ${offset} OFFSET ${limit}`;
 };
 
 module.exports = {
