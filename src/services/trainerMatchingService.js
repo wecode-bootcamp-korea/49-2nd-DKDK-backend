@@ -6,7 +6,7 @@ const getTrainerProduct = async (
   offset,
   limit,
   sort,
-  kind,
+  category,
   gender,
   isTrainer
 ) => {
@@ -19,10 +19,13 @@ const getTrainerProduct = async (
   const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(trainerId);
 
   //쿼리생성
-  const sortQuery = await trainerQueryBuilder.sortQuery(sort);
-  const categoryQuery = await trainerQueryBuilder.categoryQuery(kind);
-  const genderQuery = await trainerQueryBuilder.genderQuery(gender);
-  const trainerCheckQuery = await trainerQueryBuilder.trainerCheckQuery(
+  const sortQuery = trainerQueryBuilder.sortQuery(sort);
+  console.log("sort: ", sortQuery, sort);
+  const categoryQuery = trainerQueryBuilder.categoryQuery(category);
+  console.log("cate: ", categoryQuery, category);
+  const genderQuery = trainerQueryBuilder.genderQuery(gender);
+  console.log("gender: ", genderQuery, gender);
+  const trainerCheckQuery = trainerQueryBuilder.trainerCheckQuery(
     isTrainer,
     trainerId
   );

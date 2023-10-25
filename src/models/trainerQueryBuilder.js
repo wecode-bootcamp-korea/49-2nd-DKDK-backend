@@ -7,12 +7,12 @@ const sortQuery = (sort) => {
     case "price":
       return `ORDER BY p.price DESC`;
     default:
-      return `ORDER BY p.id ASC`;
+      return `ORDER BY p.id DESC`;
   }
 };
 
 const categoryQuery = (category) => {
-  return category != 0 && category ? `AND p.category_id = ${category}` : "";
+  return category != 0 && category ? `AND t.specialized = ${category}` : "";
 };
 
 const genderQuery = (gender) => {

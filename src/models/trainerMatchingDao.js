@@ -33,6 +33,13 @@ const getTrainerMatching = async (
         ${sortQuery}
         ${offsetQuery};
         `);
+  console.log(
+    categoryQuery,
+    genderQuery,
+    trainerCheckQuery,
+    sortQuery,
+    offsetQuery
+  );
   return result;
 };
 //트레이너 상세 정보
@@ -167,7 +174,7 @@ const createTrainerMatching = async (
 };
 const upadateTrainerMatching = async (productId, status) => {
   await AppDataSource.query(`
-    UPDATE producsts
+    UPDATE products
         SET status  = ${status}
         WHERE id = ${productId};
     `);
