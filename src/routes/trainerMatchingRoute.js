@@ -23,7 +23,7 @@ trainerMatchingRouter.delete(
 );
 //위의 get과 겹치게 되지 않는지
 trainerMatchingRouter.get(
-  "/detail/:trainerProductId",
+  "/detail",
   validateToken,
   asyncWrap(trainerMatchingController.getTrainerProductDetail)
 );

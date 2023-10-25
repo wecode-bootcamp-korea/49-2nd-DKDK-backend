@@ -2,7 +2,7 @@ const { trainerMatchingService } = require("../services");
 
 const getTrainerProduct = async (req, res) => {
   const userId = req.userId;
-  const { offset, limit, sort, kind, gender } = req.query;
+  const { offset, limit, sort, kind, gender, isTrainer } = req.query;
 
   const data = await trainerMatchingService.getTrainerProduct(
     userId,
@@ -10,15 +10,20 @@ const getTrainerProduct = async (req, res) => {
     limit,
     sort,
     kind,
-    gender
+    gender,
+    isTrainer
   );
-  console.log(data);
   res.status(200).json({ message: "GET_SUCCESS", data: data });
 };
 
 const getTrainerProductDetail = async (req, res) => {
-  const { productsId } = req.body;
-  const data = await trainerMatchingService.getTrainerProductDetail(productsId);
+  const userId = req.userId;
+  const { productId } = req.query;
+
+  const data = await trainerMatchingService.getTrainerProductDetail(
+    userId,
+    productId
+  );
   res.status(200).json({ message: "GET_SUCCESS", data: data });
 };
 
@@ -42,8 +47,8 @@ const createTrainerProduct = async (req, res) => {
 
 const deleteTrainerProduct = async (req, res) => {
   const userId = req.userId;
-  const { productsId } = req.query;
-  await trainerMatchingService.deleteTrainerProduct(userId, productsId);
+  const { productId } = req.query;
+  await trainerMatchingService.deleteTrainerProduct(userId, productId);
   res.status(200), json({ message: "DELETE_SUCCESS" });
 };
 

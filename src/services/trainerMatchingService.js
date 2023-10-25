@@ -1,19 +1,19 @@
 const { trainerMatchingDao, trainerQueryBuilder } = require("../models");
 const { throwError } = require("../utils/throwError");
 
-const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
+const getTrainerProduct = async (
+  userId,
+  offset,
+  limit,
+  sort,
+  kind,
+  gender,
+  isTrainer
+) => {
   //트레이너 확인 후 구독 여부 확인
-  var isAuth = true;
-  // 트레이너인지 확인
-  const isTrainer = await trainerMatchingDao.isTrainer(userId);
-  if (!isTrainer) {
-    isAuth = false;
-  }
   // 구독자인지 확인
   const isSubscribed = await trainerMatchingDao.isSubscribed(userId);
-  if (!isSubscribed) {
-    isAuth = false;
-  }
+
   // 이미 글을 작성한 트레이너인지 확인
   const trainerId = await trainerMatchingDao.findTrainerId(userId);
   const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(trainerId);
@@ -35,9 +35,8 @@ const getTrainerProduct = async (userId, offset, limit, sort, kind, gender) => {
     trainerCheckQuery,
     offsetQuery
   );
-  console.log("data:", data);
+
   return {
-    isAuth: isAuth,
     isSubscribed: isSubscribed,
     isPostedTrainer: isPostedTrainer,
     data: data,
@@ -63,7 +62,6 @@ const getTrainerProductDetail = async (userId, productsId) => {
 
   const data = await trainerMatchingDao.getTrainerMatchingDetail(productsId);
   return {
-    isAuth: isAuth,
     isSubscribed: isSubscribed,
     isPostedTrainer: isPostedTrainer,
     data: data,
@@ -93,7 +91,7 @@ const createTrainerProduct = async (
   const trainerId = await trainerMatchingDao.findTrainerId(userId);
   const categoryName =
     await trainerMatchingDao.findSpecializedCategoryByTrainerId(trainerId);
-  console.log(categoryName);
+
   await trainerMatchingDao.createTrainerMatching(
     userId,
     trainerId,

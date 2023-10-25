@@ -27,7 +27,7 @@ const trainerCheckQuery = (isTrainer, trainerId) => {
 
 const offsetQuery = async (offset, limit) => {
   if (offset == null || offset == undefined) return "";
-  return `LIMIT ${offset} OFFSET ${limit}`;
+  return `LIMIT ${limit} OFFSET ${offset}`;
 };
 
 module.exports = {

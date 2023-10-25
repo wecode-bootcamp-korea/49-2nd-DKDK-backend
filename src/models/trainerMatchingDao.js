@@ -8,9 +8,10 @@ const getTrainerMatching = async (
   trainerCheckQuery,
   offsetQuery
 ) => {
-  const [result] = await AppDataSource.query(`
+  const result = await AppDataSource.query(`
         SELECT 
         p.id AS id,
+        u.nickname AS name,
         p.trainer_id AS trainerId,
         p.available_area AS availableArea,
         p.available_time AS availableTime,
@@ -32,14 +33,6 @@ const getTrainerMatching = async (
         ${sortQuery}
         ${offsetQuery};
         `);
-  console.log(
-    result,
-    categoryQuery,
-    genderQuery,
-    trainerCheckQuery,
-    sortQuery,
-    offsetQuery
-  );
   return result;
 };
 //트레이너 상세 정보
@@ -76,8 +69,8 @@ const isTrainer = async (userId) => {
         WHEN (SELECT u.nickname FROM trainers t
             JOIN users u ON t.user_id  = u.id
             WHERE u.id = ?) IS NULL
-            THEN 'false'
-            ELSE 'true'
+            THEN 0
+            ELSE 1
         END AS isTrainer;
     `,
     [userId]
@@ -91,8 +84,8 @@ const isSubscribed = async (userId) => {
         WHEN (SELECT u.nickname FROM sub_orders so
             JOIN users u ON so.user_id  = u.id
             WHERE u.id = ?) IS NULL
-            THEN 'false'
-            ELSE 'true'
+            THEN 0
+            ELSE 1
         END AS isSubscribed;
       `,
     [userId]
@@ -106,8 +99,8 @@ const isPostedTrainer = async (trainerId) => {
         WHEN (SELECT p.id FROM products p
             WHERE p.trainer_id = ?
             AND p.status = 1) IS NULL
-            THEN 'false'
-            ELSE 'true'
+            THEN 0
+            ELSE 1
         END AS isPostedTrainer;
           `,
     [trainerId]
@@ -177,7 +170,6 @@ const createTrainerMatching = async (
       content,
     ]
   );
-  console.log("success");
 };
 const upadateTrainerMatching = async (productId, status) => {
   await AppDataSource.query(`
