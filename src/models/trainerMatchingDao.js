@@ -34,7 +34,6 @@ const getTrainerMatching = async (
         `);
   return result;
 };
-
 //트레이너 상세 정보
 const getTrainerMatchingDetail = async (productId) => {
   const [result] = await AppDataSource.query(
@@ -62,7 +61,7 @@ const getTrainerMatchingDetail = async (productId) => {
   );
   return result;
 };
-
+// 트레이너 확인
 const isTrainer = async (userId) => {
   const [result] = await AppDataSource.query(
     `SELECT CASE
@@ -92,11 +91,13 @@ const isSubscribed = async (userId) => {
   );
   return result.isSubscribed;
 };
+// 트레이너 글작성확인
 const isPostedTrainer = async (trainerId) => {
   const [result] = await AppDataSource.query(
     `SELECT CASE
         WHEN (SELECT p.id FROM products p
-            WHERE p.trainer_id = ?) IS NULL
+            WHERE p.trainer_id = ?
+            AND p.status = 1) IS NULL
             THEN 'false'
             ELSE 'true'
         END AS isPostedTrainer;
@@ -105,7 +106,7 @@ const isPostedTrainer = async (trainerId) => {
   );
   return result.isPostedTrainer;
 };
-
+// 트레이너id 찾기
 const findTrainerId = async (userId) => {
   const [trainerId] = await AppDataSource.query(
     `
@@ -117,7 +118,7 @@ const findTrainerId = async (userId) => {
   );
   return trainerId.id;
 };
-
+// 트레이너 전문분야 찾기
 const findSpecializedCategoryByTrainerId = async (trainerId) => {
   const [category] = await AppDataSource.query(
     `
