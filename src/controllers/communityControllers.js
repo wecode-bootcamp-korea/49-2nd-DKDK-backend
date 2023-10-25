@@ -79,7 +79,7 @@ const createCommentController = async (req, res, next) => {
 const deleteCommentController = async (req, res, next) => {
   try {
     const postId = 1;
-    const commentId = 4;
+    const commentId = 6;
     if (!postId) return res.status(400).json({ message: "KEY_ERROR" });
     if (!commentId) return res.status(400).json({ message: "NO_COMMENT" });
     return res.status(200).json({

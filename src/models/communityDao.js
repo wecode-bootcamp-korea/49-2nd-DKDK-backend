@@ -123,20 +123,27 @@ const getPostlistDao = async (userId) => {
   ]);
   return postDetailsResult[0];
 };
+
+//댓글목록 불러오기
 const getCommentDao = async (postId) => {
-  const getComment = await AppDataSource.query(
-    `
-  SELECT
-  comments.content AS content,
-  comments.post_id AS post_id,
-  comments.user_id AS user_id
-FROM comments
-LEFT JOIN posts ON posts.id = comments.post_id
-WHERE comments.post_id = ?
-  `,
-    [postId]
-  );
-  return getComment;
+  // SQL 쿼리 문자열을 정의합니다.
+  const query = `
+    SELECT
+      comments.id AS comment_id,
+      comments.content AS content,
+      comments.post_id AS post_id,
+      comments.user_id AS user_id,
+      users.nickname AS nickname,
+      users.img_url AS user_img_url,
+      CASE WHEN EXISTS (SELECT comments.id FROM comments WHERE user_id = comments.user_id) THEN 'true' ELSE 'false' END AS isComment
+    FROM comments
+    LEFT JOIN users ON users.id = comments.user_id
+    WHERE comments.post_id = ?
+  `;
+
+  // 데이터베이스에 연결하고 쿼리 실행
+  const result = await AppDataSource.query(query, [postId]);
+  return result;
 };
 
 // 구독자 여부 확인
@@ -153,6 +160,17 @@ const isSubscriptDao = async (userId) => {
     [userId]
   );
   return result.isSubscriptDao;
+};
+const likeDao = async (userId, postId) => {
+  await AppDataSource.query(
+    `
+   INSERT INTO likes
+   (user_id, post_id)
+   VALUES
+   (?,?)
+   `,
+    [userId, postId]
+  );
 };
 
 module.exports = {
