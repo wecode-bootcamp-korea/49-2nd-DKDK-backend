@@ -92,17 +92,16 @@ const isSubscribed = async (userId) => {
   );
   return result.isSubscribed;
 };
-const isPostedTrainer = async (productId, trainerId) => {
+const isPostedTrainer = async (trainerId) => {
   const [result] = await AppDataSource.query(
     `SELECT CASE
-        WHEN (SELECT p.id FROM p
-            WHERE p.id = ?
-            AND p.trainer_id = ?) IS NULL
+        WHEN (SELECT p.id FROM products p
+            WHERE p.trainer_id = ?) IS NULL
             THEN 'false'
             ELSE 'true'
         END AS isPostedTrainer;
           `,
-    [productId, trainerId]
+    [trainerId]
   );
   return result.isPostedTrainer;
 };
@@ -111,7 +110,7 @@ const findTrainerId = async (userId) => {
   const [trainerId] = await AppDataSource.query(
     `
     SELECT t.id AS id
-    FROM trainer t
+    FROM trainers t
     JOIN users u ON u.id = t.user_id
     WHERE u.id = ?;`,
     [userId]
@@ -123,7 +122,7 @@ const findSpecializedCategoryByTrainerId = async (trainerId) => {
   const [category] = await AppDataSource.query(
     `
     SELECT wc.category AS name
-    FROM workout_category wc
+    FROM workout_categories wc
     JOIN trainers t ON t.specialized = wc.id
     WHERE t.id = ?;`,
     [trainerId]
@@ -138,13 +137,14 @@ const createTrainerMatching = async (
   price,
   availableTime,
   term,
-  content
+  content,
+  categoryName
 ) => {
-  await AppDataSource.query(`
-  UPDATE users 
-  SET img_url = ${imgUrl}
-  WHERE id = ${userId};
-  `);
+  // await AppDataSource.query(`
+  // UPDATE users
+  // SET img_url = ${imgUrl}
+  // WHERE id = ${userId};
+  // `);
 
   await AppDataSource.query(
     `
@@ -167,6 +167,7 @@ const createTrainerMatching = async (
       content,
     ]
   );
+  console.log("success");
 };
 const upadateTrainerMatching = async (productId, status) => {
   await AppDataSource.query(`
