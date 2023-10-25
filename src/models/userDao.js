@@ -68,7 +68,7 @@ const isSubscribed = async (userId) => {
 const findByUserId = async (userId) => {
   const [result] = await AppDataSource.query(
     `
-    SELECT id
+    SELECT id, user_type
     FROM users
     WHERE id = ?
     `,
