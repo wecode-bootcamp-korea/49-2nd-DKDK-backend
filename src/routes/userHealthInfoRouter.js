@@ -5,8 +5,7 @@ const { handleImageUpload } = require('../utils/s3Service')
 const userHealthInfoRouter = express.Router();
 
 userHealthInfoRouter.get('/', validateToken, userHealthInfoController.viewUserHealthInfo);
-userHealthInfoRouter.get('/update', validateToken, userHealthInfoController.getUpdatingUserInfo);
+userHealthInfoRouter.get('/get', validateToken, userHealthInfoController.getUpdatingUserInfo);
 userHealthInfoRouter.post('/', validateToken, handleImageUpload, userHealthInfoController.updateUserHealthInfo);
-userHealthInfoRouter.post('/test', handleImageUpload, userHealthInfoController.imgUploadTest,);
 
 module.exports = { userHealthInfoRouter };

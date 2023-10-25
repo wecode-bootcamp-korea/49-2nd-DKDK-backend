@@ -1,5 +1,4 @@
 const { userHealthInfoService } = require("../services");
-const { upload } = require("../utils/s3Service");
 
 const viewUserHealthInfo = async (req, res, next) => {
   try {
@@ -47,12 +46,26 @@ const updateUserHealthInfo = async (req, res, next) => {
       weight,
       workoutLoad,
       interestedWorkout,
-      specialized
+      specialized,
+      imgUrl,
     } = req.body;
-
-    const imageFile = req.file;
-    const imageUrl = req.body.imageUrl;
-
+    if (!req.file) {
+      return res.status(200).json({
+        message: "USER_INFO_UPDATED",
+        data: await userHealthInfoService.updateUserInfo(
+          userId,
+          imgUrl,
+          gender,
+          birthday,
+          height,
+          weight,
+          workoutLoad,
+          interestedWorkout,
+          specialized,
+        ),
+      })
+    };
+    const imageUrl = req.file.location
     return res.status(200).json({
       message: "USER_INFO_UPDATED",
       data: await userHealthInfoService.updateUserInfo(
@@ -74,55 +87,8 @@ const updateUserHealthInfo = async (req, res, next) => {
   }
 };
 
-// const userProfileImgUpload = async (req, res, next) => {
-//   try {
-//     const userId = req.userId
-//     if (!userId) {
-//       return res.status(400).json({ message: "KEY_ERROR - ID" });
-//     };
-//     const { imgUrl } = req.body
-//     return res.status(200).json({
-//       message: "USER_IMG_UPLOADED",
-//       data: await userHealthInfoService.updateUserImg(userId, imgUrl)
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(error.status || 500).json({message: error.message});
-//     next(error);
-//   };
-// };
-
-const imgUploadTest = async (req, res, next) => {
-    const {
-      gender,
-      birthday,
-      height,
-      weight,
-      workoutLoad,
-      interestedWorkout,
-      specialized
-    } = req.body;
-
-    const imageFile = req.file;
-    const imageUrl = req.body.imageUrl;
-    
-    console.log({
-      gender,
-      birthday,
-      height,
-      weight,
-      workoutLoad,
-      interestedWorkout,
-      specialized
-    });
-
-    console.log(imageFile, imageUrl);
-}
-
 module.exports = {
   viewUserHealthInfo,
   getUpdatingUserInfo,
   updateUserHealthInfo,
-  // userProfileImgUpload
-  imgUploadTest,
 };

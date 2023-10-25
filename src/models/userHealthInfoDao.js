@@ -72,9 +72,7 @@ const getPtOrderByUserId = async (userId) => {
     SELECT
       (SELECT u.nickname FROM users u WHERE u.id = t.user_id) AS trainerName,
       (SELECT u.img_url FROM users u WHERE u.id = t.user_id) AS profileImg,
-      CASE
-        WHEN (SELECT u.gender FROM users u WHERE u.id = t.user_id) = 1 THEN "남성"
-        ELSE "여성" END AS gender,
+      (SELECT u.gender FROM users u WHERE u.id = t.user_id) AS gender,
       (SELECT u.phone_number FROM users u WHERE u.id = t.user_id) AS phoneNumber,
       (SELECT u.height FROM users u WHERE u.id = t.user_id) AS height,
       (SELECT u.weight FROM users u WHERE u.id = t.user_id) AS weight,
