@@ -102,8 +102,8 @@ const isPostedTrainer = async (trainerId) => {
         WHEN (SELECT p.id FROM products p
             WHERE p.trainer_id = ?
             AND p.status = 1) IS NULL
-            THEN 1
-            ELSE 0
+            THEN 0
+            ELSE 1
         END AS isPostedTrainer;
           `,
     [trainerId]

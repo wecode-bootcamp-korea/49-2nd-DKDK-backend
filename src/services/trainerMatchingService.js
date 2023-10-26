@@ -19,8 +19,7 @@ const getTrainerProduct = async (
   const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(
     trainerInfo.id
   );
-  console.log("hihihi: ", trainerInfo);
-
+  console.log(isPostedTrainer, trainerInfo);
   //쿼리생성
   const sortQuery = trainerQueryBuilder.sortQuery(sort);
   const categoryQuery = trainerQueryBuilder.categoryQuery(category);
@@ -41,7 +40,7 @@ const getTrainerProduct = async (
 
   return {
     trainerName: trainerInfo.name,
-    trainerInfo: trainerInfo.id,
+    trainerId: trainerInfo.id,
     trainerImg: trainerInfo.userImg,
     isSubscribed: isSubscribed,
     isPostedTrainer: isPostedTrainer,
@@ -97,12 +96,12 @@ const createTrainerProduct = async (
   const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(userId);
   if (!isPostedTrainer) throwError(400, "DUPLICATE_SUBMISSION");
 
-  const trainerInfo = await trainerMatchingDao.findTrainerId(userId);
+  const trainerInfo = await trainerMatchingDao.findTrainerInfo(userId);
   const categoryName =
-    await trainerMatchingDao.findSpecializedCategoryByTrainerId(trainerInfo);
+    await trainerMatchingDao.findSpecializedCategoryByTrainerId(trainerInfo.id);
 
   await trainerMatchingDao.createTrainerMatching(
-    trainerInfo,
+    trainerInfo.id,
     userId,
     name,
     place,
