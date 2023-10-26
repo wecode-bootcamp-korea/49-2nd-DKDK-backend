@@ -259,6 +259,61 @@ describe("RECORD SERVICE: CREATE/UPDATE RECORD", () => {
       .expect({"message":"JWT_MALFORMED"});
   });
 
+  test("FAIL: Muscle Mass Input Exceeds 100", async () => {
+    await request(app)
+      .post("/records")
+      .set("Authorization", accessToken)
+      .send({
+        muscleMass: 123,
+      })
+      .expect(400)
+      .expect({"message":"MUSCLE_MASS EXCEEDS 100"});
+  });
+
+  test("FAIL: Water Input Exceeds 100", async () => {
+    await request(app)
+      .post("/records")
+      .set("Authorization", accessToken)
+      .send({
+        waterContent: 123,
+      })
+      .expect(400)
+      .expect({"message":"WATER_CONTENT EXCEEDS 100"});
+  });
+
+  test("FAIL: Body Fat Exceeds 100", async () => {
+    await request(app)
+      .post("/records")
+      .set("Authorization", accessToken)
+      .send({
+        bodyFat: 123,
+      })
+      .expect(400)
+      .expect({"message":"BODY_FAT EXCEEDS 100"});
+  });
+
+  test("FAIL: Workout Time Exceeds 24", async () => {
+    await request(app)
+      .post("/records")
+      .set("Authorization", accessToken)
+      .send({
+        workoutTime: 25,
+      })
+      .expect(400)
+      .expect({"message":"INPUT_TIME EXCEEDS 24"});
+  });
+
+  test("FAIL: Input Key Error", async () => {
+    await request(app)
+      .post("/records")
+      .set("Authorization", accessToken)
+      .send({
+        workoutTime: 25,
+      })
+      .expect(400)
+      .expect({"message":"INPUT_TIME EXCEEDS 24"});
+  });
+  
   afterAll(async () => {
     // 테스트 데이터베이스의 불필요한 데이터를 전부 지워줍니다.
     await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 0;`);

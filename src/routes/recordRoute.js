@@ -8,7 +8,7 @@ const recordRoute = express.Router(); //라우터를 시작합니다.
 const createRecord = recordController.createRecord;
 const readRecord = recordController.readRecord;
 
-recordRoute.post("/", validateToken, recordController.createRecord);
-recordRoute.get("/", validateToken, recordController.readRecord);
+recordRouter.post("/", validateToken, asyncWrap(recordController.createRecord));
+recordRouter.get("/", validateToken, asyncWrap(recordController.readRecord));
 
 module.exports = { recordRoute };

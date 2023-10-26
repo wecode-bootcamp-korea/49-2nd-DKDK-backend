@@ -4,9 +4,12 @@ const { userRoute } = require("./userRoute");
 const { userHealthInfoRoute } = require("./userHealthInfoRoute");
 const { recordRoute } = require("./recordRoute");
 const { subscriptionRoute } = require("./subscriptionRoute");
-const { trainerMatchingRoute } = require("./trainerMatchingRoute");
+const { trainerMatchingRouter } = require("./trainerMatchingRoute");
+const { communityRouter } = require("./communityRouters");
 
 const routes = express.Router();
+
+routes.use("/community", communityRouter);
 routes.use("/training", trainerMatchingRoute);
 routes.use("/auth", authRoute);
 routes.use("/user", userRoute);
