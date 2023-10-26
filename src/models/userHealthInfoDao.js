@@ -117,7 +117,7 @@ const getSubOrdersInfoByUserId = async (userId) => {
 
 // GET - 식단
 const getRandFoodByGrade = async (grade) => {
-  return await AppDataSource.query(
+  const [result] = await AppDataSource.query(
     `
     SELECT f.meal_plan_id as id,
         JSON_ARRAYAGG(
@@ -139,6 +139,8 @@ const getRandFoodByGrade = async (grade) => {
     `,
     [grade]
   );
+  result.mealPlan = JSON.parse(result.mealPlan);
+  return result;
 };
 
 // GET - 추천 운동
@@ -245,7 +247,16 @@ const updateTrainerInfoById = async (
       interested_workout = ?
     WHERE id = ?
     `,
-      [imageUrl, gender, birthday, height, weight, workoutLoad, interestedWorkout, userId]
+      [
+        imageUrl,
+        gender,
+        birthday,
+        height,
+        weight,
+        workoutLoad,
+        interestedWorkout,
+        userId,
+      ]
     );
     const updateTrainerInfo = await queryRunner.query(
       `

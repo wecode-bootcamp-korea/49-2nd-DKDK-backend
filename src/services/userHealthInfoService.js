@@ -19,7 +19,6 @@ const getUserInfo = async (userId, workoutRcmdLimit) => {
     workoutRcmdLimit
   );
   const foodRcmd = await userHealthInfoDao.getRandFoodByGrade(bmiCalculator());
-
   return {
     userInfo: userInfo,
     trainerInfo: trainerInfo,
@@ -32,7 +31,7 @@ const getUserInfo = async (userId, workoutRcmdLimit) => {
 
 /*  유저 정보 수정 프로세스 */
 const getToBeUpdatedInfo = async (userId) => {
-  return await userHealthInfoDao.getUserDataToModify(userId)
+  return await userHealthInfoDao.getUserDataToModify(userId);
 };
 
 // 유저정보 수정
@@ -45,10 +44,11 @@ const updateUserInfo = async (
   weight,
   workoutLoad,
   interestedWorkout,
-  specialized,
+  specialized
 ) => {
   const type = await userHealthInfoDao.checkUserType(userId);
-  if (type[0].user_type !== 1 && type[0].user_type !== 2) throwError(400, "NO_SUCH_USER_TYPE"); // userType Checker
+  if (type[0].user_type !== 1 && type[0].user_type !== 2)
+    throwError(400, "NO_SUCH_USER_TYPE"); // userType Checker
   if (type[0].user_type == 1) {
     const result = await userHealthInfoDao.updateUserInfoById(
       userId,
@@ -58,10 +58,10 @@ const updateUserInfo = async (
       height,
       weight,
       workoutLoad,
-      interestedWorkout,
+      interestedWorkout
     );
-    return result == 1 ? "DATA_UPDATED" : throwError(400, "DATA_UPDATE_FAIL")
-  };
+    return result == 1 ? "DATA_UPDATED" : throwError(400, "DATA_UPDATE_FAIL");
+  }
   if (type[0].user_type == 2) {
     const result = await userHealthInfoDao.updateTrainerInfoById(
       userId,
@@ -72,17 +72,21 @@ const updateUserInfo = async (
       weight,
       workoutLoad,
       interestedWorkout,
-      specialized,
+      specialized
     );
-    return result.resultUser == 1 && result.resultTrainer == 1 ? "DATA_UPDATED" : thorwError (400, "DATA_UPDATE_FAILED")
-  };
+    return result.resultUser == 1 && result.resultTrainer == 1
+      ? "DATA_UPDATED"
+      : thorwError(400, "DATA_UPDATE_FAILED");
+  }
 };
 
 // 프로파일 업로드 확인
 const updateUserImg = async (userId, profileImg) => {
   const result = await userHealthInfoDao.updateUserImg(userId, profileImg);
-  return result == 1 ? "PROFILE_IMG_UPLOADED" : throwError(400, "IMG_UPLOAD_FAIL");
-}
+  return result == 1
+    ? "PROFILE_IMG_UPLOADED"
+    : throwError(400, "IMG_UPLOAD_FAIL");
+};
 module.exports = {
   getUserInfo,
   getToBeUpdatedInfo,
