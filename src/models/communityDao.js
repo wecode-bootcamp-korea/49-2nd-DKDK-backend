@@ -33,7 +33,6 @@ const createCommentDao = async (userId, content, postId) => {
 };
 //댓글 삭제
 const deleteCommentDao = async (postId, commentId) => {
-  console.log(postId);
   return await AppDataSource.query(
     `
     UPDATE comments SET status = 2 WHERE post_id =? AND comments.id = ?
@@ -47,31 +46,30 @@ const getAllPostDao = async (userId, postId) => {
     SELECT COUNT(*) AS comment_count FROM comments WHERE comments.post_id = ?;
   `;
   const postDetailsQuery = `
-    SELECT
-      users.id AS user_id,
-      users.nickname,
-      users.img_url,
-      comments.id AS comment_id,
-      comments.content AS comment_content,
-      likes.id AS like_id,
-      likes.post_id AS liked_post_id,
-      likes.user_id AS liked_user_id,
-      posts.id AS post_id,
-      posts.content AS post_content,
-      posts.create_at AS post_create_at,
-      posts.img_url AS post_img
-    FROM users
-    LEFT JOIN comments ON users.id = comments.user_id
-    LEFT JOIN likes ON users.id = likes.user_id
-    LEFT JOIN posts ON users.id = posts.user_id
-    WHERE users.id = ? AND posts.id = ?;
+  SELECT
+  users.id AS user_id,
+  users.nickname,
+  users.img_url,
+  comments.id AS comment_id,
+  comments.content AS comment_content,
+  likes.id AS like_id,
+  likes.post_id AS liked_post_id,
+  likes.user_id AS liked_user_id,
+  posts.id AS post_id,
+  posts.content AS post_content,
+  posts.create_at AS post_create_at,
+  posts.img_url AS post_img
+FROM users
+LEFT JOIN posts ON users.id = posts.user_id
+LEFT JOIN comments ON posts.id = comments.post_id
+LEFT JOIN likes ON posts.id = likes.post_id
+WHERE posts.id = ?;
   `;
 
   const commentCountResult = await AppDataSource.query(commentCountQuery, [
     postId,
   ]);
   const postDetailsResult = await AppDataSource.query(postDetailsQuery, [
-    userId,
     postId,
   ]);
   return {
@@ -138,6 +136,7 @@ const getCommentDao = async (postId) => {
     FROM comments
     LEFT JOIN users ON users.id = comments.user_id
     WHERE comments.post_id = ?
+    AND comments.status = 1;
   `;
 
   // 데이터베이스에 연결하고 쿼리 실행
