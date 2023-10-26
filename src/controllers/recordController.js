@@ -4,7 +4,7 @@ const recordService = require("../services/recordService");
 const readRecord = async (req, res) => {
   const id = req.userId;
   const readRecord = await recordService.readRecord(Number(id));
-  if (!readRecord) return res.status(400).json({ message: "NO_USER" });
+  if (!readRecord) return res.status(200).json({ message: "NO_DATA" });
   return res.status(200).json(readRecord);
 };
 
