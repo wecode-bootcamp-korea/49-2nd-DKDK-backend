@@ -41,6 +41,7 @@ const getTrainerMatchingDetail = async (productId) => {
     `
         SELECT 
         p.id AS id,
+        u.nickname AS name,
         p.trainer_id AS trainerId,
         p.available_area AS availableArea,
         p.available_time AS availableTime,
@@ -101,8 +102,8 @@ const isPostedTrainer = async (trainerId) => {
         WHEN (SELECT p.id FROM products p
             WHERE p.trainer_id = ?
             AND p.status = 1) IS NULL
-            THEN 1
-            ELSE 0
+            THEN 0
+            ELSE 1
         END AS isPostedTrainer;
           `,
     [trainerId]
@@ -110,18 +111,21 @@ const isPostedTrainer = async (trainerId) => {
   return result.isPostedTrainer;
 };
 // 트레이너id 찾기
-const findTrainerId = async (userId) => {
+const findTrainerInfo = async (userId) => {
   const [trainerId] = await AppDataSource.query(
     `
-    SELECT t.id AS id
+    SELECT t.id AS id,
+    u.nickname AS name,
+    u.img_url AS userImg
     FROM trainers t
     JOIN users u ON u.id = t.user_id
     WHERE u.id = ?;`,
     [userId]
   );
   if (trainerId === undefined) return 0;
-  return trainerId.id;
+  return trainerId;
 };
+
 // 트레이너 전문분야 찾기
 const findSpecializedCategoryByTrainerId = async (trainerId) => {
   const [category] = await AppDataSource.query(
@@ -180,7 +184,7 @@ module.exports = {
   isTrainer,
   isPostedTrainer,
   createTrainerMatching,
-  findTrainerId,
+  findTrainerInfo,
   findSpecializedCategoryByTrainerId,
   upadateTrainerMatching,
 };

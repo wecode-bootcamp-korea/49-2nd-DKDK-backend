@@ -15,16 +15,18 @@ const getTrainerProduct = async (
   const isSubscribed = await trainerMatchingDao.isSubscribed(userId);
 
   // 이미 글을 작성한 트레이너인지 확인
-  const trainerId = await trainerMatchingDao.findTrainerId(userId);
-  const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(trainerId);
-
+  const trainerInfo = await trainerMatchingDao.findTrainerInfo(userId);
+  const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(
+    trainerInfo.id
+  );
+  console.log(isPostedTrainer, trainerInfo);
   //쿼리생성
   const sortQuery = trainerQueryBuilder.sortQuery(sort);
   const categoryQuery = trainerQueryBuilder.categoryQuery(category);
   const genderQuery = trainerQueryBuilder.genderQuery(gender);
   const trainerCheckQuery = trainerQueryBuilder.trainerCheckQuery(
     isTrainer,
-    trainerId
+    trainerInfo.id
   );
   const offsetQuery = await trainerQueryBuilder.offsetQuery(offset, limit);
 
@@ -37,7 +39,9 @@ const getTrainerProduct = async (
   );
 
   return {
-    trainerId: trainerId,
+    trainerName: trainerInfo.name,
+    trainerId: trainerInfo.id,
+    trainerImg: trainerInfo.userImg,
     isSubscribed: isSubscribed,
     isPostedTrainer: isPostedTrainer,
     data: data,
@@ -58,14 +62,17 @@ const getTrainerProductDetail = async (userId, productsId) => {
     isAuth = false;
   }
   // 이미 글을 작성한 트레이너인지 확인
-  const trainerId = await trainerMatchingDao.findTrainerId(userId);
-  const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(trainerId);
+  const trainerInfo = await trainerMatchingDao.findTrainerInfo(userId);
+  const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(
+    trainerInfo.id
+  );
 
   const data = await trainerMatchingDao.getTrainerMatchingDetail(productsId);
   return {
     isSubscribed: isSubscribed,
     isPostedTrainer: isPostedTrainer,
-    trainerId: trainerId,
+    trainerInfo: trainerInfo.id,
+    trainerImg: trainerInfo.userImg,
     data: data,
   };
 };
@@ -89,12 +96,12 @@ const createTrainerProduct = async (
   const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(userId);
   if (!isPostedTrainer) throwError(400, "DUPLICATE_SUBMISSION");
 
-  const trainerId = await trainerMatchingDao.findTrainerId(userId);
+  const trainerInfo = await trainerMatchingDao.findTrainerInfo(userId);
   const categoryName =
-    await trainerMatchingDao.findSpecializedCategoryByTrainerId(trainerId);
+    await trainerMatchingDao.findSpecializedCategoryByTrainerId(trainerInfo.id);
 
   await trainerMatchingDao.createTrainerMatching(
-    trainerId,
+    trainerInfo.id,
     userId,
     name,
     place,
@@ -114,8 +121,8 @@ const deleteTrainerProduct = async (userId, productsId) => {
   const isSubscribed = trainerMatchingDao.isSubscribed(userId);
   if (!isSubscribed) throwError(400, "UNAUTHORIZED_USER");
   //해당 글을 작성한 트레이너인지
-  const trainerId = await trainerMatchingDao.findTrainerId(userId);
-  const isPostedTrainer = trainerMatchingDao.isPostedTrainer(trainerId);
+  const trainerInfo = await trainerMatchingDao.findTrainerInfo(userId);
+  const isPostedTrainer = trainerMatchingDao.isPostedTrainer(trainerInfo.id);
   if (!isPostedTrainer) {
     throwError(401, "IS_NOT_OWNER");
   }

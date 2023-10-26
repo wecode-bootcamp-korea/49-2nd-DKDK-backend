@@ -26,19 +26,17 @@ const getAllPostService = async (userId, postId) => {
 const getPostListService = async (userId) => {
   return await getPostlistDao(userId);
 };
-const getCommentService = async (postId) => {
-  return await getCommentDao(postId);
+const getCommentService = async (userId, postId) => {
+  return await getCommentDao(userId, postId);
 };
 
 const createPostService = async (userId, content, img_url) => {
   const checkSubscript = await isSubscriptDao(userId);
-  console.log("userId after isSubscriptDao call:", userId);
   if (checkSubscript === "false") throwError(400, "NOT_SUBSCRIBER");
   return await createPostDao(userId, content, img_url);
 };
 
 const createCommentService = async (userId, content, postId) => {
-  console.log(userId, content, postId);
   const checkSubscript = await isSubscriptDao(userId);
   if (checkSubscript === "false") throwError(400, "NOT_SUBSCRIBER");
   return await createCommentDao(userId, content, postId);
