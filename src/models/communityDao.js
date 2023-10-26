@@ -72,11 +72,25 @@ WHERE posts.id = ?;
   const postDetailsResult = await AppDataSource.query(postDetailsQuery, [
     postId,
   ]);
+  const [isPostedUser] = await AppDataSource.query(
+    `SELECT CASE
+        WHEN (SELECT u.nickname FROM sub_orders so
+            JOIN users u ON so.user_id  = u.id
+            WHERE u.id = ?) IS NULL
+            THEN 0
+            ELSE 1
+        END AS isPostedUser;
+      `,
+    [userId]
+  );
   return {
     comment_count: commentCountResult[0],
     post_details: postDetailsResult[0],
+    isPostedUser: isPostedUser.isPostedUser,
   };
 };
+
+//게시물 전체 불러오기
 const getPostlistDao = async (userId) => {
   const commentCountQuery = `
     SELECT COUNT(*) FROM comments JOIN posts ON posts.id = comments.post_id 
@@ -99,7 +113,6 @@ const getPostlistDao = async (userId) => {
       posts.id AS post_id,
       posts.title AS title,
       posts.img_url AS post_img,
-      comments.content AS comment_content,
       (${commentCountQuery}) AS commentCount,
       (${likeCountQuery}) AS likeCount,
       (${isLiked}) AS isLiked,
@@ -107,18 +120,15 @@ const getPostlistDao = async (userId) => {
       posts.content AS post_content,
       DATE_FORMAT(posts.create_at, '%Y-%m-%d') AS post_create_at
     FROM users
-    LEFT JOIN comments ON users.id = comments.user_id
-    LEFT JOIN likes ON users.id = likes.user_id
     LEFT JOIN posts ON users.id = posts.user_id
-    WHERE users.id = ?;
+    LEFT JOIN likes ON posts.id = likes.post_id
+    WHERE posts.status = 1;
   `;
-
   const postDetailsResult = await AppDataSource.query(postlistQuery, [
     userId,
     userId,
-    userId,
   ]);
-  return postDetailsResult[0];
+  return postDetailsResult;
 };
 
 //댓글목록 불러오기

@@ -32,7 +32,6 @@ const getCommentService = async (postId) => {
 
 const createPostService = async (userId, content, img_url) => {
   const checkSubscript = await isSubscriptDao(userId);
-  console.log("userId after isSubscriptDao call:", userId);
   if (checkSubscript === "false") throwError(400, "NOT_SUBSCRIBER");
   return await createPostDao(userId, content, img_url);
 };

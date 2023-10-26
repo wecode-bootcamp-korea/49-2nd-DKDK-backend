@@ -92,12 +92,10 @@ const deleteCommentController = async (req, res, next) => {
 
 const getPostListController = async (req, res, next) => {
   try {
-    const { userId } = req.userId;
-    if (!userId) return res.status(400).json({ message: "KEY_ERROR" });
-    return res.status(200).json({
-      message: "GET_POST",
-      data: await getPostListService(userId),
-    });
+    const userId = req.userId;
+    if (userId === undefined) res.status(400).json({ message: "KEY_ERROR" });
+    const data = await getPostListService(userId);
+    res.status(200).json({ message: "GET_POST", data: data });
   } catch (err) {
     console.error(err);
     next(err);
