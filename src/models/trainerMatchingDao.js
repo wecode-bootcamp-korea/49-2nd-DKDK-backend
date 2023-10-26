@@ -115,7 +115,8 @@ const findTrainerInfo = async (userId) => {
   const [trainerId] = await AppDataSource.query(
     `
     SELECT t.id AS id,
-    u.imgUrl AS userImg
+    u.nickname AS name,
+    u.img_url AS userImg
     FROM trainers t
     JOIN users u ON u.id = t.user_id
     WHERE u.id = ?;`,
