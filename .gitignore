@@ -3,6 +3,7 @@
 
 ### dotenv ###
 .env
+.env.test
 
 ### Linux ###
 *~
@@ -131,6 +132,7 @@ web_modules/
 # dotenv environment variable files
 .env.development.local
 .env.test.local
+.env.test
 .env.production.local
 .env.local
 

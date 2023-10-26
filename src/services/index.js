@@ -1,3 +1,8 @@
+const userServicve = require("./userService");
+const userHealthInfoService = require("./userHealthInfoService");
+const recordService = require("./recordService");
+const trainerMatchingService = require("./trainerMatchingService");
+const subscriptionService = require("./subscriptionService");
 const {
   createPostService,
   deletePostService,
@@ -9,6 +14,11 @@ const {
 } = require("./communityServices");
 
 module.exports = {
+  userServicve,
+  userHealthInfoService,
+  recordService,
+  subscriptionService,
+  trainerMatchingService,
   communityService: {
     createPostService,
     deletePostService,
