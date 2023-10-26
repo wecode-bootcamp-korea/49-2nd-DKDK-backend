@@ -12,7 +12,7 @@ const {
 
 const createPostController = async (req, res, next) => {
   try {
-    const userId = req.params.userId;
+    const userId = 2;
     console.log(userId);
     const { content, img_url } = req.body;
     if (!userId) return res.status(400).json({ message: "KEY_ERROR" });
@@ -29,8 +29,8 @@ const createPostController = async (req, res, next) => {
 
 const deletePostController = async (req, res, next) => {
   try {
-    const userId = req.params.userId;
-    const postId = req.params.postId;
+    const userId = 2;
+    const postId = 20;
     if (!userId || !postId)
       return res.status(400).json({ message: "KEY_ERROR" });
     return res.status(200).json({
@@ -60,9 +60,9 @@ const getAllPostController = async (req, res, next) => {
 
 const createCommentController = async (req, res, next) => {
   try {
-    const userId = req.params.userId;
+    const userId = 2;
     const content = req.body.content;
-    const postId = req.params.postId;
+    const postId = 1;
 
     if (!userId || !content || !postId)
       return res.status(400).json({ message: "KEY_ERROR" });

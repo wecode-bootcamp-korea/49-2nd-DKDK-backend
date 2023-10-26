@@ -1,4 +1,3 @@
-const { post } = require("../routes/communityRouters");
 const { AppDataSource } = require("./dataSource");
 
 //글 쓰기

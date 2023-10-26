@@ -14,10 +14,10 @@ const {
 const router = express.Router();
 
 router.get("/", getPostListController);
-router.post("/post/:userId", createPostController);
-router.delete("/post/:postId/:userId", deletePostController);
+router.post("/post", createPostController);
+router.delete("/post", deletePostController);
 router.get("/post?=", getAllPostController);
-router.post("/comment/:userId/:postId", createCommentController);
+router.post("/comment", createCommentController);
 router.delete("/comment", deleteCommentController);
 router.get("/comment", getCommentController);
 
