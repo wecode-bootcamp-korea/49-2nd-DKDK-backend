@@ -58,14 +58,15 @@ const getTrainerProductDetail = async (userId, productsId) => {
     isAuth = false;
   }
   // 이미 글을 작성한 트레이너인지 확인
-  const trainerId = await trainerMatchingDao.findTrainerId(userId);
+  const trainerInfo = await trainerMatchingDao.findTrainerInfo(userId);
   const isPostedTrainer = await trainerMatchingDao.isPostedTrainer(trainerId);
 
   const data = await trainerMatchingDao.getTrainerMatchingDetail(productsId);
   return {
     isSubscribed: isSubscribed,
     isPostedTrainer: isPostedTrainer,
-    trainerId: trainerId,
+    trainerId: trainerInfo.id,
+    trainerImg: trainerInfo.userImg,
     data: data,
   };
 };
