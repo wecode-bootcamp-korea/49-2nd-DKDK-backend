@@ -62,7 +62,6 @@ const createCommentController = async (req, res, next) => {
   try {
     const userId = req.userId;
     const { postId, content } = req.body;
-
     if (!userId || !content || !postId)
       return res.status(400).json({ message: "KEY_ERROR" });
     return res.status(200).json({
@@ -104,11 +103,12 @@ const getPostListController = async (req, res, next) => {
 
 const getCommentController = async (req, res, next) => {
   try {
+    const userId = req.userId;
     const { postId } = req.params;
     if (!postId) return res.status(400).json({ message: "KEY_ERROR" });
     return res.status(200).json({
       message: "GET_COMMENT",
-      data: await getCommentService(postId),
+      data: await getCommentService(userId, Number(postId)),
     });
   } catch (err) {
     console.error(err);

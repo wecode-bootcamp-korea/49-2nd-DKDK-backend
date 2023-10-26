@@ -74,14 +74,13 @@ WHERE posts.id = ?;
   ]);
   const [isPostedUser] = await AppDataSource.query(
     `SELECT CASE
-        WHEN (SELECT u.nickname FROM sub_orders so
-            JOIN users u ON so.user_id  = u.id
-            WHERE u.id = ?) IS NULL
+        WHEN (SELECT p.content FROM posts p
+            WHERE p.user_id = ? AND p.id = ? AND p.status = 1 LIMIT 1) IS NULL
             THEN 0
             ELSE 1
         END AS isPostedUser;
       `,
-    [userId]
+    [userId, postId]
   );
   return {
     comment_count: commentCountResult[0],
@@ -132,7 +131,7 @@ const getPostlistDao = async (userId) => {
 };
 
 //댓글목록 불러오기
-const getCommentDao = async (postId) => {
+const getCommentDao = async (userId, postId) => {
   // SQL 쿼리 문자열을 정의합니다.
   const query = `
     SELECT
@@ -151,7 +150,17 @@ const getCommentDao = async (postId) => {
 
   // 데이터베이스에 연결하고 쿼리 실행
   const result = await AppDataSource.query(query, [postId]);
-  return result;
+  const [isCommentedUser] = await AppDataSource.query(
+    `SELECT CASE
+        WHEN (SELECT c.content FROM comments c
+          WHERE c.user_id = ? AND c.post_id = ? AND c.status =1 LIMIT 1) IS NULL
+            THEN 0
+            ELSE 1
+        END AS isCommentedUser;
+      `,
+    [userId, postId]
+  );
+  return { result: result, isCommentedUser: isCommentedUser.isCommentedUser };
 };
 
 // 구독자 여부 확인

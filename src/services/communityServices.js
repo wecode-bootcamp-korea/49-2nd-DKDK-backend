@@ -26,8 +26,8 @@ const getAllPostService = async (userId, postId) => {
 const getPostListService = async (userId) => {
   return await getPostlistDao(userId);
 };
-const getCommentService = async (postId) => {
-  return await getCommentDao(postId);
+const getCommentService = async (userId, postId) => {
+  return await getCommentDao(userId, postId);
 };
 
 const createPostService = async (userId, content, img_url) => {
