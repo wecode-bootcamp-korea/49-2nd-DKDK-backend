@@ -4,6 +4,15 @@ const userController = require("./userController");
 const userHealthInfoController = require("./userHealthInfoController");
 const readController = require("./recordController");
 const subscriptionController = require("./subscriptionController");
+const {
+  createPostController,
+  deletePostController,
+  getAllPostController,
+  createCommentController,
+  deleteCommentController,
+  getPostListController,
+  getCommentController,
+} = require("./communityControllers");
 
 module.exports = {
   authController,
@@ -12,4 +21,13 @@ module.exports = {
   readController,
   subscriptionController,
   trainerMatchingController,
+  communityController: {
+    createPostController,
+    deletePostController,
+    getAllPostController,
+    createCommentController,
+    deleteCommentController,
+    getPostListController,
+    getCommentController,
+  },
 };

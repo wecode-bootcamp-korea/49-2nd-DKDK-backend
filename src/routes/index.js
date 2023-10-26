@@ -5,8 +5,11 @@ const { userHealthInfoRouter } = require("./userHealthInfoRouter");
 const { recordRouter } = require("./recordRouter");
 const { subscriptionRoute } = require("./subscriptionRoute");
 const { trainerMatchingRouter } = require("./trainerMatchingRoute");
+const {communityRouter} = require("./communityRouters");
 
 const routes = express.Router();
+
+routes.use("/community", communityRouter);
 routes.use("/training", trainerMatchingRouter);
 routes.use("/auth", authRoute);
 routes.use("/user", userRoute);

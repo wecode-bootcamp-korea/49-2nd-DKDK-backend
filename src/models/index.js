@@ -4,6 +4,16 @@ const userHealthInfoDao = require("./userHealthInfoDao");
 const recordDao = require("./recordDao");
 const trainerQueryBuilder = require("./trainerQueryBuilder");
 const subscripntionDao = require("./subscripntionDao");
+const {
+  createPostDao,
+  deletePostDao,
+  createCommentDao,
+  getAllPostDao,
+  deleteCommentDao,
+  isSubscriptDao,
+  getPostlistDao,
+  getCommentDao,
+} = require("./communityDao");
 
 module.exports = {
   userDao,
@@ -12,4 +22,14 @@ module.exports = {
   subscripntionDao,
   trainerMatchingDao,
   trainerQueryBuilder,
+  communityDao: {
+    createPostDao,
+    deletePostDao,
+    createCommentDao,
+    getAllPostDao,
+    deleteCommentDao,
+    isSubscriptDao,
+    getPostlistDao,
+    getCommentDao,
+  },
 };
