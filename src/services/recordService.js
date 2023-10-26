@@ -55,29 +55,37 @@ const createRecord = async (id, recordData) => {
  
   const readUserId = await recordDao.recordIdParamsChecker(Number(id));
   if (!readUserId) return readUserId;
-
-  const userDateTime = await recordDao.recordTimeChecker(id);
-  const checkTime = () => {
-    const receivedDateTime = userDateTime[0].createdAt;
-    const formattedUserDate = receivedDateTime.setHours(0, 0, 0, 0);
-    return formattedUserDate;
-  }
-  const recordCheckTime = () => {
-    const nowDate = new Date();
-    const dateCheckerPole = nowDate.setHours(0, 0, 0, 0);
-    return dateCheckerPole;
-  }
-  if (recordCheckTime() !== checkTime()) {
-    const recordCreator = await recordDao.recordCreator(id, recordData);
-    return recordCreator;
-  }
-
-  const recordUpdate = await recordDao.workoutRecordsUpdater(id, recordData);
-  if (!recordData.currentWeight) return recordUpdate;
-  
-  const userWeightUpdate = await recordDao.userWeightUpdater(id, recordData);
-  return userWeightUpdate;
+  else {
+    const userDateTime = await recordDao.recordTimeChecker(id);
+    const userDateTimeValue = userDateTime[0];
+    if (!userDateTimeValue) {
+      const recordCreator = await recordDao.recordCreator(id, recordData);
+      return recordCreator;
+    } else {
+      const checkTime = () => {
+        const receivedDateTime = userDateTime[0].createdAt;
+        const formattedUserDate = new Date(receivedDateTime).setHours(0, 0, 0, 0);
+        return formattedUserDate;
+      }
+      const recordCheckTime = () => {
+        const nowDate = new Date();
+        const dateCheckerPole = nowDate.setHours(0, 0, 0, 0);
+        return dateCheckerPole;
+      }
+      if (recordCheckTime() !== checkTime()) {
+        const recordCreator = await recordDao.recordCreator(id, recordData);
+        return recordCreator;
+      }
+    
+      const recordUpdate = await recordDao.workoutRecordsUpdater(id, recordData);
+      if (!recordData.currentWeight) return recordUpdate;
+      
+      const userWeightUpdate = await recordDao.userWeightUpdater(id, recordData);
+      return userWeightUpdate;
+    }
+  }  
 };
+
 
 module.exports = {
   createRecord,
