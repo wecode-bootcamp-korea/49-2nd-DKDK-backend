@@ -121,8 +121,8 @@ const deleteTrainerProduct = async (userId, productsId) => {
   const isSubscribed = trainerMatchingDao.isSubscribed(userId);
   if (!isSubscribed) throwError(400, "UNAUTHORIZED_USER");
   //해당 글을 작성한 트레이너인지
-  const trainerInfo = await trainerMatchingDao.findTrainerId(userId);
-  const isPostedTrainer = trainerMatchingDao.isPostedTrainer(trainerInfo);
+  const trainerInfo = await trainerMatchingDao.findTrainerInfo(userId);
+  const isPostedTrainer = trainerMatchingDao.isPostedTrainer(trainerInfo.id);
   if (!isPostedTrainer) {
     throwError(401, "IS_NOT_OWNER");
   }

@@ -12,8 +12,7 @@ const {
 
 const createPostController = async (req, res, next) => {
   try {
-    const userId = 2;
-    console.log(userId);
+    const userId = req.userId;
     const { content, img_url } = req.body;
     if (!userId) return res.status(400).json({ message: "KEY_ERROR" });
     if (!content) return res.status(400).json({ message: "NO_CONTENT" });
@@ -29,8 +28,8 @@ const createPostController = async (req, res, next) => {
 
 const deletePostController = async (req, res, next) => {
   try {
-    const userId = 2;
-    const postId = 20;
+    const userId = req.userId;
+    const { postId } = req.body;
     if (!userId || !postId)
       return res.status(400).json({ message: "KEY_ERROR" });
     return res.status(200).json({
@@ -94,8 +93,7 @@ const deleteCommentController = async (req, res, next) => {
 
 const getPostListController = async (req, res, next) => {
   try {
-    // const { userId } = req.userId;
-    const userId = 2;
+    const { userId } = req.userId;
     if (!userId) return res.status(400).json({ message: "KEY_ERROR" });
     return res.status(200).json({
       message: "GET_POST",
@@ -109,7 +107,7 @@ const getPostListController = async (req, res, next) => {
 
 const getCommentController = async (req, res, next) => {
   try {
-    const postId = 1;
+    const { postId } = req.body;
     if (!postId) return res.status(400).json({ message: "KEY_ERROR" });
     return res.status(200).json({
       message: "GET_COMMENT",
